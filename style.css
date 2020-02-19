@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+}
+
+.wrapper {
+    width: 424px;
+    height:313px;
+    position: relative;
+    background-image: url(images/test-board.png);
+}
+
+.player {
+    width: 30px;
+    height: 30px;
+    background-color: darkgrey;
+    border-radius: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+.position {
+    width: 30px;
+    height: 30px;
+    background-color: #C4C4C4;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 0;
+}
