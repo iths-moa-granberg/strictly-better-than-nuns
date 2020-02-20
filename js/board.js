@@ -65,6 +65,10 @@ class BoardView {
             element.classList.remove('reachable');
         }
     }
+
+    assignSpecialValue(position, className) {
+        this.positionElements[position.id - 1].classList.add(className);
+    }
 }
 
 
@@ -94,5 +98,9 @@ class BoardController {
 
     handleResetPositions = () => {
         this.view.resetPositions();
+    }
+
+    handleAssignSpecialValue = (position, className) => {
+        this.view.assignSpecialValue(position, className);
     }
 }

@@ -39,3 +39,15 @@ body {
     height: 2rem;
     margin: 2rem 1rem;
 }
+
+.key {
+    background-color: orange;
+}
+
+.goal {
+    background-color: red;
+}
+
+.home {
+    background-color: yellow;
+}
