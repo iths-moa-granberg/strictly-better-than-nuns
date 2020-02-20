@@ -33,12 +33,15 @@ class UserOptionsView {
     bindChooseStand(handler) {
         this.standBtn.addEventListener('click', e => { handler(0) });
     }
+
     bindChooseSneak(handler) {
         this.sneakBtn.addEventListener('click', e => { handler(1) });
     }
+
     bindChooseWalk(handler) {
         this.walkBtn.addEventListener('click', e => { handler(3) });
     }
+    
     bindChooseRun(handler) {
         this.runBtn.addEventListener('click', e => { handler(5) });
     }

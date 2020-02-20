@@ -71,7 +71,6 @@ class BoardView {
     }
 }
 
-
 class BoardController {
     constructor(model, view) {
         this.model = model;

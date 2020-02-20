@@ -54,7 +54,7 @@ class Game {
                 console.log('har nyckel!');
             }
         }
-        if (this.roundCounter >= 8) {
+        if (this.roundCounter >= 8) { //magic number
             console.log('game over');
         } 
     }
