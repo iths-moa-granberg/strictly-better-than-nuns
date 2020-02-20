@@ -29,3 +29,7 @@ body {
     position: absolute;
     z-index: 0;
 }
+
+.reachable {
+    border: 1px solid red;
+}
