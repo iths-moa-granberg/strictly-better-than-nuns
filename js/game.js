@@ -1,5 +1,7 @@
 class Game {
     constructor() {
+        this.roundCounter = 0;
+
         this.hasSelectedSteps = false;
         this.setPlayerSpecialPositions();
     }
@@ -24,6 +26,7 @@ class Game {
             this.movePlayer(position);
             this.checkPlayerTarget();
             this.hasSelectedSteps = false;
+            this.roundCounter++;
         }
     }
 
@@ -51,6 +54,9 @@ class Game {
                 console.log('har nyckel!');
             }
         }
+        if (this.roundCounter >= 8) {
+            console.log('game over');
+        } 
     }
 
     setPlayerSpecialPositions() {
