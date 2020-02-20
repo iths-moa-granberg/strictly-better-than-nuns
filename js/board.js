@@ -42,7 +42,7 @@ class BoardView {
             positionElement.style.top = `${position.y}px`;
             positionElement.style.left = `${position.x}px`;
             positionElement.innerText = position.id;
-            document.querySelector('.wrapper').appendChild(positionElement);
+            document.querySelector('.board-wrapper').appendChild(positionElement);
         }
     }
 

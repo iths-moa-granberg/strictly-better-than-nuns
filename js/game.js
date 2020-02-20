@@ -1,20 +1,14 @@
-class GameModel {
-    constructor() { }
-}
-
-class GameView {
-    constructor() { }
-
-}
-
-class GameController {
-    constructor(model, view) {
-        this.model = model;
-        this.view = view;
+class Game {
+    constructor() {
+        this.hasSelectedSteps = false;
     }
 
-    showAllReachablePositions() {
-        board.handleShowReachablePositions(board.handleGetPosition(player.getX(), player.getY()), 3);
+    getPlayerPosition() {
+        return board.handleGetPosition(player.getX(), player.getY());
+    }
+
+    showAllReachablePositions(steps) {
+        board.handleShowReachablePositions(this.getPlayerPosition(), steps);
     }
 
     movePlayer(position) {
@@ -22,18 +16,18 @@ class GameController {
     }
 
     positionSelected(position) {
-        let reachable = board.handleGetAllReachables(board.handleGetPosition(player.getX(), player.getY()), 3);
-        if (reachable.includes(position)) {
+        let steps = userOptions.handleGetSteps();
+        let reachable = board.handleGetAllReachables(this.getPlayerPosition(), steps);
+        if (reachable.includes(position) && this.hasSelectedSteps) {
             board.handleResetPositions();
             this.movePlayer(position);
+            this.hasSelectedSteps = false;
         }
     }
-}
 
-//Flöde:
-//- klicka stå, gå, spring
-//- visa possible endups
-//- välj endup
-//- if key or target, flagga
-//* gör ljud (ligga hos abe?)
-//- repeat
+    stepsSelected(steps) {
+        this.hasSelectedSteps = true;
+        board.handleResetPositions();
+        this.showAllReachablePositions(steps);
+    }
+}

@@ -14,12 +14,12 @@ class PlayerView {
     constructor() {
         this._playerDiv = document.createElement('div');
         this._playerDiv.className = 'player';
-        document.querySelector('.wrapper').appendChild(this._playerDiv);
+        document.querySelector('.board-wrapper').appendChild(this._playerDiv);
     }
 
     updatePlayerPosition(x, y) {
         this._playerDiv.style.top = `${y}px`;
-        this._playerDiv.style.left = `${x}px`;     
+        this._playerDiv.style.left = `${x}px`;
     }
 }
 
