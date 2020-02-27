@@ -14,14 +14,14 @@ class UserOptionsModel {
 
 class UserOptionsView {
     constructor() {
-        this.renderChooseSteps();
+        this._renderChooseSteps();
     }
 
-    renderChooseSteps() {
-        this.standBtn = this.createEl('button', '', 'Stand');
-        this.sneakBtn = this.createEl('button', '', 'Sneak');
-        this.walkBtn = this.createEl('button', '', 'Walk');
-        this.runBtn = this.createEl('button', '', 'Run');
+    _renderChooseSteps() {
+        this.standBtn = this._createEl('button', '', 'Stand');
+        this.sneakBtn = this._createEl('button', '', 'Sneak');
+        this.walkBtn = this._createEl('button', '', 'Walk');
+        this.runBtn = this._createEl('button', '', 'Run');
 
         const wrapper = document.querySelector('.user-options-wrapper');
         wrapper.appendChild(this.standBtn);
@@ -46,7 +46,7 @@ class UserOptionsView {
         this.runBtn.addEventListener('click', e => { handler(5) });
     }
 
-    createEl(tag, className, text) {
+    _createEl(tag, className, text) {
         const element = document.createElement(tag);
         if (className) {
             element.classlist.add(className);
@@ -74,7 +74,7 @@ class UserOptionsController {
         game.stepsSelected(steps);
     }
 
-    handleGetSteps = () => {
+    getSteps = () => {
         return this.model.getSteps();
     }
 }

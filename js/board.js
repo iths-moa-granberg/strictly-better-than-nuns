@@ -83,23 +83,23 @@ class BoardController {
         game.positionSelected(position);
     }
 
-    handleGetPosition = (x, y) => {
+    getPosition = (x, y) => {
         return this.model.getPosition(x, y);
     }
 
-    handleShowReachablePositions = (startPosition, steps) => {
-        this.view.showReachablePositions(this.handleGetAllReachables(startPosition, steps));
+    showReachablePositions = (startPosition, steps) => {
+        this.view.showReachablePositions(this.getAllReachables(startPosition, steps));
     }
 
-    handleGetAllReachables = (startPosition, steps) => {
+    getAllReachables = (startPosition, steps) => {
         return this.model.getAllReachable(startPosition, steps);
     }
 
-    handleResetPositions = () => {
+    resetPositions = () => {
         this.view.resetPositions();
     }
 
-    handleAssignSpecialValue = (position, className) => {
+    assignSpecialValue = (position, className) => {
         this.view.assignSpecialValue(position, className);
     }
 }

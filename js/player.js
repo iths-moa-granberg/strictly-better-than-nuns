@@ -16,7 +16,7 @@ class PlayerModel {
         this.y = y;
     }
 
-    onTarget(target) {
+    isOnTarget(target) {
         return target.x === this.x && target.y === this.y;
     }
 
@@ -63,8 +63,8 @@ class PlayerController {
         return this.model.y;
     }
 
-    handleOnTarget = (target) => {
-        return this.model.onTarget(target);
+    isOnTarget = (target) => {
+        return this.model.isOnTarget(target);
     }
 
     checkKey = () => {
@@ -75,11 +75,11 @@ class PlayerController {
         return this.model.hasGoal;
     }
 
-    handleAchieveKey = () => {
+    achieveKey = () => {
         this.model.achiveKey();
     }
 
-    handleAchieveGoal = () => {
+    achieveGoal = () => {
         this.model.achiveGoal();
     }
 }
