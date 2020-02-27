@@ -1,7 +1,9 @@
 class EnemyModel {
     constructor() {
-        this.x = 389;
-        this.y = 96;
+        this.path = enemyPaths[0]; //startvärde
+        this.stepInPath = 0;
+        this.x = this.path[this.stepInPath].x;
+        this.y = this.path[this.stepInPath].y;
 
         this.winCounter = 0;
     }
@@ -9,6 +11,31 @@ class EnemyModel {
     updateCoordinates(x, y) {
         this.x = x;
         this.y = y;
+    }
+
+    moveStandardPath() {
+        if (this.stepInPath != this.path.length -1) {
+            this.stepInPath++;
+            this.x = this.path[this.stepInPath].x;
+            this.y = this.path[this.stepInPath].y;
+        } else {
+            this._chooseNewPath();
+            this.updateCoordinates(this.path[this.stepInPath].x, this.path[this.stepInPath].y);
+        }
+    }
+
+    _chooseNewPath() {
+        let shuffledPaths = enemyPaths.concat().sort(function() { return .5 - Math.random() });
+        for (let path of shuffledPaths) {                        
+            if (path[0] === this.path[this.path.length -1] && path != this.path) {
+                this.stepInPath = 1;
+                return this.path = path;
+            }
+        }
+    }
+
+    getCurrentPath() {
+        return this.path;
     }
 }
 
@@ -40,4 +67,20 @@ class EnemyController {
     getY = () => {
         return this.model.y;
     }
+
+    moveStandardPath = () => {
+        this.model.moveStandardPath();
+        this.view.updatePosition(this.getX(), this.getY());
+    }
+
+    getCurrentPath = () => {
+        return this.model.getCurrentPath();
+    }
 }
+
+//standard rörelsemönster, förvalda paths
+//avvikelse path - if(syn || ljud)
+//line of sight 
+//lyssna efter ljud
+//catchcounter
+//-- rygg?

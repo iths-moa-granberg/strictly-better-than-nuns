@@ -4,8 +4,10 @@ class Game {
 
         this.hasSelectedSteps = false;
         this.setPlayerSpecialPositions();
+        
     }
 
+    //PLAYER
     getPlayerPosition() {
         return board.getPosition(player.getX(), player.getY());
     }
@@ -22,7 +24,7 @@ class Game {
         let steps = userOptions.getSteps();
         let reachable = board.getAllReachables(this.getPlayerPosition(), steps);
         if (reachable.includes(position) && this.hasSelectedSteps) {
-            board.resetPositions();
+            board.resetPositions('reachable'); //isolera till board??
             this.movePlayer(position);
             this.checkPlayerTarget();
             this.hasSelectedSteps = false;
@@ -32,7 +34,6 @@ class Game {
 
     stepsSelected(steps) {
         this.hasSelectedSteps = true;
-        board.resetPositions();
         this.showAllReachablePositions(steps);
     }
 
@@ -63,5 +64,12 @@ class Game {
         board.assignSpecialValue(player.model.home, 'home');
         board.assignSpecialValue(player.model.key, 'key');
         board.assignSpecialValue(player.model.goal, 'goal');
+    }
+
+    //ENEMY
+
+    moveEnemy() {
+        enemy.moveStandardPath();
+        board.showEnemyCurrentPath(enemy.getCurrentPath());
     }
 }

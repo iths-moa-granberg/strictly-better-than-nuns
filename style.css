@@ -40,7 +40,11 @@ body {
 }
 
 .reachable {
-    border: 1px solid red;
+    border: 1px solid green;
+}
+
+.enemy-path {
+    background-color: rgb(160, 160, 160);
 }
 
 .user-options-wrapper > button {

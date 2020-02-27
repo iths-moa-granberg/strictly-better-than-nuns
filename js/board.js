@@ -55,19 +55,27 @@ class BoardView {
     }
 
     showReachablePositions(positionList) {
+        this.resetPositions('reachable');
         for (let position of positionList) {
             this.positionElements[position.id - 1].classList.add('reachable');
         }
     }
 
-    resetPositions() {
+    resetPositions(className) {
         for (let element of this.positionElements) {
-            element.classList.remove('reachable');
+            element.classList.remove(className);
         }
     }
 
     assignSpecialValue(position, className) {
         this.positionElements[position.id - 1].classList.add(className);
+    }
+
+    showEnemyCurrentPath(path) {
+        this.resetPositions('enemy-path');
+        for (let position of path) {
+            this.positionElements[position.id - 1].classList.add('enemy-path');
+        }
     }
 }
 
@@ -95,11 +103,15 @@ class BoardController {
         return this.model.getAllReachable(startPosition, steps);
     }
 
-    resetPositions = () => {
-        this.view.resetPositions();
+    resetPositions = (className) => {
+        this.view.resetPositions(className);
     }
 
     assignSpecialValue = (position, className) => {
         this.view.assignSpecialValue(position, className);
+    }
+
+    showEnemyCurrentPath = (path) => {
+        this.view.showEnemyCurrentPath(path);
     }
 }
