@@ -27,6 +27,10 @@ class PlayerModel {
     achiveGoal() {
         this.hasGoal = true;
     }
+
+    loseGoal() {
+        this.hasGoal = false;
+    }
 }
 
 class PlayerView {
@@ -81,6 +85,10 @@ class PlayerController {
 
     achieveGoal = () => {
         this.model.achiveGoal();
+    }
+
+    loseGoal = () => {
+        this.model.loseGoal();
     }
 
     getKey = () => {

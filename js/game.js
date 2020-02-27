@@ -8,11 +8,15 @@ class GameModel {
         return board.getPosition(player.getX(), player.getY());
     }
 
+    getEnemyPosition() {
+        return board.getPosition(enemy.getX(), enemy.getY());
+    }
+
     checkPlayerTarget() {
         if (player.checkKey()) {
             if (player.checkGoal()) {
                 if (player.isOnTarget(player.model.home)) {
-                    console.log('win!');
+                    console.log('player win!');
                 }
             } else {
                 if (player.isOnTarget(player.model.goal)) {
@@ -31,8 +35,16 @@ class GameModel {
         }
     }
 
-    toggleSteps() {
-        this.playerHasSelectedSteps = !this.playerHasSelectedSteps;
+    checkEnemyTarget() {
+        if (this.getEnemyPosition() === this.getPlayerPosition()) {
+            enemy.catchPlayer();
+            if (enemy.getWinCounter() === 3) {
+                console.log('enemy win! game over!');
+            } else {
+                player.loseGoal();
+                //player go staight to home
+            }
+        }
     }
 
     hasSelectedSteps() {
@@ -95,7 +107,7 @@ class GameController {
     }
 
     stepsSelected = (steps) => { //called from userOptions when choosen pace/steps
-        this.model.toggleSteps();
+        this.model.playerHasSelectedSteps = true;
         this.showReachablePositions(steps);
     }
 
@@ -105,14 +117,17 @@ class GameController {
                 this.view.resetPositions('reachable');
                 this.view.movePlayer(position);
                 this.model.checkPlayerTarget();
-                this.model.toggleSteps();
+                this.model.playerHasSelectedSteps = false;
                 this.newRound();
             }
         }
     }
 
     newRound = () => {
+        this.model.checkEnemyTarget(); //check after player moves
+
         this.view.moveEnemyStandardPath();
+        this.model.checkEnemyTarget(); //check after enemy moves
         this.model.roundCounter++;
     }
 }

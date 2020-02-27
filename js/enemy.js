@@ -37,6 +37,10 @@ class EnemyModel {
     getCurrentPath() {
         return this.path;
     }
+
+    catchPlayer() {
+        this.winCounter++;
+    }
 }
 
 class EnemyView {
@@ -66,6 +70,15 @@ class EnemyController {
 
     getY = () => {
         return this.model.y;
+    }
+
+    getWinCounter = () => {
+        return this.model.winCounter;
+    }
+
+    catchPlayer = () => {
+        this.model.catchPlayer();
+        console.log('gotcha!');
     }
 
     moveStandardPath = () => {
