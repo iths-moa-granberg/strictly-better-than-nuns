@@ -82,4 +82,16 @@ class PlayerController {
     achieveGoal = () => {
         this.model.achiveGoal();
     }
+
+    getKey = () => {
+        return this.model.key;
+    }
+
+    getGoal = () => {
+        return this.model.goal;
+    }
+
+    getHome = () => {
+        return this.model.home;
+    }
 }

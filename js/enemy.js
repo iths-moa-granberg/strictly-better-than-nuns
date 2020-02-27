@@ -77,10 +77,3 @@ class EnemyController {
         return this.model.getCurrentPath();
     }
 }
-
-//standard rörelsemönster, förvalda paths
-//avvikelse path - if(syn || ljud)
-//line of sight 
-//lyssna efter ljud
-//catchcounter
-//-- rygg?
