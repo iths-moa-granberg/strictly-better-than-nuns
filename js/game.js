@@ -2,6 +2,7 @@ class GameModel {
     constructor() {
         this.roundCounter = 0;
         this.playerHasSelectedSteps = false;
+        this.playerPace = '';
     }
 
     getPlayerPosition() {
@@ -42,13 +43,9 @@ class GameModel {
                 console.log('enemy win! game over!');
             } else {
                 player.loseGoal();
-                //player go staight to home
+                //player go straight to home
             }
         }
-    }
-
-    hasSelectedSteps() {
-        return this.playerHasSelectedSteps;
     }
 
     getSteps() {
@@ -57,6 +54,22 @@ class GameModel {
 
     getAllReachables(steps) {
         return board.getAllReachables(this.getPlayerPosition(), steps);
+    }
+
+    isHeard(startPosition, endPosition) {
+        return this._soundReaches(startPosition).includes(endPosition);
+    }
+
+    _soundReaches(startPosition) {
+        return board.getAllReachables(startPosition, this._getRandomSoundReach());
+    }
+
+    _getRandomSoundReach() {
+        let sound = Math.floor(Math.random() * 6) + 1;
+        return this.playerPace === 'stand' ? sound - 3
+            : this.playerPace === 'sneak' ? sound - 2
+                : this.playerPace === 'walk' ? sound - 1
+                    : sound;
     }
 }
 
@@ -106,13 +119,14 @@ class GameController {
         this.view.showReachablePositions(this.model.getPlayerPosition(), steps);
     }
 
-    stepsSelected = (steps) => { //called from userOptions when choosen pace/steps
+    stepsSelected = (steps, pace) => { //called from userOptions when choosen pace/steps
         this.model.playerHasSelectedSteps = true;
+        this.model.playerPace = pace;
         this.showReachablePositions(steps);
     }
 
     positionSelected = (position) => { //called from board when position is clicked
-        if (this.model.hasSelectedSteps()) {
+        if (this.model.playerHasSelectedSteps) {
             if (this.model.getAllReachables(this.model.getSteps()).includes(position)) {
                 this.view.resetPositions('reachable');
                 this.view.movePlayer(position);
@@ -125,9 +139,17 @@ class GameController {
 
     newRound = () => {
         this.model.checkEnemyTarget(); //check after player moves
+        if (this.model.isHeard(this.model.getPlayerPosition(), this.model.getEnemyPosition())) {
+            console.log('player made sound and was heard');
+        }
 
+        console.log('enemy turn');
         this.view.moveEnemyStandardPath();
         this.model.checkEnemyTarget(); //check after enemy moves
+        if (this.model.isHeard(this.model.getEnemyPosition(), this.model.getPlayerPosition())) {
+            console.log('guard listened and heard player');
+        }
+
         this.model.roundCounter++;
     }
 }

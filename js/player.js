@@ -33,6 +33,7 @@ class PlayerModel {
     }
 }
 
+
 class PlayerView {
     constructor() {
         this._playerDiv = document.createElement('div');
@@ -45,6 +46,7 @@ class PlayerView {
         this._playerDiv.style.left = `${x}px`;
     }
 }
+
 
 class PlayerController {
     constructor(model, view) {

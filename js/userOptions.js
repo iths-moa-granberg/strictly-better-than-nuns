@@ -6,10 +6,6 @@ class UserOptionsModel {
     updateSteps(steps) {
         this.steps = steps;
     }
-
-    getSteps() {
-        return this.steps;
-    }
 }
 
 class UserOptionsView {
@@ -31,19 +27,19 @@ class UserOptionsView {
     }
 
     bindChooseStand(handler) {
-        this.standBtn.addEventListener('click', e => { handler(0) });
+        this.standBtn.addEventListener('click', e => { handler(0, 'stand') });
     }
 
     bindChooseSneak(handler) {
-        this.sneakBtn.addEventListener('click', e => { handler(1) });
+        this.sneakBtn.addEventListener('click', e => { handler(1, 'sneak') }); //1-2
     }
 
     bindChooseWalk(handler) {
-        this.walkBtn.addEventListener('click', e => { handler(3) });
+        this.walkBtn.addEventListener('click', e => { handler(3, 'walk') }); //3-4
     }
     
     bindChooseRun(handler) {
-        this.runBtn.addEventListener('click', e => { handler(5) });
+        this.runBtn.addEventListener('click', e => { handler(5, 'run') }); //1-5
     }
 
     _createEl(tag, className, text) {
@@ -69,12 +65,12 @@ class UserOptionsController {
         this.view.bindChooseRun(this.choosenSteps);
     }
 
-    choosenSteps = (steps) => {
+    choosenSteps = (steps, pace) => {
         this.model.updateSteps(steps);
-        game.stepsSelected(steps);
+        game.stepsSelected(steps, pace);
     }
 
     getSteps = () => {
-        return this.model.getSteps();
+        return this.model.steps;
     }
 }

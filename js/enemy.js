@@ -8,7 +8,7 @@ class EnemyModel {
         this.winCounter = 0;
     }
 
-    updateCoordinates(x, y) {
+    _updateCoordinates(x, y) {
         this.x = x;
         this.y = y;
     }
@@ -20,7 +20,7 @@ class EnemyModel {
             this.y = this.path[this.stepInPath].y;
         } else {
             this._chooseNewPath();
-            this.updateCoordinates(this.path[this.stepInPath].x, this.path[this.stepInPath].y);
+            this._updateCoordinates(this.path[this.stepInPath].x, this.path[this.stepInPath].y);
         }
     }
 
@@ -32,10 +32,6 @@ class EnemyModel {
                 return this.path = path;
             }
         }
-    }
-
-    getCurrentPath() {
-        return this.path;
     }
 
     catchPlayer() {
@@ -87,6 +83,6 @@ class EnemyController {
     }
 
     getCurrentPath = () => {
-        return this.model.getCurrentPath();
+        return this.model.path;
     }
 }
