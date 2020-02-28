@@ -31,7 +31,7 @@ class GameModel {
                 console.log('har nyckel!');
             }
         }
-        if (this.roundCounter >= 8) { //magic number
+        if (this.roundCounter >= 15) {
             console.log('game over');
         }
     }
@@ -70,6 +70,10 @@ class GameModel {
             : this.playerPace === 'sneak' ? sound - 2
                 : this.playerPace === 'walk' ? sound - 1
                     : sound;
+    }
+
+    getClosestPaths(start, end) {
+        return board.getClosestPaths(start, end);
     }
 }
 
@@ -140,16 +144,26 @@ class GameController {
     newRound = () => {
         this.model.checkEnemyTarget(); //check after player moves
         if (this.model.isHeard(this.model.getPlayerPosition(), this.model.getEnemyPosition())) {
-            console.log('player made sound and was heard');
+            this.playerWasHeard();
+        } else {
+            this.view.moveEnemyStandardPath();
         }
 
-        console.log('enemy turn');
-        this.view.moveEnemyStandardPath();
         this.model.checkEnemyTarget(); //check after enemy moves
         if (this.model.isHeard(this.model.getEnemyPosition(), this.model.getPlayerPosition())) {
             console.log('guard listened and heard player');
+            this.playerWasHeard();
         }
 
         this.model.roundCounter++;
+    }
+
+    playerWasHeard = () => {
+        
+        let paths = this.model.getClosestPaths(this.model.getPlayerPosition(), this.model.getEnemyPosition());
+        
+        console.log(paths);
+        
+        //find closest path, place token
     }
 }

@@ -27,6 +27,65 @@ class BoardModel {
             }
         }
     }
+
+    _getQueue(start, end) {
+        let tested = [start];
+        let queue = [[start]];
+
+        for (let stepArr of queue) {
+            let nextStep = [];
+            for (let pos of stepArr) {
+                let neighbours = this._getNeighbours(pos);
+                neighbours = neighbours.filter(neighbour => !tested.includes(neighbour));
+                tested = tested.concat(neighbours);
+                nextStep = nextStep.concat(neighbours);
+            }
+            queue.push(nextStep);
+            if (nextStep.includes(end)) {
+                break
+            }
+        }
+        return queue;
+    }
+
+    getClosestPaths(start, end) {
+        let queue = this._getQueue(start, end);
+        let paths = [[end]];
+
+        for (let path of paths) {
+            for (let pos of path) {
+                if (pos === path[path.length - 1]) {
+                    let i = this._getPlaceInQueue(pos, queue) - 1;
+                    let neighbours = this._getNeighbours(pos).filter(neighbour => queue[i].includes(neighbour));
+                    if (neighbours.length === 1) {
+                        path.push(neighbours[0]);
+                    } else if (neighbours.length === 2) {
+                        let newPath = path.slice();
+                        newPath.push(neighbours[0]);
+                        paths.push(newPath);
+                        path.push(neighbours[1]);
+                    } else if (neighbours.length > 2) {
+                        console.log('error: fanns fler än två möjliga håll att gå från en position');
+                    }
+                    if (path.includes(start)) {
+                        break
+                    }
+                }
+            }
+            path = path.reverse();
+        }
+        return paths;
+    }
+
+    _getPlaceInQueue(position, queue) {
+        let i = 0;
+        for (let place of queue) {
+            if (place.includes(position)) {
+                return i;
+            }
+            i++;
+        }
+    }
 }
 
 class BoardView {
@@ -113,5 +172,9 @@ class BoardController {
 
     showEnemyCurrentPath = (path) => {
         this.view.showEnemyCurrentPath(path);
+    }
+
+    getClosestPaths = (start, end) => {
+        return this.model.getClosestPaths(start, end);
     }
 }
