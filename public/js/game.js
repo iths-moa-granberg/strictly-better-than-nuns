@@ -145,6 +145,7 @@ class GameController {
         this.model.checkEnemyTarget(); //check after player moves
         if (this.model.isHeard(this.model.getPlayerPosition(), this.model.getEnemyPosition())) {
             this.playerWasHeard();
+            //enemy move free
         } else {
             this.view.moveEnemyStandardPath();
         }

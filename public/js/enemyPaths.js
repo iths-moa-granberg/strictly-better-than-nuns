@@ -9,5 +9,5 @@ const enemyPaths = [
 
     [positions[13], positions[14], positions[15], positions[16], positions[12], positions[8]],
 
-    [positions[6], positions[2], positions[1], positions[5], positions[9], positions[13]]
+    [positions[6], positions[2], positions[1], positions[5], positions[9], positions[13]],
 ];

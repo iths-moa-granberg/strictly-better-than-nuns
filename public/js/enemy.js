@@ -14,7 +14,7 @@ class EnemyModel {
     }
 
     moveStandardPath() {
-        if (this.stepInPath != this.path.length -1) {
+        if (this.stepInPath != this.path.length - 1) {
             this.stepInPath++;
             this.x = this.path[this.stepInPath].x;
             this.y = this.path[this.stepInPath].y;
@@ -25,11 +25,12 @@ class EnemyModel {
     }
 
     _chooseNewPath() {
-        let shuffledPaths = enemyPaths.concat().sort(function() { return .5 - Math.random() });
-        for (let path of shuffledPaths) {                        
-            if (path[0] === this.path[this.path.length -1] && path != this.path) {
+        let shuffledPaths = enemyPaths.concat().sort(() => .5 - Math.random());
+        for (let path of shuffledPaths) {
+            if (path[0] === this.path[this.path.length - 1] && path != this.path) {
                 this.stepInPath = 1;
-                return this.path = path;
+                this.path = path;
+                return;
             }
         }
     }
