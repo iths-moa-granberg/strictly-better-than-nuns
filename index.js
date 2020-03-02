@@ -30,7 +30,13 @@ io.on('connection', (socket) => {
     });
 
     //wait until all players has joined
-    io.sockets.emit('update board', { players: game.getPlayersPositions(), tokens: game.getTokens() }); //startPositions, empty tokens
+
+    io.sockets.emit('update board', { //startPositions, empty tokens
+        players: game.getVisiblePlayers(), //board behöver veta playerId + playerPos om synlig
+        tokens: game.getTokens(),
+        enemyPath: [],
+        reachablePaths: [[]],
+    }); 
 
     // const startNextTurn = () => {
     //     io.sockets.emit('players turn', { paths }); //skicka reachables walk etc, based on if caught

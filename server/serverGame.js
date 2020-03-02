@@ -25,8 +25,8 @@ class Game {
         return []; //placeholder code;
     }
 
-    getPlayersPositions = () => {
-        return this.players.map(player => player.position);
+    getVisiblePlayers = () => {
+        return this.players.map(player => player.visible ? { id: player.id, positionId: player.position.id } : null);
     }
 }
 

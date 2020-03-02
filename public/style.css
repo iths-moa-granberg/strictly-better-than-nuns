@@ -9,7 +9,7 @@ body {
     background-image: url(images/test-board.png);
 }
 
-.player {
+.player-1 {
     width: 30px;
     height: 30px;
     background-color: green;
@@ -18,7 +18,7 @@ body {
     z-index: 1;
 }
 
-.enemy {
+.player-enemy {
     width: 30px;
     height: 30px;
     background-color: black;
