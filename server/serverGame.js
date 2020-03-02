@@ -2,6 +2,7 @@ class Game {
     constructor() {
         this.roundCounter = 0;
         this.players = [];
+        this.enemyWinCounter = 0;
     }
 
     addPlayer = (newPlayer) => {
@@ -25,8 +26,12 @@ class Game {
         return []; //placeholder code;
     }
 
-    getVisiblePlayers = () => {
-        return this.players.map(player => player.visible ? { id: player.id, positionId: player.position.id } : null);
+    getVisibilityPlayers = () => {
+        return this.players.map(player => player.visible ? {
+            id: player.id,
+            positionId: player.position.id,
+            visible: player.visible,
+        } : null);
     }
 }
 

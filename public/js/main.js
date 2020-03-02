@@ -2,8 +2,8 @@ const socket = io();
 const board = new BoardView();
 let myPlayer;
 
-socket.on('init', ({ id, home, key, goal, isEvil }) => {
-    myPlayer = new Player(id, home, key, goal, isEvil);
+socket.on('init', ({ id, home, key, goal }) => {
+    myPlayer = new Player(id, home, key, goal);
 });
 
 socket.on('update board', ({ players, tokens, enemyPath, reachablePaths }) => {

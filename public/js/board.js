@@ -1,6 +1,5 @@
 class BoardView {
     constructor() {
-        // this.positionElements = document.querySelectorAll('.position');
         // this.bindSelectPosition() //who to call??
     }
 
@@ -11,8 +10,12 @@ class BoardView {
             
             for (let player of players) {
                 if (player.positionId === position.id) {
-                    child = this._renderPlayer(player.id);
-                } 
+                    if (player.id === activePlayer.id) {
+                        child += this._renderPlayer(player.id);
+                    } else if (player.visible) {
+                        child += this._renderPlayer(player.id);
+                    }
+                }
             }
             if (tokens.find(tokenPos => tokenPos.id === position.id)) {
                 className.push('token');

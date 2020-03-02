@@ -1,5 +1,5 @@
 class Player {
-    constructor(id, home, key, goal, isEvil) {
+    constructor(id, home, key, goal) {
         this.id = id;
 
         this.home = home;
@@ -10,8 +10,6 @@ class Player {
 
         this.hasKey = false;
         this.hasGoal = false;
-
-        this.isEvil = isEvil;
     }
 
     updatePosition(position) {
