@@ -1,6 +1,6 @@
 class GameModel {
     constructor() {
-        this.roundCounter = 0;
+        // this.roundCounter = 0;
         this.playerHasSelectedSteps = false;
         this.playerPace = '';
     }

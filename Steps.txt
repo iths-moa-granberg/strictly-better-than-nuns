@@ -1,7 +1,8 @@
+New game
 Players choose pace
 Players choose position 
 -> (player, path, pace)
-Server waits for all players choice
+		Server waits for all players choice
 Server check target players & enemy
 	    <— server ask players to place sound-tokens
 	    -> player choose token-placements

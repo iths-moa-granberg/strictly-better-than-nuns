@@ -18,11 +18,15 @@ class Player {
         this.position = position;
     }
 
-    achieveKey() {
+    isOnTarget(target) {
+        return target === this.position;
+    }
+
+    achiveKey() {
         this.hasKey = true;
     }
 
-    achieveGoal() {
+    achiveGoal() {
         this.hasGoal = true;
     }
 
@@ -30,3 +34,5 @@ class Player {
         this.hasGoal = false;
     }
 }
+
+module.exports = Player;
