@@ -33,6 +33,17 @@ class Game {
             visible: player.visible,
         } : {});
     }
+
+    checkEnemyTarget = (enemy) => {
+        for (let player of this.players) {
+            if (enemy.checkTarget(player)) {
+                this.enemyWinCounter++;
+            }
+        }
+        if (this.enemyWinCounter >= this.players.length - 2 && this.enemyWinCounter) {
+            console.log('enemy win');
+        }
+    }
 }
 
 module.exports = new Game;

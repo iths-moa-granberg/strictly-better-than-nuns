@@ -46,29 +46,23 @@ socket.on('player out of steps', ({ }) => {
 });
 
 const playerConfirmDestination = () => {
-    socket.emit('player move ended', {});
+    socket.emit('player move completed', {});
     userOptions.disableBtns();
 }
 
-socket.on('update player', ({ hasKey, hasGoal, visible }) => { 
+socket.on('update player', ({ hasKey, hasGoal, visible }) => {
     myPlayer.hasKey = hasKey;
     myPlayer.hasGoal = hasGoal;
     myPlayer.visible = visible;
 });
 
-socket.on('enemy turn', ({}) => {
-    console.log('enemy turn');
+socket.on('enemy turn', ({ }) => {
+    //if enemy, update ui, choose next step
 });
 
-// //in choosePathBtn onclick:
-// let path = [positions[1], positions[2]];
-// let pace = 'walk';
-// socket.emit('player move', { path, pace });
-
-// socket.on('enemy turn', ({ paths }) => {
-//     //if enemy
-//     //activate ui, choose next step
-// });
+socket.on('enemy step', ({}) => {
+    
+});
 
 // //in chooseNextStepEnemy onclick:
 // socket.emit('enemy step', { position, pace });

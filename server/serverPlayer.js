@@ -1,3 +1,5 @@
+const enemyPaths = require('./enemyPaths.js');
+
 class Player {
     constructor(id, home, key, goal) {
         this.id = id;
@@ -70,6 +72,10 @@ class Enemy extends Player {
                 return;
             }
         }
+    }
+
+    checkTarget = (player) => {
+        return player.position.id === this.position.id && player.id != this.id;
     }
 }
 

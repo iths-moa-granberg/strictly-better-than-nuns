@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const Player = require('./server/serverPlayer.js');
 const positions = require('./server/serverPositions.js');
-const enemyPaths = require('./server/enemyPaths.js');
+const enemyPaths = require('./server/enemyPaths.js'); //behövs bara i serverPlayer?
 const game = require('./server/serverGame.js');
 const Board = require('./server/serverBoard.js');
 const board = new Board(positions); //annat namn?
@@ -37,12 +37,16 @@ io.on('connection', (socket) => {
 
     //wait until all players has joined
 
-    io.sockets.emit('update board', {
-        players: game.getVisibilityPlayers(),
-        tokens: game.getTokens(),
-        enemyPath: [], //get path
-        reachablePositions: [],
-    });
+    const updateBoard = () => {
+        io.sockets.emit('update board', {
+            players: game.getVisibilityPlayers(),
+            tokens: game.getTokens(),
+            enemyPath: enemy.path,
+            reachablePositions: [],
+        });
+    }
+
+    updateBoard();
 
     const startNextTurn = () => {
         io.sockets.emit('players turn', {});
@@ -76,7 +80,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('player move ended', ({ }) => {
+    socket.on('player move completed', ({ }) => {
         socket.player.checkTarget();
         //if seen, visible = true, else if visible was true, place token
         socket.emit('update player', {
@@ -84,17 +88,25 @@ io.on('connection', (socket) => {
             hasGoal: socket.player.hasGoal,
             visible: socket.player.visible,
         });
+        //make sound!
 
         //wait until all players' moves are finished
 
-        io.sockets.emit('update board', {
-            players: game.getVisibilityPlayers(),
-            tokens: game.getTokens(),
-            enemyPath: [], //get path
-            reachablePositions: [],
-        });
-        socket.emit('enemy turn', {});
+        updateBoard();
+        // socket.emit('enemy turn', {}); //when enemy is playable
+        
+        enemyStep();
+        enemyStep();
+        enemyStep();
+        startNextTurn();
     });
+
+    const enemyStep = () => {
+        enemy.moveStandardPath();
+        //look around
+        game.checkEnemyTarget(enemy);
+        updateBoard();
+    }
 
     // socket.on('enemy step', ({ position, pace }) => {
     //     //socket.player.updatePosition();
