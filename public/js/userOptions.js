@@ -1,76 +1,36 @@
-class UserOptionsModel {
-    constructor() { 
-        this.steps;
-    }
-
-    updateSteps(steps) {
-        this.steps = steps;
-    }
-}
-
-class UserOptionsView {
+class UserOptions {
     constructor() {
-        this._renderChooseSteps();
+        this.wrapper = document.querySelector('.user-options-wrapper');
     }
 
-    _renderChooseSteps() {
-        this.standBtn = this._createEl('button', '', 'Stand');
-        this.sneakBtn = this._createEl('button', '', 'Sneak');
-        this.walkBtn = this._createEl('button', '', 'Walk');
-        this.runBtn = this._createEl('button', '', 'Run');
-
-        const wrapper = document.querySelector('.user-options-wrapper');
-        wrapper.appendChild(this.standBtn);
-        wrapper.appendChild(this.sneakBtn);
-        wrapper.appendChild(this.walkBtn);
-        wrapper.appendChild(this.runBtn);
-    }
-
-    bindChooseStand(handler) {
-        this.standBtn.addEventListener('click', e => { handler(0, 'stand') });
-    }
-
-    bindChooseSneak(handler) {
-        this.sneakBtn.addEventListener('click', e => { handler(1, 'sneak') }); //1-2
-    }
-
-    bindChooseWalk(handler) {
-        this.walkBtn.addEventListener('click', e => { handler(3, 'walk') }); //3-4
-    }
-    
-    bindChooseRun(handler) {
-        this.runBtn.addEventListener('click', e => { handler(5, 'run') }); //1-5
-    }
-
-    _createEl(tag, className, text) {
-        const element = document.createElement(tag);
-        if (className) {
-            element.classlist.add(className);
+    renderPaceBtns = (handler, selected, className) => {
+        this.wrapper.innerHTML = '';
+        const types = ['Stand', 'Sneak', 'Walk', 'Run'];
+        for (let type of types) {
+            if (selected && type.toLowerCase() != selected) {
+                this.wrapper.innerHTML += this._renderBtn(type, className);
+            } else {
+                this.wrapper.innerHTML += this._renderBtn(type, '');
+            }
         }
-        if (text) {
-            element.innerText = text;
+        this._addListeners(handler);
+    }
+
+    _renderBtn = (type, className) => {
+        return `
+        <button class="${type.toLowerCase()} ${className}">${type}</button>
+        `;
+    }
+
+    _addListeners = (handler) => {
+        const btns = this.wrapper.querySelectorAll('button');
+        for (let btn of btns) {
+            btn.addEventListener('click', e => handler(btn.innerText.toLowerCase()));
         }
-        return element;
-    }
-}
-
-class UserOptionsController {
-    constructor(model, view) {
-        this.model = model;
-        this.view = view;
-
-        this.view.bindChooseStand(this.choosenSteps);
-        this.view.bindChooseSneak(this.choosenSteps);
-        this.view.bindChooseWalk(this.choosenSteps);
-        this.view.bindChooseRun(this.choosenSteps);
     }
 
-    choosenSteps = (steps, pace) => {
-        this.model.updateSteps(steps);
-        game.stepsSelected(steps, pace);
-    }
-
-    getSteps = () => {
-        return this.model.steps;
+    disablePaceBtns = () => {
+        const paceBtns = this.wrapper.querySelectorAll('button');
+        paceBtns.forEach(btn => btn.disabled = true);
     }
 }

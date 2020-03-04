@@ -27,8 +27,6 @@ game.addPlayer(enemy);
 io.on('connection', (socket) => {
     socket.player = new Player.Good(1, positions[1], positions[12], positions[13]); //id, home, key, goal
     game.addPlayer(socket.player);
-    console.log(game.players);
-    
 
     socket.emit('init', {
         id: socket.player.id,
@@ -43,24 +41,50 @@ io.on('connection', (socket) => {
         players: game.getVisibilityPlayers(),
         tokens: game.getTokens(),
         enemyPath: [],
-        reachablePaths: [[]],
-    }); 
+        reachablePositions: [],
+    });
 
-    // const startNextTurn = () => {
-    //     io.sockets.emit('players turn', { paths }); //skicka reachables walk etc, based on if caught
-    // };
-    // startNextTurn();
+    const startNextTurn = () => {
+        io.sockets.emit('players turn', {});
+    };
+    startNextTurn();
 
-    // socket.on('player move', ({ path, pace }) => {
-    //     console.log(path, pace);
-    //     //socket.player.updatePosition();
-    //     //socket.player.checkTarget();
-    //     //socket.emit('update player', { data }); data: key/goalstatus, visible etc)
+    const playerStepOptions = () => {
+        socket.emit('player possible steps', {
+            endups: board.getReachable(socket.player.position, socket.player.stepsLeft),
+            visible: socket.player.visible,
+        });
+    }
 
-    //     //wait until all players has joined
-    //     io.sockets.emit('update board', { players, tokens });
-    //     socket.emit('enemy turn', { path }); //based on standard/free
+    socket.on('player chooses pace', ({ pace }) => {
+        socket.player.pace = pace;
+        socket.player.stepsLeft = pace === 'stand' ? 0
+            : pace === 'sneak' ? 1
+                : pace === 'walk' ? 3
+                    : 5;
+        playerStepOptions();
+    });
 
+    socket.on('player takes step', ({ position }) => {
+        socket.player.position = position;
+        socket.player.stepsLeft--;
+        if (socket.player.stepsLeft <= 0) {
+            socket.emit('player out of steps', {});
+        } else {
+            //if seen, visible = true
+            playerStepOptions();
+        }
+    });
+
+    // socket.on('player move ended', ({ }) => {
+    //     socket.player.checkTarget();
+    //     socket.emit('update player', { key, goal, visible });
+    //     //wait until all players' moves are finished
+    //     io.socket.emit('update board', {
+    //         players: game.getVisibilityPlayers(),
+    //         tokens: game.getTokens(),
+    //     });
+    //     // socket.emit('enemy turn', { path });
     // });
 
     // socket.on('enemy step', ({ position, pace }) => {

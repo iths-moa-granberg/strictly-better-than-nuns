@@ -3,7 +3,16 @@ class Board {
         this.positions = positions;
     }
 
-    getAllReachable = (startPosition, totalSteps) => {
+    getAllReachables = (position) => {
+        let possible = {};
+        possible.stand = [position];
+        possible.sneak = this.getReachable(position, 1); //1-2
+        possible.walk = this.getReachable(position, 3); //3-4
+        possible.run = this.getReachable(position, 5); //1-5
+        return possible;
+    }
+
+    getReachable = (startPosition, totalSteps) => {
         let possiblePos = [startPosition];
         for (let steps = 0; steps < totalSteps; steps++) {
             for (let pos of possiblePos) {
@@ -17,7 +26,7 @@ class Board {
     _getNeighbours = (position) => {
         let neighbours = [];
         for (let neighbour of position.neighbours) {
-            neighbours.push(positions[neighbour]);
+            neighbours.push(this.positions[neighbour]);
         }
         return neighbours;
     }

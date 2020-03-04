@@ -1,41 +1,58 @@
 class BoardView {
     constructor() {
-        // this.bindSelectPosition() //who to call??
+        this.activePlayer = {};
+        this.players = [];
+        this.tokens = [];
+        this.enemyPath = [];
+        this.reachablePositions = [];
     }
 
-    renderBoard = (activePlayer, players, tokens, enemyPath, reachablePaths) => {
+    renderBoard = () => {
+        this._clearBoard();        
         for (let position of Object.values(positions)) {
             let className = ['position'];
             let child = '';
-            
-            for (let player of players) {
+
+            if (position.id === this.activePlayer.position.id) {
+                child += this._renderPlayer('1'); //obs fulhack
+            }
+            for (let player of this.players) {
                 if (player.positionId === position.id) {
-                    if (player.id === activePlayer.id) {
+                    if (player.id === this.activePlayer.id) {
                         child += this._renderPlayer(player.id);
                     } else if (player.visible) {
                         child += this._renderPlayer(player.id);
                     }
                 }
             }
-            if (tokens.find(tokenPos => tokenPos.id === position.id)) {
+            if (this.tokens.find(tokenPos => tokenPos.id === position.id)) {
                 className.push('token');
             }
-            if (enemyPath.find(enemyPos => enemyPos.id === position.id)) {
+            if (this.enemyPath.find(enemyPos => enemyPos.id === position.id)) {
                 className.push('enemy-path');
             }
-            if (reachablePaths.find(pos => pos.id === position.id)) {
+            if (this.reachablePositions.find(pos => pos.id === position.id)) {
                 className.push('reachable');
             }
-            if (activePlayer.key.id === position.id) {
+            if (this.activePlayer.key.id === position.id) {
                 className.push('key');
             }
-            if (activePlayer.goal.id === position.id) {
+            if (this.activePlayer.goal.id === position.id) {
                 className.push('goal');
             }
-            if (activePlayer.home.id === position.id) {
+            if (this.activePlayer.home.id === position.id) {
                 className.push('home');
             }
             document.querySelector('.board-wrapper').innerHTML += this._renderPosition(position, className.join(' '), child);
+        }
+    }
+
+    addStepListener = (start, endups, handler) => {
+        for (let position of Object.values(positions)) {
+            if (start.neighbours.includes(position.id) && endups.find(pos => pos.id === position.id)) {
+                const node = document.querySelectorAll('.position')[position.id - 1];
+                node.addEventListener('click', e => handler(position));
+            }
         }
     }
 
@@ -52,5 +69,9 @@ class BoardView {
         return `
             <div class="player-${playerId.toString()}"></div>
         `;
+    }
+
+    _clearBoard = () => {
+        document.querySelector('.board-wrapper').innerHTML = '';
     }
 }

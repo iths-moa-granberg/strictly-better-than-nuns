@@ -15,7 +15,7 @@ class Game {
     }
 
     startNextRound = () => {
-        //for each socket, check playerPos and calc reachablesObj, emit mave move
+        //for each socket, check playerPos and calc reachablesObj, emit make move
         this.roundCounter++;
         if (this.roundCounter >= 15) {
             console.log('end game');
@@ -31,7 +31,7 @@ class Game {
             id: player.id,
             positionId: player.position.id,
             visible: player.visible,
-        } : null);
+        } : {});
     }
 }
 

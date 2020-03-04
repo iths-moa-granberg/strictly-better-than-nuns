@@ -1,19 +1,54 @@
 const socket = io();
 const board = new BoardView();
+const userOptions = new UserOptions();
 let myPlayer;
 
 socket.on('init', ({ id, home, key, goal }) => {
     myPlayer = new Player(id, home, key, goal);
 });
 
-socket.on('update board', ({ players, tokens, enemyPath, reachablePaths }) => {
-    board.renderBoard(myPlayer, players, tokens, enemyPath, reachablePaths);
+socket.on('update board', ({ players, tokens, enemyPath, reachablePositions }) => {
+    board.activePlayer = myPlayer;
+    board.players = players;
+    board.tokens = tokens;
+    board.enemyPath = enemyPath;
+    board.reachablePositions = reachablePositions;
+    board.renderBoard();
 });
 
-// socket.on('players turn', ({ paths }) => {
-//     //if player
-//     //check if caught, limit 
-//     //activate ui, choose pace and path
+socket.on('players turn', ({ }) => {
+    //if player
+    userOptions.renderPaceBtns(playerChoosesPace);
+});
+
+const playerChoosesPace = (pace) => {
+    socket.emit('player chooses pace', ({ pace }));
+    userOptions.renderPaceBtns(playerChoosesPace, pace, 'disabled');
+}
+
+socket.on('player possible steps', ({ endups, visible }) => {
+    //if visible, warning
+    board.reachablePositions = endups;
+    board.renderBoard();
+    board.addStepListener(board.activePlayer.position, endups, playerTakeStep);
+});
+
+const playerTakeStep = (position) => {
+    userOptions.disablePaceBtns();
+    board.activePlayer.position = position;
+    socket.emit('player takes step', { position });
+}
+
+socket.on('player out of steps', ({ }) => {
+    board.reachablePositions = [];
+    board.renderBoard();
+    //userOptions confirm happy with decision
+    //socket.emit('player move ended', {});
+});
+
+// socket.on('player turn ended', ({ endups, seen }) => {
+//     board.renderBoard();
+//     board.addStepListener(myPlayer.position, endups, playerStep);
 // });
 
 // // socket.on('update player', ({ data }) => { });

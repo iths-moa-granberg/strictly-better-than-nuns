@@ -7,10 +7,13 @@ class Player {
         this.key = key;
         this.goal = goal;
 
+        this.pace = 0;
+        this.stepsLeft = 0;
+
         this.hasKey = false;
         this.hasGoal = false;
 
-        this.visible = true;
+        this.visible = false;
     }
 
     updatePosition(position) {
@@ -42,6 +45,8 @@ class Enemy extends Player {
         this.stepInPath = 0;
 
         this.position = path[0];
+
+        this.visible = true;
     }
 
     moveStandardPath = () => {
