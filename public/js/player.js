@@ -11,20 +11,4 @@ class Player {
         this.hasKey = false;
         this.hasGoal = false;
     }
-
-    updatePosition(position) {
-        this.position = position;
-    }
-
-    achieveKey() {
-        this.hasKey = true;
-    }
-
-    achieveGoal() {
-        this.hasGoal = true;
-    }
-
-    loseGoal() {
-        this.hasGoal = false;
-    }
 }
