@@ -25,7 +25,7 @@ enemy = new Player.Evil('enemy', enemyPaths[0]);
 game.addPlayer(enemy);
 
 io.on('connection', (socket) => {
-    socket.player = new Player.Good(1, positions[1], positions[12], positions[13]); //id, home, key, goal
+    socket.player = new Player.Good(game.generatePlayerInfo());
     game.addPlayer(socket.player);
 
     socket.emit('init', {
@@ -90,16 +90,22 @@ io.on('connection', (socket) => {
         });
         //make sound!
 
-        //wait until all players' moves are finished
+        game.playerTurnCompleted++;
+        if (game.playerTurnCompleted === game.numOfGoodPlayers) {
+            game.playerTurnCompleted = 0;
+            startEnemyTurn();
+        }
+    });
 
+    const startEnemyTurn = () => {
         updateBoard();
         // socket.emit('enemy turn', {}); //when enemy is playable
-        
+
         enemyStep();
         enemyStep();
         enemyStep();
         startNextTurn();
-    });
+    }
 
     const enemyStep = () => {
         enemy.moveStandardPath();

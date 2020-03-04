@@ -6,7 +6,7 @@ class Player {
         this.key = key;
         this.goal = goal;
 
-        this.position = this.home;
+        this.position = home;
 
         this.hasKey = false;
         this.hasGoal = false;

@@ -1,17 +1,19 @@
+const positions = require('./serverPositions');
+
 class Game {
     constructor() {
         this.roundCounter = 0;
         this.players = [];
+        this.numOfGoodPlayers = 0;
         this.enemyWinCounter = 0;
+        this.playerTurnCompleted = 0;
     }
 
     addPlayer = (newPlayer) => {
-        for (let player of this.players) {
-            if (player.id === newPlayer.id) {
-                return
-            }
-        }
         this.players.push(newPlayer);
+        if (newPlayer.id != 'enemy') {
+            this.numOfGoodPlayers++;
+        }
     }
 
     startNextRound = () => {
@@ -40,9 +42,18 @@ class Game {
                 this.enemyWinCounter++;
             }
         }
-        if (this.enemyWinCounter >= this.players.length - 2 && this.enemyWinCounter) {
+        if (this.enemyWinCounter >= this.numOfGoodPlayers) {
             console.log('enemy win');
         }
+    }
+
+    generatePlayerInfo = () => {
+        return {
+            id: this.numOfGoodPlayers,
+            home: positions[1 + this.numOfGoodPlayers],
+            key: positions[12 + this.numOfGoodPlayers],
+            goal: positions[10 + this.numOfGoodPlayers],
+        };
     }
 }
 

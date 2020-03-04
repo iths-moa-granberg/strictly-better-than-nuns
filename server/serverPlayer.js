@@ -1,7 +1,7 @@
 const enemyPaths = require('./enemyPaths.js');
 
 class Player {
-    constructor(id, home, key, goal) {
+    constructor({ id, home, key, goal }) {
         this.id = id;
         this.position = home;
 
@@ -16,10 +16,6 @@ class Player {
         this.hasGoal = false;
 
         this.visible = false;
-    }
-
-    updatePosition(position) {
-        this.position = position;
     }
 
     loseGoal() {
@@ -43,7 +39,7 @@ class Player {
 
 class Enemy extends Player {
     constructor(id, path) {
-        super(id);
+        super({ id });
 
         this.path = path;
         this.stepInPath = 0;
