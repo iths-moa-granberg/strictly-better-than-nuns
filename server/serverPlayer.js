@@ -20,20 +20,22 @@ class Player {
         this.position = position;
     }
 
-    isOnTarget(target) {
-        return target === this.position;
-    }
-
-    achiveKey() {
-        this.hasKey = true;
-    }
-
-    achiveGoal() {
-        this.hasGoal = true;
-    }
-
     loseGoal() {
         this.hasGoal = false;
+    }
+
+    checkTarget = () => {
+        if (this.hasKey) {
+            if (this.hasGoal) {
+                if (this.home.id === this.position.id) {
+                    console.log('win');
+                }
+            } else if (this.goal.id === this.position.id) {
+                this.hasGoal = true;
+            }
+        } else if (this.key.id === this.position.id) {
+            this.hasKey = true;
+        }
     }
 }
 

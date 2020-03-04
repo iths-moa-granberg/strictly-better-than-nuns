@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
     io.sockets.emit('update board', {
         players: game.getVisibilityPlayers(),
         tokens: game.getTokens(),
-        enemyPath: [],
+        enemyPath: [], //get path
         reachablePositions: [],
     });
 
@@ -76,16 +76,25 @@ io.on('connection', (socket) => {
         }
     });
 
-    // socket.on('player move ended', ({ }) => {
-    //     socket.player.checkTarget();
-    //     socket.emit('update player', { key, goal, visible });
-    //     //wait until all players' moves are finished
-    //     io.socket.emit('update board', {
-    //         players: game.getVisibilityPlayers(),
-    //         tokens: game.getTokens(),
-    //     });
-    //     // socket.emit('enemy turn', { path });
-    // });
+    socket.on('player move ended', ({ }) => {
+        socket.player.checkTarget();
+        //if seen, visible = true, else if visible was true, place token
+        socket.emit('update player', {
+            hasKey: socket.player.hasKey,
+            hasGoal: socket.player.hasGoal,
+            visible: socket.player.visible,
+        });
+
+        //wait until all players' moves are finished
+
+        io.sockets.emit('update board', {
+            players: game.getVisibilityPlayers(),
+            tokens: game.getTokens(),
+            enemyPath: [], //get path
+            reachablePositions: [],
+        });
+        socket.emit('enemy turn', {});
+    });
 
     // socket.on('enemy step', ({ position, pace }) => {
     //     //socket.player.updatePosition();

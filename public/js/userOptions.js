@@ -29,8 +29,14 @@ class UserOptions {
         }
     }
 
-    disablePaceBtns = () => {
-        const paceBtns = this.wrapper.querySelectorAll('button');
-        paceBtns.forEach(btn => btn.disabled = true);
+    disableBtns = () => {
+        const btns = this.wrapper.querySelectorAll('button');
+        btns.forEach(btn => btn.disabled = true);
+    }
+
+    renderConfirmDestinationBtn = (handler) => {
+        this.wrapper.innerHTML = this._renderBtn('Confirm');
+        // this.wrapper.innerHTML += this._renderBtn('Back');
+        this._addListeners(handler);
     }
 }

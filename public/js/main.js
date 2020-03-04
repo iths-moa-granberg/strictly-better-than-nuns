@@ -34,7 +34,7 @@ socket.on('player possible steps', ({ endups, visible }) => {
 });
 
 const playerTakeStep = (position) => {
-    userOptions.disablePaceBtns();
+    userOptions.disableBtns();
     board.activePlayer.position = position;
     socket.emit('player takes step', { position });
 }
@@ -42,16 +42,23 @@ const playerTakeStep = (position) => {
 socket.on('player out of steps', ({ }) => {
     board.reachablePositions = [];
     board.renderBoard();
-    //userOptions confirm happy with decision
-    //socket.emit('player move ended', {});
+    userOptions.renderConfirmDestinationBtn(playerConfirmDestination);
 });
 
-// socket.on('player turn ended', ({ endups, seen }) => {
-//     board.renderBoard();
-//     board.addStepListener(myPlayer.position, endups, playerStep);
-// });
+const playerConfirmDestination = () => {
+    socket.emit('player move ended', {});
+    userOptions.disableBtns();
+}
 
-// // socket.on('update player', ({ data }) => { });
+socket.on('update player', ({ hasKey, hasGoal, visible }) => { 
+    myPlayer.hasKey = hasKey;
+    myPlayer.hasGoal = hasGoal;
+    myPlayer.visible = visible;
+});
+
+socket.on('enemy turn', ({}) => {
+    console.log('enemy turn');
+});
 
 // //in choosePathBtn onclick:
 // let path = [positions[1], positions[2]];
