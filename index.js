@@ -49,13 +49,14 @@ io.on('connection', (socket) => {
     updateBoard();
 
     const startNextTurn = () => {
+        game.startNextTurn();
         io.sockets.emit('players turn', {});
     };
     startNextTurn();
 
     const playerStepOptions = () => {
         socket.emit('player possible steps', {
-            endups: board.getReachable(socket.player.position, socket.player.stepsLeft),
+            endups: board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey),
             visible: socket.player.visible,
         });
     }

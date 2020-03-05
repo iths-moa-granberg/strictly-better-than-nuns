@@ -3,21 +3,18 @@ class Board {
         this.positions = positions;
     }
 
-    getAllReachables = (position) => {
-        let possible = {};
-        possible.stand = [position];
-        possible.sneak = this.getReachable(position, 1); //1-2
-        possible.walk = this.getReachable(position, 3); //3-4
-        possible.run = this.getReachable(position, 5); //1-5
-        return possible;
-    }
-
-    getReachable = (startPosition, totalSteps) => {
+    getReachable = (startPosition, totalSteps, hasKey, sound) => {
+        if (sound) {
+            hasKey = true;
+        }
         let possiblePos = [startPosition];
         for (let steps = 0; steps < totalSteps; steps++) {
             for (let pos of possiblePos) {
                 possiblePos = possiblePos.concat(this._getNeighbours(pos)
                     .filter(neighbour => !possiblePos.includes(neighbour)));
+                if (!hasKey) {
+                    possiblePos = possiblePos.filter(pos => !pos.requireKey);
+                }
             }
         }
         return possiblePos;
@@ -31,7 +28,10 @@ class Board {
         return neighbours;
     }
 
-    getClosestPaths = (start, end) => {
+    getClosestPaths = (start, end, hasKey, sound) => {
+        if (sound) {
+            hasKey = true;
+        }
         let queue = this._getQueue(start, end);
         let paths = [[end]];
 
@@ -40,6 +40,9 @@ class Board {
                 if (pos === path[path.length - 1]) {
                     let i = this._getPlaceInQueue(pos, queue) - 1;
                     let neighbours = this._getNeighbours(pos).filter(neighbour => queue[i].includes(neighbour));
+                    if (!hasKey) {
+                        neighbours = neighbours.filter(pos => !pos.requireKey);
+                    }
                     if (neighbours.length === 1) {
                         path.push(neighbours[0]);
                     } else if (neighbours.length === 2) {

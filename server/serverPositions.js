@@ -25,6 +25,7 @@ const positions = {
         x: 389,
         y: 5,
         neighbours: [3, 8],
+        requireKey: true,
     },
 
     5: {

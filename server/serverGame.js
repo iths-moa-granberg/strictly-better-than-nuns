@@ -16,10 +16,9 @@ class Game {
         }
     }
 
-    startNextRound = () => {
-        //for each socket, check playerPos and calc reachablesObj, emit make move
+    startNextTurn = () => {
         this.roundCounter++;
-        if (this.roundCounter >= 15) {
+        if (this.roundCounter > 15) {
             console.log('end game');
         }
     }
@@ -40,6 +39,7 @@ class Game {
         for (let player of this.players) {
             if (enemy.checkTarget(player)) {
                 this.enemyWinCounter++;
+                player.loseGoal();
             }
         }
         if (this.enemyWinCounter >= this.numOfGoodPlayers) {
