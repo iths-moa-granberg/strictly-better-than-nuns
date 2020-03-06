@@ -18,12 +18,8 @@ class BoardView {
                 child += this._renderPlayer(this.activePlayer.id);
             }
             for (let player of this.players) {
-                if (player.positionId === position.id) {
-                    if (player.id === this.activePlayer.id) {
-                        child += this._renderPlayer(player.id);
-                    } else if (player.visible) {
-                        child += this._renderPlayer(player.id);
-                    }
+                if (player.positionId === position.id && player.visible && player.id != this.activePlayer.id) {
+                    child += this._renderPlayer(player.id);
                 }
             }
             if (this.soundTokens.find(tokenPos => tokenPos.id === position.id)) {
