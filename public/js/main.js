@@ -5,6 +5,7 @@ let myPlayer;
 
 socket.on('init', ({ id, home, key, goal }) => {
     myPlayer = new Player(id, home, key, goal);
+    console.log(myPlayer.id);
 });
 
 socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reachablePositions }) => {

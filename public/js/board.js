@@ -9,13 +9,13 @@ class BoardView {
     }
 
     renderBoard = () => {
-        this._clearBoard();        
+        this._clearBoard();
         for (let position of Object.values(positions)) {
             let className = ['position'];
             let child = '';
 
             if (position.id === this.activePlayer.position.id) {
-                child += this._renderPlayer('1'); //obs fulhack
+                child += this._renderPlayer(this.activePlayer.id);
             }
             for (let player of this.players) {
                 if (player.positionId === position.id) {
@@ -71,7 +71,7 @@ class BoardView {
 
     _renderPlayer = (playerId) => {
         return `
-            <div class="player-${playerId.toString()}"></div>
+            <div class="player player-${playerId.toString()}"></div>
         `;
     }
 

@@ -9,22 +9,28 @@ body {
     background-image: url(images/test-board.png);
 }
 
-.player-1 {
+.player {
     width: 25px;
     height: 25px;
-    background-color: green;
     border-radius: 100%;
     position: absolute;
     z-index: 1;
 }
 
+.player-0 {
+    background-color: green;
+}
+
+.player-1 {
+    background-color: darkblue;
+}
+
+.player-2 {
+    background-color: purple;
+}
+
 .player-enemy {
-    width: 25px;
-    height: 25px;
     background-color: black;
-    border-radius: 100%;
-    position: absolute;
-    z-index: 1;
 }
 
 .position {
