@@ -11,6 +11,7 @@ class Player {
 
         this.pace = '';
         this.stepsLeft = 0;
+        this.path = [];
 
         this.hasKey = false;
         this.hasGoal = false;
@@ -39,7 +40,7 @@ class Player {
 
 class Enemy extends Player {
     constructor(id, path) {
-        super({ id });
+        super({ id, path });
 
         this.path = path;
         this.stepInPath = 0;

@@ -4,6 +4,7 @@ const positions = {
         x: 5,
         y: 5,
         neighbours: [2, 5],
+        inSight: [2, 5, 6, 9, 13,],
     },
 
     2: {
@@ -11,6 +12,7 @@ const positions = {
         x: 133,
         y: 5,
         neighbours: [1, 3, 6],
+        inSight: [1, 5, 6,],
     },
 
     3: {
@@ -18,6 +20,8 @@ const positions = {
         x: 261,
         y: 5,
         neighbours: [2, 4],
+        requireKey: true,
+        inSight: [4, 7, 8,],
     },
 
     4: {
@@ -25,7 +29,7 @@ const positions = {
         x: 389,
         y: 5,
         neighbours: [3, 8],
-        requireKey: true,
+        inSight: [3, 7, 8,],
     },
 
     5: {
@@ -33,6 +37,7 @@ const positions = {
         x: 5,
         y: 96,
         neighbours: [1, 6, 9],
+        inSight: [1, 2, 6, 9, 13,],
     },
 
     6: {
@@ -40,6 +45,7 @@ const positions = {
         x: 133,
         y: 96,
         neighbours: [2, 5, 7],
+        inSight: [1, 5, 2,],
     },
 
     7: {
@@ -47,6 +53,7 @@ const positions = {
         x: 261,
         y: 96,
         neighbours: [6, 11, 8],
+        inSight: [3, 4, 8,],
     },
 
     8: {
@@ -54,6 +61,7 @@ const positions = {
         x: 389,
         y: 96,
         neighbours: [4, 7, 12],
+        inSight: [3, 4, 7,],
     },
 
     9: {
@@ -61,6 +69,7 @@ const positions = {
         x: 5,
         y: 187,
         neighbours: [5, 13],
+        inSight: [1, 5, 13,],
     },
 
     10: {
@@ -68,6 +77,7 @@ const positions = {
         x: 133,
         y: 187,
         neighbours: [14, 11],
+        inSight: [11, 12, 14, 15, 16,],
     },
 
     11: {
@@ -75,6 +85,7 @@ const positions = {
         x: 261,
         y: 187,
         neighbours: [7, 10],
+        inSight: [10, 12, 14, 15, 16,],
     },
 
     12: {
@@ -82,13 +93,15 @@ const positions = {
         x: 389,
         y: 187,
         neighbours: [8, 16],
+        inSight: [10, 11, 14, 15, 16,],
     },
-    
+
     13: {
         id: 13,
         x: 5,
         y: 278,
         neighbours: [9, 14],
+        inSight: [1, 5, 9,],
     },
 
     14: {
@@ -96,6 +109,7 @@ const positions = {
         x: 133,
         y: 278,
         neighbours: [13, 10, 15],
+        inSight: [10, 11, 12, 15, 16,],
     },
 
     15: {
@@ -103,6 +117,7 @@ const positions = {
         x: 261,
         y: 278,
         neighbours: [14, 16],
+        inSight: [10, 12, 14, 11, 16,],
     },
 
     16: {
@@ -110,6 +125,7 @@ const positions = {
         x: 389,
         y: 278,
         neighbours: [15, 12],
+        inSight: [10, 12, 14, 15, 11,],
     },
 };
 

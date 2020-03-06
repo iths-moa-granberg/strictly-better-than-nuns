@@ -6,7 +6,7 @@ body {
     width: 424px;
     height:313px;
     position: relative;
-    background-image: url(images/test-board.png);
+    background-image: url(images/test-board2.png);
 }
 
 .player {
@@ -74,8 +74,14 @@ body {
     opacity: 0.5;
 }
 
-.sound-token, .sight-token {
+.sound-token {
     width: 30px;
     height: 30px;
     background-color: violet;
+}
+
+.sight-token {
+    width: 30px;
+    height: 30px;
+    background-color: coral;
 }

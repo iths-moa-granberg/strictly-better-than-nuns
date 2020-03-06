@@ -74,29 +74,51 @@ io.on('connection', (socket) => {
     socket.on('player takes step', ({ position }) => {
         socket.player.position = position;
         socket.player.stepsLeft--;
+
+        lookAround(socket.player);
+        socket.player.path.push({ position, visible: socket.player.visible });
+
         if (socket.player.stepsLeft <= 0) {
             socket.emit('player out of steps', {});
         } else {
-            //if seen, visible = true
             playerStepOptions();
         }
     });
 
+        player.visible = board.isSeen(player.position, enemy.position);
+    }
+
     socket.on('player move completed', ({ }) => {
         socket.player.checkTarget();
-        //if seen, visible = true, else if visible was true, place token
+
+        if (!socket.player.visible) {
+            leaveSight(socket.player);
+        } else {
+            makeSound(socket.player);
+        }
+        socket.player.path = [];
+
         socket.emit('update player', {
             hasKey: socket.player.hasKey,
             hasGoal: socket.player.hasGoal,
             visible: socket.player.visible,
         });
-        makeSound(socket.player);
         game.playerTurnCompleted++;
         if (game.playerTurnCompleted === game.numOfGoodPlayers) {
             game.playerTurnCompleted = 0;
             startEnemyTurn();
         }
     });
+
+    const leaveSight = (player) => {
+        let path = player.path.reverse();
+        for (let obj of path) {
+            if (obj.visible && obj != path[0]) {
+                game.addToken(obj.position, 'sight');
+                return
+            }
+        }
+    }
 
     const makeSound = (player) => {
         const heardTo = board.isHeard(player.position, enemy.position, player.pace);
@@ -119,6 +141,7 @@ io.on('connection', (socket) => {
         enemyStep();
         enemyStep();
         game.soundTokens = [];
+        game.sightTokens = [];
         //listen if walking
         startNextTurn();
     }

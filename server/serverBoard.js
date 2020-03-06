@@ -113,6 +113,10 @@ class Board {
                 : pace === 'walk' ? sound - 1
                     : sound;
     }
+
+    isSeen = (position, enemyPosition) => {
+        return enemyPosition.inSight.includes(position.id) || enemyPosition.id === position.id;
+    }
 }
 
 module.exports = Board;
