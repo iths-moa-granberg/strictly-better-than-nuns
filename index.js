@@ -40,7 +40,8 @@ io.on('connection', (socket) => {
     const updateBoard = () => {
         io.sockets.emit('update board', {
             players: game.getVisibilityPlayers(),
-            tokens: game.getTokens(),
+            soundTokens: game.soundTokens,
+            sightTokens: game.sightTokens,
             enemyPath: enemy.path,
             reachablePositions: [],
         });
@@ -89,14 +90,26 @@ io.on('connection', (socket) => {
             hasGoal: socket.player.hasGoal,
             visible: socket.player.visible,
         });
-        //make sound!
-
+        makeSound(socket.player);
         game.playerTurnCompleted++;
         if (game.playerTurnCompleted === game.numOfGoodPlayers) {
             game.playerTurnCompleted = 0;
             startEnemyTurn();
         }
     });
+
+    const makeSound = (player) => {
+        const heardTo = board.isHeard(player.position, enemy.position, player.pace);
+        if (heardTo) {
+            let tokenPos;
+            if (heardTo.length > 1) {
+                tokenPos = heardTo[1]; //player should choose
+            } else {
+                tokenPos = heardTo[0];
+            }
+            game.addToken(tokenPos, 'sound');
+        }
+    }
 
     const startEnemyTurn = () => {
         updateBoard();
@@ -105,6 +118,8 @@ io.on('connection', (socket) => {
         enemyStep();
         enemyStep();
         enemyStep();
+        game.soundTokens = [];
+        //listen if walking
         startNextTurn();
     }
 

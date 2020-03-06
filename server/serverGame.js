@@ -7,6 +7,8 @@ class Game {
         this.numOfGoodPlayers = 0;
         this.enemyWinCounter = 0;
         this.playerTurnCompleted = 0;
+        this.soundTokens = [];
+        this.sightTokens = [];
     }
 
     addPlayer = (newPlayer) => {
@@ -23,8 +25,12 @@ class Game {
         }
     }
 
-    getTokens = () => {
-        return []; //placeholder code;
+    addToken = (position, type) => {
+        if (type === 'sound') {
+            this.soundTokens.push(position);
+        } else if (type === 'sight') {
+            this.sightTokens.push(position);
+        }
     }
 
     getVisibilityPlayers = () => {

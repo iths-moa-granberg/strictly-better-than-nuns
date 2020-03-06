@@ -3,10 +3,7 @@ class Board {
         this.positions = positions;
     }
 
-    getReachable = (startPosition, totalSteps, hasKey, sound) => {
-        if (sound) {
-            hasKey = true;
-        }
+    getReachable = (startPosition, totalSteps, hasKey) => { //jämför id
         let possiblePos = [startPosition];
         for (let steps = 0; steps < totalSteps; steps++) {
             for (let pos of possiblePos) {
@@ -28,10 +25,7 @@ class Board {
         return neighbours;
     }
 
-    getClosestPaths = (start, end, hasKey, sound) => {
-        if (sound) {
-            hasKey = true;
-        }
+    getClosestPaths = (start, end, hasKey) => {
         let queue = this._getQueue(start, end);
         let paths = [[end]];
 
@@ -58,8 +52,8 @@ class Board {
                     }
                 }
             }
-            path = path.reverse();
         }
+        paths.forEach(path => path.push(start));
         return paths;
     }
 
@@ -71,7 +65,7 @@ class Board {
             let nextStep = [];
             for (let pos of stepArr) {
                 let neighbours = this._getNeighbours(pos);
-                neighbours = neighbours.filter(neighbour => !tested.includes(neighbour));
+                neighbours = neighbours.filter(neighbour => !tested.find(pos => neighbour.id === pos.id));
                 tested = tested.concat(neighbours);
                 nextStep = nextStep.concat(neighbours);
             }
@@ -91,6 +85,33 @@ class Board {
             }
             i++;
         }
+    }
+
+    isHeard = (playerPos, enemyPos, pace) => {
+        const sound = this._getRandomSoundReach(pace);
+        console.log('sound: ', sound);
+        const reaches = this.getReachable(playerPos, sound, true);
+
+        if (reaches.find(pos => pos.id === enemyPos.id)) {
+            const soundPaths = this.getClosestPaths(playerPos, enemyPos, true);
+            console.log('after soundPath');
+
+            let tokenPositions = [];
+            for (let path of soundPaths) {
+                tokenPositions.push(path[1]);
+            }
+            return tokenPositions;
+        } else {
+            return;
+        }
+    }
+
+    _getRandomSoundReach = (pace) => {
+        let sound = Math.floor(Math.random() * 6) + 1;
+        return pace === 'stand' ? sound - 3
+            : pace === 'sneak' ? sound - 2
+                : pace === 'walk' ? sound - 1
+                    : sound;
     }
 }
 

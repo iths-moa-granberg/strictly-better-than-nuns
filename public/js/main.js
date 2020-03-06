@@ -7,10 +7,11 @@ socket.on('init', ({ id, home, key, goal }) => {
     myPlayer = new Player(id, home, key, goal);
 });
 
-socket.on('update board', ({ players, tokens, enemyPath, reachablePositions }) => {
+socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reachablePositions }) => {
     board.activePlayer = myPlayer;
     board.players = players;
-    board.tokens = tokens;
+    board.soundTokens = soundTokens;
+    board.sightTokens = sightTokens;
     board.enemyPath = enemyPath;
     board.reachablePositions = reachablePositions;
     board.renderBoard();
@@ -60,8 +61,8 @@ socket.on('enemy turn', ({ }) => {
     //if enemy, update ui, choose next step
 });
 
-socket.on('enemy step', ({}) => {
-    
+socket.on('enemy step', ({ }) => {
+
 });
 
 // //in chooseNextStepEnemy onclick:

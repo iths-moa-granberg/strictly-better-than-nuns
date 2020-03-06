@@ -9,7 +9,7 @@ class Player {
         this.key = key;
         this.goal = goal;
 
-        this.pace = 0;
+        this.pace = '';
         this.stepsLeft = 0;
 
         this.hasKey = false;

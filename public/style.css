@@ -67,3 +67,9 @@ body {
 .disabled {
     opacity: 0.5;
 }
+
+.sound-token, .sight-token {
+    width: 30px;
+    height: 30px;
+    background-color: violet;
+}
