@@ -85,6 +85,7 @@ io.on('connection', (socket) => {
         }
     });
 
+    const lookAround = (player) => {
         player.visible = board.isSeen(player.position, enemy.position);
     }
 
