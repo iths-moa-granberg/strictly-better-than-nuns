@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
     });
 
     const lookAround = (player) => {
-        player.visible = board.isSeen(player.position, enemy.position);
+        player.visible = board.isSeen(player.position, enemy.position, enemy.lastPosition);
     }
 
     socket.on('player move completed', ({ }) => {
@@ -149,7 +149,11 @@ io.on('connection', (socket) => {
 
     const enemyStep = () => {
         enemy.moveStandardPath();
-        //look around
+        for (let player of game.players) {
+            if (player.id != 'enemy') {
+                lookAround(player);
+            }
+        }
         game.checkEnemyTarget(enemy);
         updateBoard();
     }

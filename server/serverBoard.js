@@ -94,7 +94,6 @@ class Board {
 
         if (reaches.find(pos => pos.id === enemyPos.id)) {
             const soundPaths = this.getClosestPaths(playerPos, enemyPos, true);
-            console.log('after soundPath');
 
             let tokenPositions = [];
             for (let path of soundPaths) {
@@ -114,8 +113,20 @@ class Board {
                     : sound;
     }
 
-    isSeen = (position, enemyPosition) => {
-        return enemyPosition.inSight.includes(position.id) || enemyPosition.id === position.id;
+    isSeen = (position, enemyPos, enemyLastPos) => {
+        if (enemyPos.x === enemyLastPos.x) {
+            if (enemyPos.y < enemyLastPos.y) {
+                return enemyPos.inSight.includes(position.id) && position.y <= enemyPos.y;
+            } else {
+                return enemyPos.inSight.includes(position.id) && position.y >= enemyPos.y;
+            }
+        } else if (enemyPos.y === enemyLastPos.y) {
+            if (enemyPos.x < enemyLastPos.x) {
+                return enemyPos.inSight.includes(position.id) && position.x <= enemyPos.x;
+            } else {
+                return enemyPos.inSight.includes(position.id) && position.x >= enemyPos.x;
+            }
+        }
     }
 }
 

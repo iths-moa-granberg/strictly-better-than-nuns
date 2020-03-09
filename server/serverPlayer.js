@@ -46,6 +46,7 @@ class Enemy extends Player {
         this.stepInPath = 0;
 
         this.position = path[0];
+        this.lastPosition = path[0];
 
         this.visible = true;
     }
@@ -53,11 +54,16 @@ class Enemy extends Player {
     moveStandardPath = () => {
         if (this.stepInPath != this.path.length - 1) {
             this.stepInPath++;
-            this.position = this.path[this.stepInPath];
+            this._updatePositions();
         } else {
             this._chooseNewPath();
-            this.position = this.path[this.stepInPath];
+            this._updatePositions();
         }
+    }
+
+    _updatePositions = () => {
+        this.lastPosition = this.position;
+        this.position = this.path[this.stepInPath];
     }
 
     _chooseNewPath = () => {
