@@ -9,14 +9,14 @@ class Player {
         this.key = key;
         this.goal = goal;
 
+        this.visible = false;
+
         this.pace = '';
         this.stepsLeft = 0;
-        this.path = [];
+        this.path = [{ position: home, visible: this.visible }];
 
         this.hasKey = false;
         this.hasGoal = false;
-
-        this.visible = false;
     }
 
     loseGoal() {
@@ -35,6 +35,10 @@ class Player {
         } else if (this.key.id === this.position.id) {
             this.hasKey = true;
         }
+    }
+
+    resetPath = () => {
+        this.path = [{ position: this.position, visible: this.visible }];
     }
 }
 

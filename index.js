@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
         } else {
             makeSound(socket.player);
         }
-        socket.player.path = [];
+        socket.player.resetPath();
 
         socket.emit('update player', {
             hasKey: socket.player.hasKey,
@@ -109,6 +109,13 @@ io.on('connection', (socket) => {
             game.playerTurnCompleted = 0;
             startEnemyTurn();
         }
+    });
+
+    socket.on('player reset move', ({ }) => {
+        socket.player.position = socket.player.path[0].position;
+        socket.player.visible = socket.player.path[0].visible;
+        socket.player.resetPath();
+        io.sockets.emit('players turn', { position: socket.player.position });
     });
 
     const leaveSight = (player) => {

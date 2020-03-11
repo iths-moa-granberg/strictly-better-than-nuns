@@ -17,8 +17,12 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reach
     board.renderBoard();
 });
 
-socket.on('players turn', ({ }) => {
+socket.on('players turn', ({ position }) => {
     //if player
+    if (position) {
+        myPlayer.position = position;
+        board.renderBoard();
+    }
     userOptions.renderPaceBtns(playerChoosesPace);
 });
 
@@ -43,12 +47,16 @@ const playerTakeStep = (position) => {
 socket.on('player out of steps', ({ }) => {
     board.reachablePositions = [];
     board.renderBoard();
-    userOptions.renderConfirmDestinationBtn(playerConfirmDestination);
+    userOptions.renderConfirmDestinationBtn(playerConfirmDestination, playerResetSteps);
 });
 
 const playerConfirmDestination = () => {
     socket.emit('player move completed', {});
     userOptions.disableBtns();
+}
+
+const playerResetSteps = () => {
+    socket.emit('player reset move', {});
 }
 
 socket.on('update player', ({ hasKey, hasGoal, visible }) => {
