@@ -56,6 +56,13 @@ class BoardView {
         }
     }
 
+    addTokenListener = (heardTo, handler) => {
+        for (let position of heardTo) {
+            const node = document.querySelectorAll('.position')[position.id - 1];
+            node.addEventListener('click', e => handler(position));            
+        }
+    }
+
     _renderPosition = (position, className, child) => {
         return `
             <div class="${className}" style="top: ${position.y}px; left: ${position.x}px;">

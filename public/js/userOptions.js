@@ -42,4 +42,12 @@ class UserOptions {
         confirmBtn.addEventListener('click', e => handlerConfirm());
         backBtn.addEventListener('click', e => handlerBack());
     }
+
+    renderTokenInstr = () => {
+        this.wrapper.innerHTML = 'click on soundtoken to select sound-position'; //fillertext
+    }
+
+    clear = () => {
+        this.wrapper.innerHTML = '';
+    }
 }

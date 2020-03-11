@@ -94,9 +94,16 @@ io.on('connection', (socket) => {
 
         if (!socket.player.visible) {
             leaveSight(socket.player);
-        } else {
-            makeSound(socket.player);
+
+            if (makeSound(socket.player)) {
+                return
+            }
         }
+        endPlayerTurn();
+    });
+
+    const endPlayerTurn = () => {
+        socket.emit()
         socket.player.resetPath();
 
         socket.emit('update player', {
@@ -109,7 +116,7 @@ io.on('connection', (socket) => {
             game.playerTurnCompleted = 0;
             startEnemyTurn();
         }
-    });
+    }
 
     socket.on('player reset move', ({ }) => {
         socket.player.position = socket.player.path[0].position;
@@ -131,15 +138,20 @@ io.on('connection', (socket) => {
     const makeSound = (player) => {
         const heardTo = board.isHeard(player.position, enemy.position, player.pace);
         if (heardTo) {
-            let tokenPos;
             if (heardTo.length > 1) {
-                tokenPos = heardTo[1]; //player should choose
+                socket.emit('player choose token', { heardTo });
+                return true;
             } else {
-                tokenPos = heardTo[0];
+                game.addToken(heardTo[0], 'sound');
             }
-            game.addToken(tokenPos, 'sound');
         }
+        return false;
     }
+
+    socket.on('player place token', ({ position }) => {
+        game.addToken(position, 'sound');
+        endPlayerTurn();
+    });
 
     const startEnemyTurn = () => {
         updateBoard();
