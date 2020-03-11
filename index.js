@@ -122,7 +122,7 @@ io.on('connection', (socket) => {
         socket.player.position = socket.player.path[0].position;
         socket.player.visible = socket.player.path[0].visible;
         socket.player.resetPath();
-        io.sockets.emit('players turn', { position: socket.player.position });
+        socket.emit('players turn', { position: socket.player.position });
     });
 
     const leaveSight = (player) => {
