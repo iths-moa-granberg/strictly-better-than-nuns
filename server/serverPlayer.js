@@ -10,6 +10,7 @@ class Player {
         this.goal = goal;
 
         this.visible = false;
+        this.isEvil = false;
 
         this.pace = '';
         this.stepsLeft = 0;
@@ -53,6 +54,7 @@ class Enemy extends Player {
         this.lastPosition = path[0];
 
         this.visible = true;
+        this.isEvil = true;
     }
 
     moveStandardPath = () => {

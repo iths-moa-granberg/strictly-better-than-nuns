@@ -13,7 +13,7 @@ class Game {
 
     addPlayer = (newPlayer) => {
         this.players.push(newPlayer);
-        if (newPlayer.id != 'enemy') {
+        if (!newPlayer.isEvil) {
             this.numOfGoodPlayers++;
         }
     }

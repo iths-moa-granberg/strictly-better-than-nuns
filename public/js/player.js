@@ -1,6 +1,7 @@
 class Player {
-    constructor(id, home, key, goal) {
+    constructor(id, home, key, goal, isEvil) {
         this.id = id;
+        this.isEvil = isEvil;
 
         this.home = home;
         this.key = key;

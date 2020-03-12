@@ -24,8 +24,8 @@ const startGame = () => {
     socket.emit('start', ({}));
 }
 
-socket.on('init', ({ id, home, key, goal }) => {
-    myPlayer = new Player(id, home, key, goal);
+socket.on('init', ({ id, home, key, goal, isEvil }) => {
+    myPlayer = new Player(id, home, key, goal, isEvil);
 });
 
 socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reachablePositions }) => {
@@ -39,7 +39,7 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reach
 });
 
 socket.on('players turn', ({ position }) => {
-    if (myPlayer.id != 'enemy') {
+    if (!myPlayer.isEvil) {
         if (position) {
             myPlayer.position = position;
             board.renderBoard();
@@ -52,7 +52,7 @@ socket.on('players turn', ({ position }) => {
 });
 
 const selectPace = (pace) => {
-    if (myPlayer.id != 'enemy') {
+    if (!myPlayer.isEvil) {
         socket.emit('player selects pace', ({ pace }));
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
     } else {
@@ -71,7 +71,7 @@ socket.on('possible steps', ({ endups, visible }) => {
 const takeStep = (position) => {
     userOptions.disableBtns();
     board.activePlayer.position = position;
-    if (myPlayer.id != 'enemy') {
+    if (!myPlayer.isEvil) {
         socket.emit('player takes step', { position });
     } else {
         socket.emit('enemy takes step', { position });
@@ -114,7 +114,7 @@ const playerPlaceToken = (position) => {
 }
 
 socket.on('enemy turn', ({ }) => {
-    if (myPlayer.id === 'enemy') {
+    if (myPlayer.isEvil) {
         userOptions.enableBtns();
     } else {
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);

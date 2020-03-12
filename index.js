@@ -24,7 +24,7 @@ const board = new Board(positions);
 enemy = new Player.Evil('enemy', enemyPaths[0]);
 
 io.on('connection', (socket) => {
-    socket.emit('join', { enemyJoined: game.players.find(player => player.id === 'enemy') });
+    socket.emit('join', { enemyJoined: game.players.find(player => player.isEvil) });
 
     socket.on('player joined', ({ good }) => {
         if (good) {
@@ -35,6 +35,7 @@ io.on('connection', (socket) => {
                 home: socket.player.home,
                 key: socket.player.key,
                 goal: socket.player.goal,
+                isEvil: socket.player.isEvil,
             });
         } else {
             socket.player = enemy;
@@ -44,6 +45,7 @@ io.on('connection', (socket) => {
                 home: socket.player.position,
                 key: socket.player.position,
                 goal: socket.player.position,
+                isEvil: socket.player.isEvil,
             });
             io.sockets.emit('disable join as evil', ({}));
         }
@@ -117,7 +119,7 @@ io.on('connection', (socket) => {
         game.checkEnemyTarget(socket.player);
 
         for (let player of game.players) {
-            if (player.id != 'enemy') {
+            if (!player.isEvil) {
                 lookAround(player);
                 if (player.visible) {
                     //chase
