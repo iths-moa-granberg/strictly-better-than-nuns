@@ -3,6 +3,20 @@ const board = new BoardView();
 const userOptions = new UserOptions();
 let myPlayer;
 
+socket.on('choose player', ({ }) => {
+    userOptions.renderChoosePlayer(join);
+});
+
+const join = (good) => {
+    socket.emit('player joined', ({ good }));
+    userOptions.renderStartGame(startGame);
+}
+
+const startGame = () => {
+    userOptions.clear();
+    socket.emit('start', ({}));
+}
+
 socket.on('init', ({ id, home, key, goal }) => {
     myPlayer = new Player(id, home, key, goal);
 });
@@ -18,17 +32,21 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reach
 });
 
 socket.on('players turn', ({ position }) => {
-    //if player
-    if (position) {
-        myPlayer.position = position;
-        board.renderBoard();
+    if (myPlayer.id != 'enemy') {
+        if (position) {
+            myPlayer.position = position;
+            board.renderBoard();
+        }
+        userOptions.renderPaceBtns(playerChoosesPace, ['Stand', 'Sneak', 'Walk', 'Run']);
+    } else {
+        userOptions.renderPaceBtns(enemyChoosesPace, ['Walk', 'Run']);
+        userOptions.disableBtns();
     }
-    userOptions.renderPaceBtns(playerChoosesPace);
 });
 
 const playerChoosesPace = (pace) => {
     socket.emit('player chooses pace', ({ pace }));
-    userOptions.renderPaceBtns(playerChoosesPace, pace, 'disabled');
+    userOptions.renderPaceBtns(playerChoosesPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
 }
 
 socket.on('player possible steps', ({ endups, visible }) => {
@@ -80,8 +98,19 @@ const playerPlaceToken = (position) => {
 }
 
 socket.on('enemy turn', ({ }) => {
-    //if enemy, update ui, choose next step
+    if (myPlayer.id === 'enemy') {
+        userOptions.enableBtns();
+        console.log('enemy turn');
+        //update ui, choose next step
+    } else {
+        userOptions.renderPaceBtns(playerChoosesPace, ['Stand', 'Sneak', 'Walk', 'Run']);
+        userOptions.disableBtns();
+    }
 });
+
+const enemyChoosesPace = () => {
+
+}
 
 socket.on('enemy step', ({ }) => {
 

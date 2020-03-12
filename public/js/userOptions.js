@@ -3,9 +3,8 @@ class UserOptions {
         this.wrapper = document.querySelector('.user-options-wrapper');
     }
 
-    renderPaceBtns = (handler, selected, className) => {
+    renderPaceBtns = (handler, types, selected, className) => {
         this.wrapper.innerHTML = '';
-        const types = ['Stand', 'Sneak', 'Walk', 'Run'];
         for (let type of types) {
             if (selected && type.toLowerCase() != selected) {
                 this.wrapper.innerHTML += this._renderBtn(type, className);
@@ -34,6 +33,11 @@ class UserOptions {
         btns.forEach(btn => btn.disabled = true);
     }
 
+    enableBtns = () => {
+        const btns = this.wrapper.querySelectorAll('button');
+        btns.forEach(btn => btn.disabled = false);
+    }
+
     renderConfirmDestinationBtn = (handlerConfirm, handlerBack) => {
         this.wrapper.innerHTML = this._renderBtn('Confirm');
         this.wrapper.innerHTML += this._renderBtn('Back');
@@ -49,5 +53,20 @@ class UserOptions {
 
     clear = () => {
         this.wrapper.innerHTML = '';
+    }
+
+    renderChoosePlayer = (handler) => {
+        this.wrapper.innerHTML = this._renderBtn('Good');
+        this.wrapper.innerHTML += this._renderBtn('Evil');
+        const goodBtn = document.querySelector('button');
+        const evilBtn = document.querySelectorAll('button')[1];
+        goodBtn.addEventListener('click', e => handler(true));
+        evilBtn.addEventListener('click', e => handler(false));
+    }
+
+    renderStartGame = (handler) => {
+        this.wrapper.innerHTML = this._renderBtn('Start');
+        const start = document.querySelector('button');
+        start.addEventListener('click', e => handler());
     }
 }

@@ -25,17 +25,33 @@ enemy = new Player.Evil('enemy', enemyPaths[0]);
 game.addPlayer(enemy);
 
 io.on('connection', (socket) => {
-    socket.player = new Player.Good(game.generatePlayerInfo());
-    game.addPlayer(socket.player);
+    socket.emit('choose player', {});
 
-    socket.emit('init', {
-        id: socket.player.id,
-        home: socket.player.home,
-        key: socket.player.key,
-        goal: socket.player.goal,
+    socket.on('player joined', ({ good }) => {
+        if (good) {
+            socket.player = new Player.Good(game.generatePlayerInfo());
+            game.addPlayer(socket.player);
+            socket.emit('init', {
+                id: socket.player.id,
+                home: socket.player.home,
+                key: socket.player.key,
+                goal: socket.player.goal,
+            });
+        } else {
+            socket.player = enemy;
+            socket.emit('init', { //fulhack
+                id: socket.player.id,
+                home: socket.player.position,
+                key: socket.player.position,
+                goal: socket.player.position,
+            });
+        }
+        updateBoard();
     });
 
-    //wait until all players has joined
+    socket.on('start', ({ }) => {
+        startNextTurn();
+    });
 
     const updateBoard = () => {
         io.sockets.emit('update board', {
@@ -47,13 +63,10 @@ io.on('connection', (socket) => {
         });
     }
 
-    updateBoard();
-
     const startNextTurn = () => {
         game.startNextTurn();
         io.sockets.emit('players turn', {});
     };
-    startNextTurn();
 
     const playerStepOptions = () => {
         socket.emit('player possible steps', {
@@ -111,7 +124,7 @@ io.on('connection', (socket) => {
             hasGoal: socket.player.hasGoal,
             visible: socket.player.visible,
         });
-        game.playerTurnCompleted++;
+        game.playerTurnCompleted++;        
         if (game.playerTurnCompleted === game.numOfGoodPlayers) {
             game.playerTurnCompleted = 0;
             startEnemyTurn();
@@ -155,14 +168,14 @@ io.on('connection', (socket) => {
 
     const startEnemyTurn = () => {
         updateBoard();
-        // socket.emit('enemy turn', {}); //when enemy is playable
+        io.sockets.emit('enemy turn', {});
 
-        enemyStep();
-        enemyStep();
-        enemyStep();
-        game.soundTokens = [];
-        game.sightTokens = [];
-        startNextTurn();
+        // enemyStep();
+        // enemyStep();
+        // enemyStep();
+        // game.soundTokens = [];
+        // game.sightTokens = [];
+        // startNextTurn();
     }
 
     const enemyStep = () => {
