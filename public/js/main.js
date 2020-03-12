@@ -62,7 +62,7 @@ const selectPace = (pace) => {
 }
 
 socket.on('possible steps', ({ endups, visible }) => {
-    //if visible, warning
+    //if player && visible, warning
     board.reachablePositions = endups;
     board.renderBoard();
     board.addStepListener(board.activePlayer.position, endups, takeStep);
@@ -116,26 +116,8 @@ const playerPlaceToken = (position) => {
 socket.on('enemy turn', ({ }) => {
     if (myPlayer.id === 'enemy') {
         userOptions.enableBtns();
-        console.log('enemy turn');
-        //update ui, choose next step
     } else {
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
         userOptions.disableBtns();
     }
 });
-
-// //in chooseNextStepEnemy onclick:
-// socket.emit('enemy step', { position, pace });
-
-// //in chooseNoMoreSteps onclick:
-// //if stepCounter max or choose to stope
-// socket.emit('enemy move completed', {});
-
-
-
-
-// const board = new BoardController(new BoardModel(), new BoardView());
-// const player = new PlayerController(new PlayerModel(), new PlayerView());
-// const enemy = new EnemyController(new EnemyModel(), new EnemyView());
-// const userOptions = new UserOptionsController(new UserOptionsModel(), new UserOptionsView());
-// const game = new GameController(new GameModel(), new GameView());

@@ -19,7 +19,7 @@ const positions = require('./server/serverPositions.js');
 const enemyPaths = require('./server/enemyPaths.js'); //behövs bara i serverPlayer?
 const game = require('./server/serverGame.js');
 const Board = require('./server/serverBoard.js');
-const board = new Board(positions); //annat namn?
+const board = new Board(positions);
 
 enemy = new Player.Evil('enemy', enemyPaths[0]);
 
