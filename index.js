@@ -22,10 +22,9 @@ const Board = require('./server/serverBoard.js');
 const board = new Board(positions); //annat namn?
 
 enemy = new Player.Evil('enemy', enemyPaths[0]);
-game.addPlayer(enemy);
 
 io.on('connection', (socket) => {
-    socket.emit('choose player', {});
+    socket.emit('join', { enemyJoined: game.players.find(player => player.id === 'enemy') });
 
     socket.on('player joined', ({ good }) => {
         if (good) {
@@ -39,12 +38,14 @@ io.on('connection', (socket) => {
             });
         } else {
             socket.player = enemy;
+            game.addPlayer(enemy);
             socket.emit('init', { //fulhack
                 id: socket.player.id,
                 home: socket.player.position,
                 key: socket.player.position,
                 goal: socket.player.position,
             });
+            io.sockets.emit('disable join as evil', ({}));
         }
         updateBoard();
     });
@@ -124,7 +125,7 @@ io.on('connection', (socket) => {
             hasGoal: socket.player.hasGoal,
             visible: socket.player.visible,
         });
-        game.playerTurnCompleted++;        
+        game.playerTurnCompleted++;
         if (game.playerTurnCompleted === game.numOfGoodPlayers) {
             game.playerTurnCompleted = 0;
             startEnemyTurn();

@@ -3,14 +3,21 @@ const board = new BoardView();
 const userOptions = new UserOptions();
 let myPlayer;
 
-socket.on('choose player', ({ }) => {
+socket.on('join', ({ enemyJoined }) => {
     userOptions.renderChoosePlayer(join);
+    if (enemyJoined) {
+        userOptions.disableBtns('.evil');
+    }
 });
 
 const join = (good) => {
     socket.emit('player joined', ({ good }));
     userOptions.renderStartGame(startGame);
 }
+
+socket.on('disable join as evil', ({ }) => {
+    userOptions.disableBtns('.evil');
+});
 
 const startGame = () => {
     userOptions.clear();

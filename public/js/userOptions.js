@@ -28,8 +28,13 @@ class UserOptions {
         }
     }
 
-    disableBtns = () => {
-        const btns = this.wrapper.querySelectorAll('button');
+    disableBtns = (className) => {
+        let btns;
+        if (className) {
+            btns = this.wrapper.querySelectorAll(className);
+        } else {
+            btns = this.wrapper.querySelectorAll('button');
+        }
         btns.forEach(btn => btn.disabled = true);
     }
 
