@@ -70,13 +70,13 @@ io.on('connection', (socket) => {
     };
 
     const playerStepOptions = () => {
-        socket.emit('player possible steps', {
+        socket.emit('possible steps', {
             endups: board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey),
             visible: socket.player.visible,
         });
     }
 
-    socket.on('player chooses pace', ({ pace }) => {
+    socket.on('player selects pace', ({ pace }) => {
         socket.player.pace = pace;
         socket.player.stepsLeft = pace === 'stand' ? 0
             : pace === 'sneak' ? 1
@@ -85,10 +85,22 @@ io.on('connection', (socket) => {
         playerStepOptions();
     });
 
+    const enemyStepOptions = () => {
+        //if no tokens
+        socket.emit('possible steps', {
+            endups: board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft),
+        });
+    }
+
+    socket.on('enemy selects pace', ({ pace }) => {
+        socket.player.pace = pace;
+        socket.player.stepsLeft = pace === 'walk' ? 3 : 5; //3-4, 5-6
+        enemyStepOptions();
+    });
+
     socket.on('player takes step', ({ position }) => {
         socket.player.position = position;
         socket.player.stepsLeft--;
-
         lookAround(socket.player);
         socket.player.path.push({ position, visible: socket.player.visible });
 
@@ -98,6 +110,36 @@ io.on('connection', (socket) => {
             playerStepOptions();
         }
     });
+
+    socket.on('enemy takes step', ({ position }) => {
+        //if  no tokens
+        socket.player.moveStandardPath();
+        game.checkEnemyTarget(socket.player);
+
+        for (let player of game.players) {
+            if (player.id != 'enemy') {
+                lookAround(player);
+                if (player.visible) {
+                    //chase
+                }
+            }
+        }
+
+        updateBoard();
+
+        if (socket.player.stepsLeft <= 0) {
+            endEnemyTurn();
+        } else {
+            enemyStepOptions();
+        }
+    });
+
+    const endEnemyTurn = () => {
+        game.soundTokens = [];
+        game.sightTokens = [];
+        //listen
+        startNextTurn();
+    }
 
     const lookAround = (player) => {
         player.visible = board.isSeen(player.position, enemy.position, enemy.lastPosition);
@@ -170,33 +212,5 @@ io.on('connection', (socket) => {
     const startEnemyTurn = () => {
         updateBoard();
         io.sockets.emit('enemy turn', {});
-
-        // enemyStep();
-        // enemyStep();
-        // enemyStep();
-        // game.soundTokens = [];
-        // game.sightTokens = [];
-        // startNextTurn();
     }
-
-    const enemyStep = () => {
-        enemy.moveStandardPath();
-        for (let player of game.players) {
-            if (player.id != 'enemy') {
-                lookAround(player);
-            }
-        }
-        game.checkEnemyTarget(enemy);
-        updateBoard();
-    }
-
-    // socket.on('enemy step', ({ position, pace }) => {
-    //     //socket.player.updatePosition();
-    //     //socket.player.checkTarget();
-    //     io.sockets.emit('update board', { players, tokens }); //in players: seen, caught
-    // });
-
-    // socket.on('enemy move completed', () => {
-    //     startNextTurn();
-    // });
 });

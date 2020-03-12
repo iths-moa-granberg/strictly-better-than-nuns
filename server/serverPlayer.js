@@ -56,8 +56,9 @@ class Enemy extends Player {
     }
 
     moveStandardPath = () => {
-        if (this.stepInPath != this.path.length - 1) {
+        if (this.stepInPath != this.path.length - 2) {
             this.stepInPath++;
+            this.stepsLeft--;
             this._updatePositions();
         } else {
             this._chooseNewPath();
@@ -74,7 +75,8 @@ class Enemy extends Player {
         let shuffledPaths = enemyPaths.concat().sort(() => .5 - Math.random());
         for (let path of shuffledPaths) {
             if (path[0] === this.path[this.path.length - 1] && path != this.path) {
-                this.stepInPath = 1;
+                this.stepInPath = 0;
+                this.stepsLeft--;
                 this.path = path;
                 return;
             }

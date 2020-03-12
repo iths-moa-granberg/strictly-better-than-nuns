@@ -25,6 +25,11 @@ class Board {
         return neighbours;
     }
 
+    getEnemyStandardReachable = (start, path, totalSteps) => {
+        return path.filter((pos, index) => index > path.indexOf(start))
+            .filter((pos, index) => index < totalSteps);
+    }
+
     getClosestPaths = (start, end, hasKey) => {
         let queue = this._getQueue(start, end);
         let paths = [[end]];

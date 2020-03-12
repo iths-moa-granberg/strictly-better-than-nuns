@@ -44,29 +44,38 @@ socket.on('players turn', ({ position }) => {
             myPlayer.position = position;
             board.renderBoard();
         }
-        userOptions.renderPaceBtns(playerChoosesPace, ['Stand', 'Sneak', 'Walk', 'Run']);
+        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
     } else {
-        userOptions.renderPaceBtns(enemyChoosesPace, ['Walk', 'Run']);
+        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
         userOptions.disableBtns();
     }
 });
 
-const playerChoosesPace = (pace) => {
-    socket.emit('player chooses pace', ({ pace }));
-    userOptions.renderPaceBtns(playerChoosesPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
+const selectPace = (pace) => {
+    if (myPlayer.id != 'enemy') {
+        socket.emit('player selects pace', ({ pace }));
+        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
+    } else {
+        socket.emit('enemy selects pace', ({ pace }));
+        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run'], pace, 'disabled');
+    }
 }
 
-socket.on('player possible steps', ({ endups, visible }) => {
+socket.on('possible steps', ({ endups, visible }) => {
     //if visible, warning
     board.reachablePositions = endups;
     board.renderBoard();
-    board.addStepListener(board.activePlayer.position, endups, playerTakeStep);
+    board.addStepListener(board.activePlayer.position, endups, takeStep);
 });
 
-const playerTakeStep = (position) => {
+const takeStep = (position) => {
     userOptions.disableBtns();
     board.activePlayer.position = position;
-    socket.emit('player takes step', { position });
+    if (myPlayer.id != 'enemy') {
+        socket.emit('player takes step', { position });
+    } else {
+        socket.emit('enemy takes step', { position });
+    }
 }
 
 socket.on('player out of steps', ({ }) => {
@@ -110,17 +119,9 @@ socket.on('enemy turn', ({ }) => {
         console.log('enemy turn');
         //update ui, choose next step
     } else {
-        userOptions.renderPaceBtns(playerChoosesPace, ['Stand', 'Sneak', 'Walk', 'Run']);
+        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
         userOptions.disableBtns();
     }
-});
-
-const enemyChoosesPace = () => {
-
-}
-
-socket.on('enemy step', ({ }) => {
-
 });
 
 // //in chooseNextStepEnemy onclick:
