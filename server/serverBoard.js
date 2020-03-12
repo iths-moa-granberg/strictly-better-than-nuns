@@ -87,9 +87,7 @@ class Board {
         }
     }
 
-    isHeard = (playerPos, enemyPos, pace) => {
-        const sound = this._getRandomSoundReach(pace);
-        console.log('sound: ', sound);
+    isHeard = (playerPos, enemyPos, sound) => {
         const reaches = this.getReachable(playerPos, sound, true);
 
         if (reaches.find(pos => pos.id === enemyPos.id)) {
@@ -105,8 +103,11 @@ class Board {
         }
     }
 
-    _getRandomSoundReach = (pace) => {
-        let sound = Math.floor(Math.random() * 6) + 1;
+    getRandomSound = () => {
+        return Math.floor(Math.random() * 6) + 1;
+    }
+
+    getRandomSoundReach = (pace, sound) => {
         return pace === 'stand' ? sound - 3
             : pace === 'sneak' ? sound - 2
                 : pace === 'walk' ? sound - 1

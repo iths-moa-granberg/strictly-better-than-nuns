@@ -95,7 +95,8 @@ io.on('connection', (socket) => {
         if (!socket.player.visible) {
             leaveSight(socket.player);
 
-            if (makeSound(socket.player)) {
+            const sound = board.getRandomSoundReach(socket.player.pace, board.getRandomSound());
+            if (makeSound(socket.player, sound)) {
                 return
             }
         }
@@ -103,7 +104,6 @@ io.on('connection', (socket) => {
     });
 
     const endPlayerTurn = () => {
-        socket.emit()
         socket.player.resetPath();
 
         socket.emit('update player', {
@@ -135,8 +135,8 @@ io.on('connection', (socket) => {
         }
     }
 
-    const makeSound = (player) => {
-        const heardTo = board.isHeard(player.position, enemy.position, player.pace);
+    const makeSound = (player, sound) => {
+        const heardTo = board.isHeard(player.position, enemy.position, sound);
         if (heardTo) {
             if (heardTo.length > 1) {
                 socket.emit('player choose token', { heardTo });
@@ -162,7 +162,6 @@ io.on('connection', (socket) => {
         enemyStep();
         game.soundTokens = [];
         game.sightTokens = [];
-        //listen if walking
         startNextTurn();
     }
 
