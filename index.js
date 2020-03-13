@@ -88,10 +88,13 @@ io.on('connection', (socket) => {
     });
 
     const enemyStepOptions = () => {
-        //if no tokens
-        socket.emit('possible steps', {
-            endups: board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft),
-        });
+        let endups = [];
+        if (game.soundTokens.length || game.sightTokens.length) {
+            endups = board.getReachable(socket.player.position, socket.player.stepsLeft, true);
+        } else {
+            endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft)
+        }
+        socket.emit('possible steps', { endups });
     }
 
     socket.on('enemy selects pace', ({ pace }) => {
@@ -101,6 +104,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('player takes step', ({ position }) => {
+        position = game.getServerPosition(position.id)
         socket.player.position = position;
         socket.player.stepsLeft--;
         lookAround(socket.player);
@@ -114,15 +118,20 @@ io.on('connection', (socket) => {
     });
 
     socket.on('enemy takes step', ({ position }) => {
-        //if  no tokens
-        socket.player.moveStandardPath();
+        position = game.getServerPosition(position.id);
+        if (game.soundTokens.length || game.sightTokens.length) {
+            socket.player.moveFreely(position);
+        } else {
+            socket.player.moveStandardPath();
+        }
+
         game.checkEnemyTarget(socket.player);
 
         for (let player of game.players) {
             if (!player.isEvil) {
                 lookAround(player);
                 if (player.visible) {
-                    //chase
+                    //move freely + may change pace to run
                 }
             }
         }

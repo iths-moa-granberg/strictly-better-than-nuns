@@ -62,6 +62,10 @@ class Game {
             goal: positions[10 + this.numOfGoodPlayers],
         };
     }
+
+    getServerPosition = (id) => {        
+        return positions[id];        
+    }
 }
 
 module.exports = new Game;

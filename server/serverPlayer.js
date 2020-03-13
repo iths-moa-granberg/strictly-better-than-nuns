@@ -68,9 +68,14 @@ class Enemy extends Player {
         }
     }
 
-    _updatePositions = () => {
+    moveFreely = (position) => {
+        this.stepsLeft--;
+        this._updatePositions(position);
+    }
+
+    _updatePositions = (position) => {
         this.lastPosition = this.position;
-        this.position = this.path[this.stepInPath];
+        this.position = position ? position : this.path[this.stepInPath];        
     }
 
     _chooseNewPath = () => {
