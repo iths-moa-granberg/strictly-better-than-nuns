@@ -91,8 +91,14 @@ io.on('connection', (socket) => {
         let endups = [];
         if (game.soundTokens.length || game.sightTokens.length) {
             endups = board.getReachable(socket.player.position, socket.player.stepsLeft, true);
+        } else if (socket.player.isOnPath()) {
+            endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
+            if (socket.player.path[socket.player.path.length - 1].id === socket.player.position.id && !endups.length) {
+                socket.player._chooseNewPath(); //enemyplayer choose next path
+                endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
+            }
         } else {
-            endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft)
+            endups = board.getClosestWayToPath(socket.player.position, socket.player.path);
         }
         socket.emit('possible steps', { endups });
     }
@@ -119,12 +125,7 @@ io.on('connection', (socket) => {
 
     socket.on('enemy takes step', ({ position }) => {
         position = game.getServerPosition(position.id);
-        if (game.soundTokens.length || game.sightTokens.length) {
-            socket.player.moveFreely(position);
-        } else {
-            socket.player.moveStandardPath();
-        }
-
+        socket.player.move(position); //choose next path
         game.checkEnemyTarget(socket.player);
 
         for (let player of game.players) {
@@ -167,6 +168,8 @@ io.on('connection', (socket) => {
                     }
                 }
             }
+        } else {
+            endEnemyTurn();
         }
     }
 

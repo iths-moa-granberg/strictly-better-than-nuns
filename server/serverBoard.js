@@ -68,6 +68,20 @@ class Board {
         return paths;
     }
 
+    getClosestWayToPath = (start, path) => {
+        let allPaths = [];
+        let shortestPathLength = 100; //magic number, max distance bw any pos board
+        for (let position of path) {
+            let paths = this.getClosestPaths(start, position, true);
+            if (paths[0].length < shortestPathLength) {
+                shortestPathLength = paths[0].length;
+            }
+            allPaths = allPaths.concat(paths);
+        }
+        let shortest = allPaths.filter(path => path.length === shortestPathLength);
+        return shortest[0]; //ej valbar
+    }
+
     _getQueue = (start, end) => {
         let tested = [start];
         let queue = [[start]];

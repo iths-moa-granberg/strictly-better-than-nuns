@@ -56,7 +56,6 @@ class Enemy extends Player {
         super({ id, path });
 
         this.path = path;
-        this.stepInPath = 0;
 
         this.position = path[0];
         this.lastPosition = path[0];
@@ -65,33 +64,21 @@ class Enemy extends Player {
         this.isEvil = true;
     }
 
-    moveStandardPath = () => {
-        if (this.stepInPath != this.path.length - 2) {
-            this.stepInPath++;
-            this.stepsLeft--;
-            this._updatePositions();
-        } else {
-            this._chooseNewPath();
-            this._updatePositions();
+    move = (position) => {
+        if (this.isOnPath(position)) {            
+            if (this.path[this.path.length - 1] === position) {
+                this._chooseNewPath();
+            }
         }
-    }
-
-    moveFreely = (position) => {
         this.stepsLeft--;
-        this._updatePositions(position);
-    }
-
-    _updatePositions = (position) => {
         this.lastPosition = this.position;
-        this.position = position ? position : this.path[this.stepInPath];
+        this.position = position;
     }
 
     _chooseNewPath = () => {
         let shuffledPaths = enemyPaths.concat().sort(() => .5 - Math.random());
         for (let path of shuffledPaths) {
             if (path[0] === this.path[this.path.length - 1] && path != this.path) {
-                this.stepInPath = 0;
-                this.stepsLeft--;
                 this.path = path;
                 return;
             }
@@ -100,6 +87,10 @@ class Enemy extends Player {
 
     checkTarget = (player) => {
         return player.position.id === this.position.id && player.id != this.id;
+    }
+
+    isOnPath = () => {
+        return this.path.find(pos => pos.id === this.position.id) ? true : false;
     }
 }
 
