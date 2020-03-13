@@ -63,8 +63,8 @@ class Game {
         };
     }
 
-    getServerPosition = (id) => {        
-        return positions[id];        
+    getServerPosition = (id) => {
+        return positions[id];
     }
 }
 

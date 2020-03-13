@@ -41,6 +41,14 @@ class Player {
     resetPath = () => {
         this.path = [{ position: this.position, visible: this.visible }];
     }
+
+    updatePathVisibility = (position) => {
+        this.path.forEach(obj => {
+            if (obj.position.id === position.id) {
+                obj.visible = true;
+            }
+        });
+    }
 }
 
 class Enemy extends Player {
@@ -75,7 +83,7 @@ class Enemy extends Player {
 
     _updatePositions = (position) => {
         this.lastPosition = this.position;
-        this.position = position ? position : this.path[this.stepInPath];        
+        this.position = position ? position : this.path[this.stepInPath];
     }
 
     _chooseNewPath = () => {

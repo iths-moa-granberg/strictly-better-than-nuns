@@ -131,7 +131,7 @@ io.on('connection', (socket) => {
             if (!player.isEvil) {
                 lookAround(player);
                 if (player.visible) {
-                    //move freely + may change pace to run
+                    player.updatePathVisibility(player.position);
                 }
             }
         }
