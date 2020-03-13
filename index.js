@@ -140,20 +140,22 @@ io.on('connection', (socket) => {
         game.soundTokens = [];
         game.sightTokens = [];
 
-        const sound = board.getRandomSound();
-        for (let player of game.players) {
-            if (!player.isEvil) {
-                const playerSound = board.getSoundReach(player.pace, sound);
-                const heardTo = board.isHeard(player.position, enemy.position, playerSound);
-                if (heardTo) {
-                    if (heardTo.length > 1) {
-                        io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
+        if (enemy.pace === 'walk') {
+            const sound = board.getRandomSound();
+            for (let player of game.players) {
+                if (!player.isEvil) {
+                    const playerSound = board.getSoundReach(player.pace, sound);
+                    const heardTo = board.isHeard(player.position, enemy.position, playerSound);
+                    if (heardTo) {
+                        if (heardTo.length > 1) {
+                            io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
+                        } else {
+                            game.addToken(heardTo[0], 'sound');
+                            endEnemyTurn();
+                        }
                     } else {
-                        game.addToken(heardTo[0], 'sound');
                         endEnemyTurn();
                     }
-                } else {
-                    endEnemyTurn();
                 }
             }
         }
