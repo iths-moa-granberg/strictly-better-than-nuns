@@ -99,18 +99,20 @@ socket.on('update player', ({ hasKey, hasGoal, visible }) => {
     myPlayer.visible = visible;
 });
 
-socket.on('player choose token', ({ heardTo }) => {
-    board.soundTokens = heardTo;
-    board.renderBoard();
-    board.addTokenListener(heardTo, playerPlaceToken);
-    userOptions.renderTokenInstr();
+socket.on('player select token', ({ heardTo, id, turn }) => {
+    if (id === myPlayer.id) {
+        board.soundTokens = heardTo;
+        board.renderBoard();
+        board.addTokenListener(heardTo, playerPlaceToken, turn);
+        userOptions.renderTokenInstr();
+    }
 });
 
-const playerPlaceToken = (position) => {
+const playerPlaceToken = (position, turn) => {
     board.soundTokens = [position];
     board.renderBoard();
     userOptions.clear();
-    socket.emit('player place token', { position });
+    socket.emit('player place token', { position, turn });
 }
 
 socket.on('enemy turn', ({ }) => {

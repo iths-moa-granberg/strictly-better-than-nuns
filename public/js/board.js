@@ -56,10 +56,10 @@ class BoardView {
         }
     }
 
-    addTokenListener = (heardTo, handler) => {
+    addTokenListener = (heardTo, handler, turn) => {
         for (let position of heardTo) {
             const node = document.querySelectorAll('.position')[position.id - 1];
-            node.addEventListener('click', e => handler(position));
+            node.addEventListener('click', e => handler(position, turn));
         }
     }
 

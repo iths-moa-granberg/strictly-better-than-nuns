@@ -112,7 +112,7 @@ class Board {
         return Math.floor(Math.random() * 6) + 1;
     }
 
-    getRandomSoundReach = (pace, sound) => {
+    getSoundReach = (pace, sound) => {
         return pace === 'stand' ? sound - 3
             : pace === 'sneak' ? sound - 2
                 : pace === 'walk' ? sound - 1

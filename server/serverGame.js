@@ -7,6 +7,7 @@ class Game {
         this.numOfGoodPlayers = 0;
         this.enemyWinCounter = 0;
         this.playerTurnCompleted = 0;
+        this.placedSoundCounter = 0;
         this.soundTokens = [];
         this.sightTokens = [];
     }
