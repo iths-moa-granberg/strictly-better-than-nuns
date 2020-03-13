@@ -120,7 +120,9 @@ class Board {
 
             let tokenPositions = [];
             for (let path of soundPaths) {
-                tokenPositions.push(path[1]);
+                if (!tokenPositions.find(pos => pos.id === path[1].id)) {
+                    tokenPositions.push(path[1]);
+                }
             }
             return tokenPositions;
         } else {
