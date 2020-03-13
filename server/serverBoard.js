@@ -49,8 +49,14 @@ class Board {
                         newPath.push(neighbours[0]);
                         paths.push(newPath);
                         path.push(neighbours[1]);
-                    } else if (neighbours.length > 2) {
-                        console.log('error: fanns fler än två möjliga håll att gå från en position');
+                    } else if (neighbours.length === 3) {
+                        let firstNewPath = path.slice();
+                        let secondNewPath = path.slice();
+                        firstNewPath.push(neighbours[0]);
+                        secondNewPath.push(neighbours[1]);
+                        path.push(neighbours[2]);
+                        paths.push(firstNewPath);
+                        paths.push(secondNewPath);
                     }
                     if (path.includes(start)) {
                         break
