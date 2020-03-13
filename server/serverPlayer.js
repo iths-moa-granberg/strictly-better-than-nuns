@@ -65,7 +65,7 @@ class Enemy extends Player {
     }
 
     move = (position) => {
-        if (this.isOnPath(position)) {            
+        if (this.isOnPath(position)) {
             if (this.path[this.path.length - 1] === position) {
                 this._chooseNewPath();
             }

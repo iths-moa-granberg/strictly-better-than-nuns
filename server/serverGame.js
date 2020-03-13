@@ -34,12 +34,16 @@ class Game {
         }
     }
 
-    getVisibilityPlayers = () => {
+    getVisiblePlayers = () => {
         return this.players.map(player => player.visible ? {
             id: player.id,
             positionId: player.position.id,
             visible: player.visible,
         } : {});
+    }
+
+    playersIsVisible = () => {
+        return this.players.find(player => player.visible === true && !player.isEvil) ? true : false;
     }
 
     checkEnemyTarget = (enemy) => {

@@ -58,7 +58,7 @@ io.on('connection', (socket) => {
 
     const updateBoard = () => {
         io.sockets.emit('update board', {
-            players: game.getVisibilityPlayers(),
+            players: game.getVisiblePlayers(),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
             enemyPath: enemy.path,
@@ -89,7 +89,7 @@ io.on('connection', (socket) => {
 
     const enemyStepOptions = () => {
         let endups = [];
-        if (game.soundTokens.length || game.sightTokens.length) {
+        if (game.soundTokens.length || game.sightTokens.length || game.playersIsVisible()) {
             endups = board.getReachable(socket.player.position, socket.player.stepsLeft, true);
         } else if (socket.player.isOnPath()) {
             endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
