@@ -29,13 +29,15 @@ socket.on('init', ({ id, home, key, goal, isEvil }) => {
 });
 
 socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reachablePositions }) => {
-    board.activePlayer = myPlayer;
-    board.players = players;
-    board.soundTokens = soundTokens;
-    board.sightTokens = sightTokens;
-    board.enemyPath = enemyPath;
-    board.reachablePositions = reachablePositions;
-    board.renderBoard();
+    if (myPlayer) {
+        board.activePlayer = myPlayer;
+        board.players = players;
+        board.soundTokens = soundTokens;
+        board.sightTokens = sightTokens;
+        board.enemyPath = enemyPath;
+        board.reachablePositions = reachablePositions;
+        board.renderBoard();
+    }
 });
 
 socket.on('players turn', ({ position }) => {
