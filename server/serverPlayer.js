@@ -18,9 +18,12 @@ class Player {
 
         this.hasKey = false;
         this.hasGoal = false;
+
+        this.caught = false;
     }
 
-    loseGoal() {
+    isCaught = () => {
+        this.caught = true;
         this.hasGoal = false;
     }
 

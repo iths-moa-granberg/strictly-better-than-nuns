@@ -40,13 +40,17 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reach
     }
 });
 
-socket.on('players turn', ({ position }) => {
+socket.on('players turn', ({ position, caughtPlayers }) => {
     if (!myPlayer.isEvil) {
         if (position) {
             myPlayer.position = position;
             board.renderBoard();
         }
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
+        if (caughtPlayers.includes(myPlayer.id)) {
+            userOptions.renderCaughtInstr();
+            socket.emit('player selects pace', ({ pace: 'walk' }));
+        }
     } else {
         userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
         userOptions.disableBtns();

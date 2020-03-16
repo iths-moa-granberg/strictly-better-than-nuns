@@ -68,12 +68,18 @@ io.on('connection', (socket) => {
 
     const startNextTurn = () => {
         game.startNextTurn();
-        io.sockets.emit('players turn', {});
+        io.sockets.emit('players turn', { caughtPlayers: game.caughtPlayers });
     };
 
     const playerStepOptions = () => {
+        let endups = [];
+        if (game.isCaught(socket.player)) {
+            endups = board.getClosestPaths(socket.player.position, socket.player.home, socket.player.hasKey).flat();
+        } else {
+            endups = board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey);
+        }
         socket.emit('possible steps', {
-            endups: board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey),
+            endups,
             visible: socket.player.visible,
         });
     }
@@ -114,6 +120,9 @@ io.on('connection', (socket) => {
         socket.player.position = position;
         socket.player.stepsLeft--;
         lookAround(socket.player);
+        if (game.isCaught(socket.player) && !socket.player.visible) {
+            game.removeCaughtPlayer(socket.player);
+        }
         socket.player.path.push({ position, visible: socket.player.visible });
 
         if (socket.player.stepsLeft <= 0) {
@@ -154,13 +163,17 @@ io.on('connection', (socket) => {
             const sound = board.getRandomSound();
             for (let player of game.players) {
                 if (!player.isEvil) {
-                    const playerSound = board.getSoundReach(player.pace, sound);
-                    const heardTo = board.isHeard(player.position, enemy.position, playerSound);
-                    if (heardTo) {
-                        if (heardTo.length > 1) {
-                            io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
+                    if (!game.isCaught(player)) {
+                        const playerSound = board.getSoundReach(player.pace, sound);
+                        const heardTo = board.isHeard(player.position, enemy.position, playerSound);
+                        if (heardTo) {
+                            if (heardTo.length > 1) {
+                                io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
+                            } else {
+                                game.addToken(heardTo[0], 'sound');
+                                endEnemyTurn();
+                            }
                         } else {
-                            game.addToken(heardTo[0], 'sound');
                             endEnemyTurn();
                         }
                     } else {
@@ -181,6 +194,7 @@ io.on('connection', (socket) => {
         socket.player.checkTarget();
 
         if (!socket.player.visible) {
+            socket.player.caught = false;
             leaveSight(socket.player);
 
             const sound = board.getSoundReach(socket.player.pace, board.getRandomSound());
@@ -210,7 +224,10 @@ io.on('connection', (socket) => {
         socket.player.position = socket.player.path[0].position;
         socket.player.visible = socket.player.path[0].visible;
         socket.player.resetPath();
-        socket.emit('players turn', { position: socket.player.position });
+        if (socket.player.caught) {
+            game.addCaughtPlayer(socket.player);
+        }
+        socket.emit('players turn', { position: socket.player.position, caughtPlayers: game.caughtPlayers });
     });
 
     const leaveSight = (player) => {

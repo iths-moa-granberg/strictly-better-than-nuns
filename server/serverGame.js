@@ -5,6 +5,7 @@ class Game {
         this.roundCounter = 0;
         this.players = [];
         this.numOfGoodPlayers = 0;
+        this.caughtPlayers = [];
         this.enemyWinCounter = 0;
         this.playerTurnCompleted = 0;
         this.placedSoundCounter = 0;
@@ -50,12 +51,25 @@ class Game {
         for (let player of this.players) {
             if (enemy.checkTarget(player)) {
                 this.enemyWinCounter++;
-                player.loseGoal();
+                player.isCaught();
+                this.addCaughtPlayer(player);
             }
         }
         if (this.enemyWinCounter >= this.numOfGoodPlayers) {
             console.log('enemy win');
         }
+    }
+
+    addCaughtPlayer = (player) => {
+        this.caughtPlayers.push(player.id);
+    }
+
+    removeCaughtPlayer = (player) => {
+        this.caughtPlayers = this.caughtPlayers.filter(id => id != player.id);
+    }
+
+    isCaught = (player) => {
+        return this.caughtPlayers.includes(player.id);
     }
 
     generatePlayerInfo = () => {
