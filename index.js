@@ -227,7 +227,7 @@ io.on('connection', (socket) => {
         if (socket.player.caught) {
             game.addCaughtPlayer(socket.player);
         }
-        socket.emit('players turn', { position: socket.player.position, caughtPlayers: game.caughtPlayers });
+        socket.emit('players turn', { resetPosition: socket.player.position, caughtPlayers: game.caughtPlayers });
     });
 
     const leaveSight = (player) => {

@@ -40,10 +40,10 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reach
     }
 });
 
-socket.on('players turn', ({ position, caughtPlayers }) => {
+socket.on('players turn', ({ resetPosition, caughtPlayers }) => {
     if (!myPlayer.isEvil) {
-        if (position) {
-            myPlayer.position = position;
+        if (resetPosition) {
+            myPlayer.position = resetPosition;
             board.renderBoard();
         }
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
