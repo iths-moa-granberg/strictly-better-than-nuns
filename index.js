@@ -264,7 +264,7 @@ io.on('connection', (socket) => {
 
     const endEnemyTurn = () => {
         game.placedSoundCounter++;
-        if (game.placedSoundCounter === game.numOfGoodPlayers) {
+        if (game.placedSoundCounter === game.numOfGoodPlayers || enemy.pace != 'walk') {
             game.placedSoundCounter = 0;
             updateBoard();
             startNextTurn();
