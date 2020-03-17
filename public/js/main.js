@@ -67,35 +67,47 @@ const selectPace = (pace) => {
     }
 }
 
-socket.on('possible steps', ({ endups, visible }) => {
+socket.on('possible steps', ({ endups, visible, stepsLeft }) => {
     //if player && visible, warning
+    if (myPlayer.isEvil && stepsLeft <= 1) {
+        askToConfirmDestination();
+        userOptions.disableBtns('.back'); //todo: add regret choice-possibility for enemy
+    } else if (!myPlayer.isEvil && !endups.length) {
+        askToConfirmDestination();
+    }
     board.reachablePositions = endups;
     board.renderBoard();
     board.addStepListener(board.activePlayer.position, endups, takeStep);
 });
 
+const askToConfirmDestination = () => {
+    board.reachablePositions = [];
+    board.renderBoard();
+    userOptions.renderConfirmDestinationBtn(confirmDestination, resetSteps);
+}
+
 const takeStep = (position) => {
-    userOptions.disableBtns();
     board.activePlayer.position = position;
-    if (!myPlayer.isEvil) {
-        socket.emit('player takes step', { position });
-    } else {
+    if (myPlayer.isEvil) {
         socket.emit('enemy takes step', { position });
+    } else {
+        socket.emit('player takes step', { position });
+        askToConfirmDestination();
     }
 }
 
-socket.on('player out of steps', ({ }) => {
-    board.reachablePositions = [];
-    board.renderBoard();
-    userOptions.renderConfirmDestinationBtn(playerConfirmDestination, playerResetSteps);
-});
-
-const playerConfirmDestination = () => {
-    socket.emit('player move completed', {});
+const confirmDestination = () => {
+    if (myPlayer.isEvil) {
+        socket.emit('enemy move completed', {});
+    } else {
+        socket.emit('player move completed', {});
+    }
     userOptions.disableBtns();
 }
 
-const playerResetSteps = () => {
+const resetSteps = () => {
+    board.reachablePositions = [];
+    board.renderBoard();
     socket.emit('player reset move', {});
 }
 

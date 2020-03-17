@@ -102,12 +102,12 @@ io.on('connection', (socket) => {
         } else {
             endups = board.getClosestWayToPath(socket.player.position, socket.player.path);
         }
-        socket.emit('possible steps', { endups });
+        socket.emit('possible steps', { endups, stepsLeft: socket.player.stepsLeft });
     }
 
     socket.on('enemy selects pace', ({ pace }) => {
         socket.player.pace = pace;
-        socket.player.stepsLeft = pace === 'walk' ? 3 : 5; //3-4, 5-6
+        socket.player.stepsLeft = pace === 'walk' ? 4 : 6;
         enemyStepOptions();
     });
 
@@ -121,11 +121,7 @@ io.on('connection', (socket) => {
         }
         socket.player.path.push({ position, visible: socket.player.visible });
 
-        if (socket.player.stepsLeft <= 0) {
-            socket.emit('player out of steps', {});
-        } else {
-            playerStepOptions();
-        }
+        playerStepOptions();
     });
 
     const chooseNewPath = (paths) => {
@@ -159,15 +155,13 @@ io.on('connection', (socket) => {
                 }
             }
         }
-
         updateBoard();
-
-        if (socket.player.stepsLeft <= 0) {
-            enemyMoveComplete();
-        } else {
-            enemyStepOptions();
-        }
+        enemyStepOptions();
     }
+
+    socket.on('enemy move completed', ({ }) => {
+        enemyMoveComplete();
+    });
 
     const enemyMoveComplete = () => {
         game.soundTokens = [];
