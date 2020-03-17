@@ -68,24 +68,9 @@ class Enemy extends Player {
     }
 
     move = (position) => {
-        if (this.isOnPath(position)) {
-            if (this.path[this.path.length - 1] === position) {
-                this._chooseNewPath();
-            }
-        }
         this.stepsLeft--;
         this.lastPosition = this.position;
         this.position = position;
-    }
-
-    _chooseNewPath = () => {
-        let shuffledPaths = enemyPaths.concat().sort(() => .5 - Math.random());
-        for (let path of shuffledPaths) {
-            if (path[0] === this.path[this.path.length - 1] && path != this.path) {
-                this.path = path;
-                return;
-            }
-        }
     }
 
     checkTarget = (player) => {
@@ -94,6 +79,14 @@ class Enemy extends Player {
 
     isOnPath = () => {
         return this.path.find(pos => pos.id === this.position.id) ? true : false;
+    }
+
+    endOfPath = () => {
+        return this.isOnPath() && this.path[this.path.length - 1].id === this.position.id;
+    }
+
+    getNewPossiblePaths = () => {
+        return enemyPaths.filter(path => path[0].id === this.path[this.path.length - 1].id && path != this.path);
     }
 }
 

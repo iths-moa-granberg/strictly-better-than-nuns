@@ -99,10 +99,6 @@ io.on('connection', (socket) => {
             endups = board.getReachable(socket.player.position, socket.player.stepsLeft, true);
         } else if (socket.player.isOnPath()) {
             endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
-            if (socket.player.path[socket.player.path.length - 1].id === socket.player.position.id && !endups.length) {
-                socket.player._chooseNewPath(); //enemyplayer choose next path
-                endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
-            }
         } else {
             endups = board.getClosestWayToPath(socket.player.position, socket.player.path);
         }
@@ -132,9 +128,27 @@ io.on('connection', (socket) => {
         }
     });
 
+    const chooseNewPath = (paths) => {
+        socket.emit('choose new path', ({ paths }));
+    }
+
+    socket.on('select path', ({ path }) => {
+        socket.player.path = path;
+        actOnEmenyStep();
+    });
+
     socket.on('enemy takes step', ({ position }) => {
         position = game.getServerPosition(position.id);
-        socket.player.move(position); //choose next path
+        socket.player.move(position);
+        if (socket.player.endOfPath()) {
+            updateBoard();
+            chooseNewPath(socket.player.getNewPossiblePaths());
+        } else {
+            actOnEmenyStep();
+        }
+    });
+
+    const actOnEmenyStep = () => {
         game.checkEnemyTarget(socket.player);
 
         for (let player of game.players) {
@@ -153,7 +167,7 @@ io.on('connection', (socket) => {
         } else {
             enemyStepOptions();
         }
-    });
+    }
 
     const enemyMoveComplete = () => {
         game.soundTokens = [];

@@ -129,3 +129,22 @@ socket.on('enemy turn', ({ }) => {
         userOptions.disableBtns();
     }
 });
+
+socket.on('choose new path', ({ paths }) => {
+    showBtnsSelectPath(paths);
+});
+
+const showBtnsSelectPath = (paths) => {
+    userOptions.renderChoosePath(paths, showSelectedPath);
+}
+
+const showSelectedPath = (paths, num) => {
+    board.enemyPath = paths[num];
+    board.renderBoard();
+    userOptions.renderConfirmDestinationBtn(selectPath, showBtnsSelectPath, paths);
+}
+
+const selectPath = () => {
+    let path = board.enemyPath;
+    socket.emit('select path', { path });
+}

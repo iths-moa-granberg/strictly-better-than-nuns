@@ -3,7 +3,7 @@ class Board {
         this.positions = positions;
     }
 
-    getReachable = (startPosition, totalSteps, hasKey) => { //jämför id
+    getReachable = (startPosition, totalSteps, hasKey) => {
         let possiblePos = [startPosition];
         for (let steps = 0; steps < totalSteps; steps++) {
             for (let pos of possiblePos) {
@@ -26,7 +26,8 @@ class Board {
     }
 
     getEnemyStandardReachable = (start, path, totalSteps) => {
-        return path.filter((pos, index) => index > path.indexOf(start))
+        let serverStart = path.find(obj => obj.id === start.id);
+        return path.filter((pos, index) => index > path.indexOf(serverStart))
             .filter((pos, index) => index < totalSteps);
     }
 
@@ -36,7 +37,7 @@ class Board {
 
         for (let path of paths) {
             for (let pos of path) {
-                if (pos === path[path.length - 1]) {
+                if (pos.id === path[path.length - 1].id) {
                     let i = this._getPlaceInQueue(pos, queue) - 1;
                     let neighbours = this._getNeighbours(pos).filter(neighbour => queue[i].includes(neighbour));
                     if (!hasKey) {
@@ -58,7 +59,7 @@ class Board {
                         paths.push(firstNewPath);
                         paths.push(secondNewPath);
                     }
-                    if (path.includes(start)) {
+                    if (path.find(pos => pos.id === start.id)) {
                         break
                     }
                 }
@@ -95,7 +96,7 @@ class Board {
                 nextStep = nextStep.concat(neighbours);
             }
             queue.push(nextStep);
-            if (nextStep.includes(end)) {
+            if (nextStep.find(pos => pos.id === end.id)) {
                 break
             }
         }
@@ -105,7 +106,7 @@ class Board {
     _getPlaceInQueue = (position, queue) => {
         let i = 0;
         for (let place of queue) {
-            if (place.includes(position)) {
+            if (place.find(pos => pos.id === position.id)) {
                 return i;
             }
             i++;

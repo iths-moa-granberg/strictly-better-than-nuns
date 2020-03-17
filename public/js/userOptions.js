@@ -43,13 +43,13 @@ class UserOptions {
         btns.forEach(btn => btn.disabled = false);
     }
 
-    renderConfirmDestinationBtn = (handlerConfirm, handlerBack) => {
+    renderConfirmDestinationBtn = (handlerConfirm, handlerBack, paramBack) => {
         this.wrapper.innerHTML = this._renderBtn('Confirm');
         this.wrapper.innerHTML += this._renderBtn('Back');
         const confirmBtn = document.querySelector('button');
         const backBtn = document.querySelectorAll('button')[1];
         confirmBtn.addEventListener('click', e => handlerConfirm());
-        backBtn.addEventListener('click', e => handlerBack());
+        backBtn.addEventListener('click', e => handlerBack(paramBack));
     }
 
     renderTokenInstr = () => {
@@ -78,5 +78,14 @@ class UserOptions {
     renderCaughtInstr = () => {
         console.log('render instr called');
         this.wrapper.innerHTML = 'you are caught, walk straight to home until no longer in view'; //fillertext
+    }
+
+    renderChoosePath = (paths, handler) => {
+        this.wrapper.innerHTML = 'choose next path'; //fillertext
+        paths.forEach((path, index) => this.wrapper.innerHTML += `<button>${index}</button>`);
+        const btns = this.wrapper.querySelectorAll('button');
+        for (let btn of btns) {
+            btn.addEventListener('click', e => handler(paths, btn.innerText));
+        }
     }
 }
