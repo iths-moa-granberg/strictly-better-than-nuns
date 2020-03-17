@@ -167,6 +167,8 @@ io.on('connection', (socket) => {
         game.soundTokens = [];
         game.sightTokens = [];
 
+        socket.player.updateLastConfirmedInfo();
+
         if (enemy.pace === 'walk') {
             const sound = board.getRandomSound();
             for (let player of game.players) {
@@ -236,6 +238,11 @@ io.on('connection', (socket) => {
             game.addCaughtPlayer(socket.player);
         }
         socket.emit('players turn', { resetPosition: socket.player.position, caughtPlayers: game.caughtPlayers });
+    });
+
+    socket.on('enemy reset move', ({ }) => {
+        socket.player.resetToLastConfirmedInfo();
+        socket.emit('enemy turn', { resetPosition: socket.player.position });
     });
 
     const leaveSight = (player) => {

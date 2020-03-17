@@ -71,7 +71,6 @@ socket.on('possible steps', ({ endups, visible, stepsLeft }) => {
     //if player && visible, warning
     if (myPlayer.isEvil && stepsLeft <= 1) {
         askToConfirmDestination();
-        userOptions.disableBtns('.back'); //todo: add regret choice-possibility for enemy
     } else if (!myPlayer.isEvil && !endups.length) {
         askToConfirmDestination();
     }
@@ -107,8 +106,11 @@ const confirmDestination = () => {
 
 const resetSteps = () => {
     board.reachablePositions = [];
-    board.renderBoard();
-    socket.emit('player reset move', {});
+    if (myPlayer.isEvil) {
+        socket.emit('enemy reset move', {});
+    } else {
+        socket.emit('player reset move', {});
+    }
 }
 
 socket.on('update player', ({ hasKey, hasGoal, visible }) => {
@@ -133,9 +135,13 @@ const playerPlaceToken = (position, turn) => {
     socket.emit('player place token', { position, turn });
 }
 
-socket.on('enemy turn', ({ }) => {
+socket.on('enemy turn', ({ resetPosition }) => {
     if (myPlayer.isEvil) {
-        userOptions.enableBtns();
+        if (resetPosition) {
+            myPlayer.position = resetPosition;
+            board.renderBoard();
+        }
+        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
     } else {
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
         userOptions.disableBtns();
