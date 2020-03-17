@@ -80,7 +80,7 @@ class Board {
             allPaths = allPaths.concat(paths);
         }
         let shortest = allPaths.filter(path => path.length === shortestPathLength);
-        return shortest[0]; //ej valbar
+        return shortest.flat();
     }
 
     _getQueue = (start, end) => {
