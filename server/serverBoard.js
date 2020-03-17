@@ -14,7 +14,7 @@ class Board {
                 }
             }
         }
-        return possiblePos;
+        return possiblePos.filter(pos => pos.id != startPosition.id);
     }
 
     _getNeighbours = (position) => {
@@ -31,7 +31,11 @@ class Board {
             .filter((pos, index) => index < totalSteps);
     }
 
-    getClosestPaths = (start, end, hasKey) => {
+    getClosestWayHome = (start, end, hasKey) => {
+        return this._getClosestPaths(start, end, hasKey).flat().filter(pos => pos.id != start.id);
+    }
+
+    _getClosestPaths = (start, end, hasKey) => {
         let queue = this._getQueue(start, end);
         let paths = [[end]];
 
@@ -73,14 +77,15 @@ class Board {
         let allPaths = [];
         let shortestPathLength = 100; //magic number, max distance bw any pos board
         for (let position of path) {
-            let paths = this.getClosestPaths(start, position, true);
+            let paths = this._getClosestPaths(start, position, true);
             if (paths[0].length < shortestPathLength) {
                 shortestPathLength = paths[0].length;
             }
             allPaths = allPaths.concat(paths);
         }
-        let shortest = allPaths.filter(path => path.length === shortestPathLength);
-        return shortest.flat();
+        return allPaths.filter(path => path.length === shortestPathLength)
+            .flat()
+            .filter(pos => pos.id != start.id);
     }
 
     _getQueue = (start, end) => {
@@ -117,7 +122,7 @@ class Board {
         const reaches = this.getReachable(playerPos, sound, true);
 
         if (reaches.find(pos => pos.id === enemyPos.id)) {
-            const soundPaths = this.getClosestPaths(playerPos, enemyPos, true);
+            const soundPaths = this._getClosestPaths(playerPos, enemyPos, true);
 
             let tokenPositions = [];
             for (let path of soundPaths) {

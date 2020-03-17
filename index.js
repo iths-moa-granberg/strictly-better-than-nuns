@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
     const playerStepOptions = () => {
         let endups = [];
         if (game.isCaught(socket.player)) {
-            endups = board.getClosestPaths(socket.player.position, socket.player.home, socket.player.hasKey).flat();
+            endups = board.getClosestWayHome(socket.player.position, socket.player.home, socket.player.hasKey);
         } else {
             endups = board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey);
         }
