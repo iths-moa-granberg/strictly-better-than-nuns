@@ -60,6 +60,11 @@ class UserOptions {
         this.wrapper.innerHTML = '';
     }
 
+    removeBtn = (className) => {
+        const btn = this.wrapper.querySelector(className);
+        this.wrapper.removeChild(btn);
+    }
+
     renderChoosePlayer = (handler) => {
         this.wrapper.innerHTML = this._renderBtn('Good');
         this.wrapper.innerHTML += this._renderBtn('Evil');

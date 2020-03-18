@@ -71,7 +71,7 @@ socket.on('possible steps', ({ endups, visible, stepsLeft }) => {
     //if player && visible, warning
     if (myPlayer.isEvil && stepsLeft <= 1) {
         askToConfirmDestination();
-        userOptions.disableBtns('.back'); //todo: add regret choice-possibility for enemy
+        userOptions.removeBtn('.back');
     } else if (!myPlayer.isEvil && !endups.length) {
         askToConfirmDestination();
     }
