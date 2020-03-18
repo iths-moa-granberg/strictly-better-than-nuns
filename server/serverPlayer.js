@@ -63,12 +63,6 @@ class Enemy extends Player {
         this.position = path[0];
         this.lastPosition = path[0];
 
-        this.lastConfirmedInfo = {
-            position: this.position,
-            lastPosition: this.lastPosition,
-            path,
-        };
-
         this.visible = true;
         this.isEvil = true;
     }
@@ -93,18 +87,6 @@ class Enemy extends Player {
 
     getNewPossiblePaths = () => {
         return enemyPaths.filter(path => path[0].id === this.path[this.path.length - 1].id && path != this.path);
-    }
-
-    updateLastConfirmedInfo = () => {
-        this.lastConfirmedInfo.position = this.position;
-        this.lastConfirmedInfo.lastPosition = this.lastPosition;
-        this.lastConfirmedInfo.path = this.path;
-    }
-
-    resetToLastConfirmedInfo = () => {
-        this.position = this.lastConfirmedInfo.position;
-        this.lastPosition = this.lastConfirmedInfo.lastPosition;
-        this.path = this.lastConfirmedInfo.path;
     }
 }
 
