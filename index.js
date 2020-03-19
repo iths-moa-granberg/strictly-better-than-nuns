@@ -115,7 +115,7 @@ io.on('connection', (socket) => {
         position = game.getServerPosition(position.id)
         socket.player.position = position;
         socket.player.stepsLeft--;
-        lookAround(socket.player);
+        socket.player.visible = isSeen(socket.player);
         if (game.isCaught(socket.player) && !socket.player.visible) {
             game.removeCaughtPlayer(socket.player);
         }
@@ -136,6 +136,14 @@ io.on('connection', (socket) => {
     socket.on('enemy takes step', ({ position }) => {
         position = game.getServerPosition(position.id);
         socket.player.move(position);
+        game.checkEnemyTarget(socket.player);
+
+        for (let player of game.players) {
+            if (!player.isEvil && isSeen(player)) {
+                player.visible = true;
+                player.updatePathVisibility(player.position);
+            }
+        }
         if (socket.player.endOfPath()) {
             updateBoard();
             chooseNewPath(socket.player.getNewPossiblePaths());
@@ -145,16 +153,6 @@ io.on('connection', (socket) => {
     });
 
     const actOnEmenyStep = () => {
-        game.checkEnemyTarget(socket.player);
-
-        for (let player of game.players) {
-            if (!player.isEvil) {
-                lookAround(player);
-                if (player.visible) {
-                    player.updatePathVisibility(player.position);
-                }
-            }
-        }
         updateBoard();
         enemyStepOptions();
     }
@@ -194,8 +192,8 @@ io.on('connection', (socket) => {
         }
     }
 
-    const lookAround = (player) => {
-        player.visible = board.isSeen(player.position, enemy.position, enemy.lastPosition);
+    const isSeen = (player) => {
+        return board.isSeen(player.position, enemy.position, enemy.lastPosition);
     }
 
     socket.on('player move completed', ({ }) => {
