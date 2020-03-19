@@ -36,7 +36,7 @@ class Board {
     }
 
     _getClosestPaths = (start, end, hasKey) => {
-        let queue = this._getQueue(start, end);
+        let queue = this._getQueue(start, end, hasKey);
         let paths = [[end]];
 
         for (let path of paths) {
@@ -88,7 +88,7 @@ class Board {
             .filter(pos => pos.id != start.id);
     }
 
-    _getQueue = (start, end) => {
+    _getQueue = (start, end, hasKey) => {
         let tested = [start];
         let queue = [[start]];
 
@@ -96,7 +96,10 @@ class Board {
             let nextStep = [];
             for (let pos of stepArr) {
                 let neighbours = this._getNeighbours(pos);
-                neighbours = neighbours.filter(neighbour => !tested.find(pos => neighbour.id === pos.id));
+                neighbours = neighbours.filter(neighbour => !tested.find(pos => neighbour.id === pos.id))
+                if (!hasKey) {
+                    neighbours = neighbours.filter(neighbour => !neighbour.requireKey);
+                }
                 tested = tested.concat(neighbours);
                 nextStep = nextStep.concat(neighbours);
             }
