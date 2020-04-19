@@ -14,13 +14,12 @@ server.listen(port, () => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-const Player = require('./server/serverPlayer.js');
-const positions = require('./server/serverPositions.js');
-const enemyPaths = require('./server/enemyPaths.js'); //behövs bara i serverPlayer?
-const Game = require('./server/serverGame.js');
+const Player = require('./server/serverPlayer');
+const enemyPaths = require('./server/enemyPaths'); //behövs bara i serverPlayer?
+const Game = require('./server/serverGame');
 const game = new Game();
-const Board = require('./server/serverBoard.js');
-const board = new Board(positions);
+const Board = require('./server/serverBoard');
+const board = new Board();
 
 enemy = new Player.Evil('enemy', enemyPaths[0]);
 

@@ -1,7 +1,7 @@
+const positions = require('./serverPositions');
+
 class Board {
-    constructor(positions) {
-        this.positions = positions;
-    }
+    constructor() { }
 
     getReachable = (startPosition, totalSteps, hasKey) => {
         let possiblePos = [startPosition];
@@ -18,7 +18,7 @@ class Board {
     }
 
     _getNeighbours = (position) => {
-        return position.neighbours.map(neighbour => this.positions[neighbour]);
+        return position.neighbours.map(neighbour => positions[neighbour]);
     }
 
     getEnemyStandardReachable = (start, path, totalSteps) => {
