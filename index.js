@@ -165,30 +165,29 @@ io.on('connection', (socket) => {
         game.soundTokens = [];
         game.sightTokens = [];
 
-        if (enemy.pace === 'walk') {
-            const sound = board.getRandomSound();
-            for (let player of game.players) {
-                if (!player.isEvil) {
-                    if (!game.isCaught(player)) {
-                        const playerSound = board.getSoundReach(player.pace, sound);
-                        const heardTo = board.isHeard(player.position, enemy.position, playerSound);
-                        if (heardTo) {
-                            if (heardTo.length > 1) {
-                                io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
-                            } else {
-                                game.addToken(heardTo[0], 'sound');
-                                endEnemyTurn();
-                            }
-                        } else {
-                            endEnemyTurn();
-                        }
+        if (enemy.pace === 'run') {
+            endEnemyTurn();
+            return;
+        }
+
+        const sound = board.getRandomSound();
+        for (let player of game.players) {
+            if (!player.isEvil && !game.isCaught(player)) {
+                const playerSound = board.getSoundReach(player.pace, sound);
+                const heardTo = board.isHeard(player.position, enemy.position, playerSound);
+                if (heardTo) {
+                    if (heardTo.length > 1) {
+                        io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
                     } else {
+                        game.addToken(heardTo[0], 'sound');
                         endEnemyTurn();
                     }
+                } else {
+                    endEnemyTurn();
                 }
+            } else {
+                endEnemyTurn();
             }
-        } else {
-            endEnemyTurn();
         }
     }
 
@@ -270,7 +269,7 @@ io.on('connection', (socket) => {
 
     const endEnemyTurn = () => {
         game.placedSoundCounter++;
-        if (game.placedSoundCounter === game.numOfGoodPlayers || enemy.pace != 'walk') {
+        if (game.placedSoundCounter === game.players.length - 1 || enemy.pace === 'run') {
             game.placedSoundCounter = 0;
             updateBoard();
             startNextTurn();
