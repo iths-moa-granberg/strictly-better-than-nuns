@@ -67,17 +67,17 @@ const selectPace = (pace) => {
     }
 }
 
-socket.on('possible steps', ({ endups, visible, stepsLeft }) => {
+socket.on('possible steps', ({ possibleSteps, visible, stepsLeft }) => {
     //if player && visible, warning
     if (myPlayer.isEvil && stepsLeft <= 1) {
         askToConfirmDestination();
         userOptions.removeBtn('.back');
-    } else if (!myPlayer.isEvil && !endups.length) {
+    } else if (!myPlayer.isEvil && !possibleSteps.length) {
         askToConfirmDestination();
     }
-    board.reachablePositions = endups;
+    board.reachablePositions = possibleSteps;
     board.renderBoard();
-    board.addStepListener(board.activePlayer.position, endups, takeStep);
+    board.addStepListener(board.activePlayer.position, possibleSteps, takeStep);
 });
 
 const askToConfirmDestination = () => {

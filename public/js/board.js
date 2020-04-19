@@ -47,9 +47,9 @@ class BoardView {
         }
     }
 
-    addStepListener = (start, endups, handler) => {
+    addStepListener = (start, possibleSteps, handler) => {
         for (let position of Object.values(positions)) {
-            if (start.neighbours.includes(position.id) && endups.find(pos => pos.id === position.id)) {
+            if (start.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id)) {
                 const node = document.querySelectorAll('.position')[position.id - 1];
                 node.addEventListener('click', e => handler(position));
             }

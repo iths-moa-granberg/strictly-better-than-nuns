@@ -72,14 +72,14 @@ io.on('connection', (socket) => {
     };
 
     const playerStepOptions = () => {
-        let endups = [];
+        let possibleSteps = [];
         if (game.isCaught(socket.player)) {
-            endups = board.getClosestWayHome(socket.player.position, socket.player.home, socket.player.hasKey);
+            possibleSteps = board.getClosestWayHome(socket.player.position, socket.player.home, socket.player.hasKey);
         } else {
-            endups = board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey);
+            possibleSteps = board.getReachable(socket.player.position, socket.player.stepsLeft, socket.player.hasKey);
         }
         socket.emit('possible steps', {
-            endups,
+            possibleSteps,
             visible: socket.player.visible,
         });
     }
@@ -94,15 +94,15 @@ io.on('connection', (socket) => {
     });
 
     const enemyStepOptions = () => {
-        let endups = [];
+        let possibleSteps = [];
         if (game.soundTokens.length || game.sightTokens.length || game.playersIsVisible()) {
-            endups = board.getReachable(socket.player.position, socket.player.stepsLeft, true);
+            possibleSteps = board.getReachable(socket.player.position, socket.player.stepsLeft, true);
         } else if (socket.player.isOnPath()) {
-            endups = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
+            possibleSteps = board.getEnemyStandardReachable(socket.player.position, socket.player.path, socket.player.stepsLeft);
         } else {
-            endups = board.getClosestWayToPath(socket.player.position, socket.player.path);
+            possibleSteps = board.getClosestWayToPath(socket.player.position, socket.player.path);
         }
-        socket.emit('possible steps', { endups, stepsLeft: socket.player.stepsLeft });
+        socket.emit('possible steps', { possibleSteps, stepsLeft: socket.player.stepsLeft });
     }
 
     socket.on('enemy selects pace', ({ pace }) => {
