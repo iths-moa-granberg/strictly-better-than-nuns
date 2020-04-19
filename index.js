@@ -258,7 +258,7 @@ io.on('connection', (socket) => {
         return false;
     }
 
-    socket.on('player place token', ({ position, turn }) => {
+    socket.on('player placed token', ({ position, turn }) => {
         game.addToken(position, 'sound');
         if (turn === 'player') {
             endPlayerTurn();

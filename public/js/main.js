@@ -130,7 +130,7 @@ const playerPlaceToken = (position, turn) => {
     board.soundTokens = [position];
     board.renderBoard();
     userOptions.clear();
-    socket.emit('player place token', { position, turn });
+    socket.emit('player placed token', { position, turn });
 }
 
 socket.on('enemy turn', () => {
