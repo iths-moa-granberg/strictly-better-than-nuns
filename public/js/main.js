@@ -15,7 +15,7 @@ const join = (good) => {
     userOptions.renderStartGame(startGame);
 }
 
-socket.on('disable join as evil', ({ }) => {
+socket.on('disable join as evil', () => {
     userOptions.disableBtns('.evil');
 });
 
