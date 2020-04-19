@@ -21,7 +21,7 @@ socket.on('disable join as evil', ({ }) => {
 
 const startGame = () => {
     userOptions.clear();
-    socket.emit('start', ({}));
+    socket.emit('start');
 }
 
 socket.on('init', ({ id, home, key, goal, isEvil }) => {
@@ -98,9 +98,9 @@ const takeStep = (position) => {
 
 const confirmDestination = () => {
     if (myPlayer.isEvil) {
-        socket.emit('enemy move completed', {});
+        socket.emit('enemy move completed');
     } else {
-        socket.emit('player move completed', {});
+        socket.emit('player move completed');
     }
     userOptions.disableBtns();
 }
@@ -108,7 +108,7 @@ const confirmDestination = () => {
 const resetSteps = () => {
     board.reachablePositions = [];
     board.renderBoard();
-    socket.emit('player reset move', {});
+    socket.emit('player reset move');
 }
 
 socket.on('update player', ({ hasKey, hasGoal, visible }) => {
@@ -133,7 +133,7 @@ const playerPlaceToken = (position, turn) => {
     socket.emit('player place token', { position, turn });
 }
 
-socket.on('enemy turn', ({ }) => {
+socket.on('enemy turn', () => {
     if (myPlayer.isEvil) {
         userOptions.enableBtns();
     } else {

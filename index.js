@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
                 goal: socket.player.position,
                 isEvil: socket.player.isEvil,
             });
-            io.sockets.emit('disable join as evil', ({}));
+            io.sockets.emit('disable join as evil');
         }
         updateBoard();
     });
@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
         enemyStepOptions();
     }
 
-    socket.on('enemy move completed', ({ }) => {
+    socket.on('enemy move completed', () => {
         enemyMoveComplete();
     });
 
@@ -196,7 +196,7 @@ io.on('connection', (socket) => {
         return board.isSeen(player.position, enemy.position, enemy.lastPosition);
     }
 
-    socket.on('player move completed', ({ }) => {
+    socket.on('player move completed', () => {
         socket.player.checkTarget();
 
         if (!socket.player.visible) {
@@ -226,7 +226,7 @@ io.on('connection', (socket) => {
         }
     }
 
-    socket.on('player reset move', ({ }) => {
+    socket.on('player reset move', () => {
         socket.player.position = socket.player.path[0].position;
         socket.player.visible = socket.player.path[0].visible;
         socket.player.resetPath();
@@ -279,6 +279,6 @@ io.on('connection', (socket) => {
 
     const startEnemyTurn = () => {
         updateBoard();
-        io.sockets.emit('enemy turn', {});
+        io.sockets.emit('enemy turn');
     }
 });
