@@ -77,7 +77,7 @@ socket.on('possible steps', ({ possibleSteps, visible, stepsLeft }) => {
     }
     board.reachablePositions = possibleSteps;
     board.renderBoard();
-    board.addStepListener(board.activePlayer.position, possibleSteps, takeStep);
+    board.addListener(takeStep, possibleSteps);
 });
 
 const askToConfirmDestination = () => {
@@ -86,13 +86,15 @@ const askToConfirmDestination = () => {
     userOptions.renderConfirmDestinationBtn(confirmDestination, resetSteps);
 }
 
-const takeStep = (position) => {
-    board.activePlayer.position = position;
-    if (myPlayer.isEvil) {
-        socket.emit('enemy takes step', { position });
-    } else {
-        socket.emit('player takes step', { position });
-        askToConfirmDestination();
+const takeStep = (position, possibleSteps) => {    
+    if (myPlayer.position.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id)) {
+        board.activePlayer.position = position;
+        if (myPlayer.isEvil) {
+            socket.emit('enemy takes step', { position });
+        } else {
+            socket.emit('player takes step', { position });
+            askToConfirmDestination();
+        }
     }
 }
 
@@ -121,16 +123,18 @@ socket.on('player select token', ({ heardTo, id, turn }) => {
     if (id === myPlayer.id) {
         board.soundTokens = heardTo;
         board.renderBoard();
-        board.addTokenListener(heardTo, playerPlaceToken, turn);
+        board.addListener(playerPlaceToken, turn, heardTo);
         userOptions.renderTokenInstr();
     }
 });
 
-const playerPlaceToken = (position, turn) => {
-    board.soundTokens = [position];
-    board.renderBoard();
-    userOptions.clear();
-    socket.emit('player placed token', { position, turn });
+const playerPlaceToken = (position, turn, heardTo) => {
+    if (heardTo.find(pos => pos.id === position.id)) {
+        board.soundTokens = [position];
+        board.renderBoard();
+        userOptions.clear();
+        socket.emit('player placed token', { position, turn });
+    }
 }
 
 socket.on('enemy turn', () => {

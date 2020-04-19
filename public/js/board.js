@@ -47,19 +47,10 @@ class BoardView {
         }
     }
 
-    addStepListener = (start, possibleSteps, handler) => {
+    addListener = (handler, ...params) => {
         for (let position of Object.values(positions)) {
-            if (start.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id)) {
-                const node = document.querySelectorAll('.position')[position.id - 1];
-                node.addEventListener('click', e => handler(position));
-            }
-        }
-    }
-
-    addTokenListener = (heardTo, handler, turn) => {
-        for (let position of heardTo) {
             const node = document.querySelectorAll('.position')[position.id - 1];
-            node.addEventListener('click', e => handler(position, turn));
+            node.addEventListener('click', e => handler(position, ...params));
         }
     }
 
