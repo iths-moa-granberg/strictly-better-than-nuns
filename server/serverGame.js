@@ -44,7 +44,7 @@ class Game {
     }
 
     playersIsVisible = () => {
-        return this.players.find(player => player.visible === true && !player.isEvil) ? true : false;
+        return Boolean(this.players.find(player => player.visible === true && !player.isEvil));
     }
 
     checkEnemyTarget = (enemy) => {

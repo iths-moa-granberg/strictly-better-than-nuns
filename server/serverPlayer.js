@@ -78,7 +78,7 @@ class Enemy extends Player {
     }
 
     isOnPath = () => {
-        return this.path.find(pos => pos.id === this.position.id) ? true : false;
+        return Boolean(this.path.find(pos => pos.id === this.position.id));
     }
 
     endOfPath = () => {
