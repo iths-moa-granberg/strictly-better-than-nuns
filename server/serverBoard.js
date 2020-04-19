@@ -108,13 +108,7 @@ class Board {
     }
 
     _getPlaceInQueue = (position, queue) => {
-        let i = 0;
-        for (let place of queue) {
-            if (place.find(pos => pos.id === position.id)) {
-                return i;
-            }
-            i++;
-        }
+        return queue.findIndex(place => place.find(pos => pos.id === position.id));
     }
 
     isHeard = (playerPos, enemyPos, sound) => {
