@@ -18,6 +18,7 @@ const Player = require('./server/serverPlayer.js');
 const positions = require('./server/serverPositions.js');
 const enemyPaths = require('./server/enemyPaths.js'); //behövs bara i serverPlayer?
 const game = require('./server/serverGame.js');
+const game = new Game();
 const Board = require('./server/serverBoard.js');
 const board = new Board(positions);
 
@@ -52,7 +53,7 @@ io.on('connection', (socket) => {
         updateBoard();
     });
 
-    socket.on('start', ({ }) => {
+    socket.on('start', () => {
         startNextTurn();
     });
 
