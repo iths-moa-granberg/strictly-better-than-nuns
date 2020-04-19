@@ -18,11 +18,7 @@ class Board {
     }
 
     _getNeighbours = (position) => {
-        let neighbours = [];
-        for (let neighbour of position.neighbours) {
-            neighbours.push(this.positions[neighbour]);
-        }
-        return neighbours;
+        return position.neighbours.map(neighbour => this.positions[neighbour]);
     }
 
     getEnemyStandardReachable = (start, path, totalSteps) => {
