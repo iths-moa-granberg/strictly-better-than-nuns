@@ -81,7 +81,6 @@ class UserOptions {
     }
 
     renderCaughtInstr = () => {
-        console.log('render instr called');
         this.wrapper.innerHTML = 'you are caught, walk straight to home until no longer in view'; //fillertext
     }
 
