@@ -3,7 +3,7 @@ const board = new BoardView();
 const userOptions = new UserOptions();
 let myPlayer;
 
-socket.on('join', ({ enemyJoined }) => {
+socket.on('init', ({ enemyJoined }) => {
     userOptions.renderChoosePlayer(join);
     if (enemyJoined) {
         userOptions.disableBtns('.evil');
@@ -24,7 +24,7 @@ const startGame = () => {
     socket.emit('start');
 }
 
-socket.on('init', ({ id, home, key, goal, isEvil }) => {
+socket.on('set up player', ({ id, home, key, goal, isEvil }) => {
     myPlayer = new Player(id, home, key, goal, isEvil);
 });
 

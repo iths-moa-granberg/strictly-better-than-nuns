@@ -24,13 +24,13 @@ const board = new Board();
 enemy = new Player.Evil('enemy', enemyPaths[0]);
 
 io.on('connection', (socket) => {
-    socket.emit('join', { enemyJoined: game.players.find(player => player.isEvil) });
+    socket.emit('init', { enemyJoined: game.players.find(player => player.isEvil) });
 
     socket.on('player joined', ({ good }) => {
         if (good) {
             socket.player = new Player.Good(game.generatePlayerInfo());
             game.addPlayer(socket.player);
-            socket.emit('init', {
+            socket.emit('set up player', {
                 id: socket.player.id,
                 home: socket.player.home,
                 key: socket.player.key,
@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
         } else {
             socket.player = enemy;
             game.addPlayer(enemy);
-            socket.emit('init', { //fulhack
+            socket.emit('set up player', { //fulhack
                 id: socket.player.id,
                 home: socket.player.position,
                 key: socket.player.position,
