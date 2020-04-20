@@ -21,10 +21,13 @@ const game = new Game();
 const Board = require('./server/serverBoard');
 const board = new Board();
 
-enemy = new Player.Evil('enemy', enemyPaths[0]);
+enemy = {
+    enemy1: new Player.Evil('enemy1', enemyPaths[0]),
+    enemy2: new Player.Evil('enemy2', enemyPaths[2]),
+};
 
 io.on('connection', (socket) => {
-    socket.emit('init', { enemyJoined: game.players.find(player => player.isEvil) });
+    socket.emit('init', { enemyJoined: game.enemyJoined });
 
     socket.on('player joined', ({ good }) => {
         if (good) {
@@ -39,14 +42,9 @@ io.on('connection', (socket) => {
             });
         } else {
             socket.player = enemy;
-            game.addPlayer(enemy);
-            socket.emit('set up player', { //fulhack
-                id: socket.player.id,
-                home: socket.player.position,
-                key: socket.player.position,
-                goal: socket.player.position,
-                isEvil: socket.player.isEvil,
-            });
+            game.enemyJoined = true;
+            socket.emit('set up enemy', { 
+                startPositions: [socket.player.enemy1.position, socket.player.enemy2.position] });
             io.sockets.emit('disable join as evil');
         }
         updateBoard();

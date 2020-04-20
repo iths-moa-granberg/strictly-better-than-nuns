@@ -11,6 +11,7 @@ class Game {
         this.placedSoundCounter = 0;
         this.soundTokens = [];
         this.sightTokens = [];
+        this.enemyJoined = false;
     }
 
     addPlayer = (newPlayer) => {

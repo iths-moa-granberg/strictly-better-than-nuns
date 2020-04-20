@@ -13,3 +13,11 @@ class Player {
         this.hasGoal = false;
     }
 }
+
+class Enemy {
+    constructor(id, position) {
+        this.id = id;
+        this.position = position;
+        this.isEvil = true;
+    }
+}

@@ -2,6 +2,7 @@ const socket = io();
 const board = new BoardView();
 const userOptions = new UserOptions();
 let myPlayer;
+let currentPlayer;
 
 socket.on('init', ({ enemyJoined }) => {
     userOptions.renderChoosePlayer(join);
@@ -26,6 +27,16 @@ const startGame = () => {
 
 socket.on('set up player', ({ id, home, key, goal, isEvil }) => {
     myPlayer = new Player(id, home, key, goal, isEvil);
+    currentPlayer = myPlayer;
+});
+
+socket.on('set up enemy', ({ startPositions }) => {
+    myPlayer = {
+        enemy1: new Enemy('enemy1', startPositions[0]),
+        enemy2: new Enemy('enemy2', startPositions[1]),
+        isEvil: true,
+    };
+    currentPlayer = myPlayer.enemy1;
 });
 
 socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reachablePositions }) => {
