@@ -4,7 +4,6 @@ class Game {
     constructor() {
         this.roundCounter = 0;
         this.players = [];
-        this.numOfGoodPlayers = 0;
         this.caughtPlayers = [];
         this.enemyWinCounter = 0;
         this.playerTurnCompleted = 0;
@@ -15,10 +14,7 @@ class Game {
     }
 
     addPlayer = (newPlayer) => {
-        this.players.push(newPlayer);
-        if (!newPlayer.isEvil) {
-            this.numOfGoodPlayers++;
-        }
+        this.players.push(newPlayer);ƒ
     }
 
     startNextTurn = () => {
@@ -44,7 +40,7 @@ class Game {
     }
 
     playersIsVisible = () => {
-        return Boolean(this.players.find(player => player.visible === true && !player.isEvil));
+        return Boolean(this.players.find(player => player.visible === true));
     }
 
     checkEnemyTarget = (enemy) => {
@@ -55,7 +51,7 @@ class Game {
                 this.addCaughtPlayer(player);
             }
         }
-        if (this.enemyWinCounter >= this.numOfGoodPlayers) {
+        if (this.enemyWinCounter > this.player.length) {
             console.log('enemy win');
         }
     }
@@ -74,10 +70,10 @@ class Game {
 
     generatePlayerInfo = () => {
         return {
-            id: this.numOfGoodPlayers,
-            home: positions[1 + this.numOfGoodPlayers],
-            key: positions[12 + this.numOfGoodPlayers],
-            goal: positions[10 + this.numOfGoodPlayers],
+            id: this.players.length,
+            home: positions[1 + this.players.length],
+            key: positions[12 + this.players.length],
+            goal: positions[10 + this.players.length],
         };
     }
 

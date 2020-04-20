@@ -74,7 +74,7 @@ class Enemy extends Player {
     }
 
     checkTarget = (player) => {
-        return player.position.id === this.position.id && player.id != this.id;
+        return player.position.id === this.position.id;
     }
 
     isOnPath = () => {

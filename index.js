@@ -215,7 +215,7 @@ io.on('connection', (socket) => {
             visible: socket.player.visible,
         });
         game.playerTurnCompleted++;
-        if (game.playerTurnCompleted === game.numOfGoodPlayers) {
+        if (game.playerTurnCompleted === game.players.length - 1) {
             game.playerTurnCompleted = 0;
             startEnemyTurn();
         }
