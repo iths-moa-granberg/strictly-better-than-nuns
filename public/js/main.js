@@ -97,6 +97,8 @@ const askToConfirmDestination = () => {
     userOptions.renderConfirmDestinationBtn(confirmDestination, resetSteps);
 }
 
+const takeStep = (position, possibleSteps) => {
+    if (currentPlayer.position.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id)) {
         board.activePlayer.position = position;
         if (myPlayer.isEvil) {
             socket.emit('enemy takes step', { position });
@@ -126,6 +128,7 @@ socket.on('update player', ({ hasKey, hasGoal, visible }) => {
     myPlayer.hasKey = hasKey;
     myPlayer.hasGoal = hasGoal;
     myPlayer.visible = visible;
+    currentPlayer = myPlayer;
 });
 
 socket.on('player select token', ({ heardTo, id, turn }) => {
