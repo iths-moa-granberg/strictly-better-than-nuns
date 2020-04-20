@@ -97,8 +97,6 @@ const askToConfirmDestination = () => {
     userOptions.renderConfirmDestinationBtn(confirmDestination, resetSteps);
 }
 
-const takeStep = (position, possibleSteps) => {    
-    if (myPlayer.position.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id)) {
         board.activePlayer.position = position;
         if (myPlayer.isEvil) {
             socket.emit('enemy takes step', { position });
