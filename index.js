@@ -21,10 +21,7 @@ const game = new Game();
 const Board = require('./server/serverBoard');
 const board = new Board();
 
-enemy = {
-    enemy1: new Player.Evil('enemy1', enemyPaths[0]),
-    enemy2: new Player.Evil('enemy2', enemyPaths[2]),
-};
+enemy = [new Player.Evil('enemy1', enemyPaths[0]), new Player.Evil('enemy2', enemyPaths[2])];
 
 io.on('connection', (socket) => {
     socket.emit('init', { enemyJoined: game.enemyJoined });
@@ -43,8 +40,9 @@ io.on('connection', (socket) => {
         } else {
             socket.player = enemy;
             game.enemyJoined = true;
-            socket.emit('set up enemy', { 
-                startPositions: [socket.player.enemy1.position, socket.player.enemy2.position] });
+            socket.emit('set up enemy', {
+                startPositions: [socket.player[0].position, socket.player[1].position]
+            });
             io.sockets.emit('disable join as evil');
         }
         updateBoard();
@@ -59,7 +57,7 @@ io.on('connection', (socket) => {
             players: players = enemy.concat(game.getVisiblePlayers()),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
-            enemyPaths: [enemy.enemy1.path, enemy.enemy2.path],
+            enemyPaths: [enemy[0].path, enemy[1].path],
             reachablePositions: [],
         });
     }
