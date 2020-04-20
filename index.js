@@ -130,7 +130,7 @@ io.on('connection', (socket) => {
 
     socket.on('select path', ({ path }) => {
         socket.player.path = path;
-        actOnEmenyStep();
+        actOnEnemyStep();
     });
 
     socket.on('enemy takes step', ({ position }) => {
@@ -148,11 +148,11 @@ io.on('connection', (socket) => {
             updateBoard();
             chooseNewPath(socket.player.getNewPossiblePaths());
         } else {
-            actOnEmenyStep();
+            actOnEnemyStep();
         }
     });
 
-    const actOnEmenyStep = () => {
+    const actOnEnemyStep = () => {
         updateBoard();
         enemyStepOptions();
     }
