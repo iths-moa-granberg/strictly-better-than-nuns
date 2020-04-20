@@ -39,13 +39,13 @@ socket.on('set up enemy', ({ startPositions }) => {
     currentPlayer = myPlayer.enemy1;
 });
 
-socket.on('update board', ({ players, soundTokens, sightTokens, enemyPath, reachablePositions }) => {
+socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
     if (myPlayer) {
-        board.activePlayer = myPlayer;
+        board.activePlayer = currentPlayer;
         board.players = players;
         board.soundTokens = soundTokens;
         board.sightTokens = sightTokens;
-        board.enemyPath = enemyPath;
+        board.enemyPaths = enemyPaths;
         board.reachablePositions = reachablePositions;
         board.renderBoard();
     }

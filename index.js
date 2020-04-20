@@ -56,10 +56,10 @@ io.on('connection', (socket) => {
 
     const updateBoard = () => {
         io.sockets.emit('update board', {
-            players: game.getVisiblePlayers(),
+            players: players = enemy.concat(game.getVisiblePlayers()),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
-            enemyPath: enemy.path,
+            enemyPaths: [enemy.enemy1.path, enemy.enemy2.path],
             reachablePositions: [],
         });
     }

@@ -39,9 +39,8 @@ class Game {
     getVisiblePlayers = () => {
         return this.players.map(player => player.visible ? {
             id: player.id,
-            positionId: player.position.id,
-            visible: player.visible,
-        } : {});
+            position: player.position,
+        } : { id: '', position: { id: '' } });
     }
 
     playersIsVisible = () => {
