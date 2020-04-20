@@ -14,7 +14,7 @@ class Game {
     }
 
     addPlayer = (newPlayer) => {
-        this.players.push(newPlayer);ƒ
+        this.players.push(newPlayer);
     }
 
     startNextTurn = () => {
