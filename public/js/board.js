@@ -4,7 +4,8 @@ class BoardView {
         this.players = [];
         this.soundTokens = [];
         this.sightTokens = [];
-        this.enemyPaths = [];
+        this.e1Path = [];
+        this.e2Path = [];
         this.reachablePositions = [];
     }
 
@@ -28,10 +29,10 @@ class BoardView {
             if (this.sightTokens.find(tokenPos => tokenPos.id === position.id)) {
                 child += this._renderToken('sight');
             }
-            if (this.enemyPaths[0].find(enemyPos => enemyPos.id === position.id)) {
+            if (this.e1Path.find(enemyPos => enemyPos.id === position.id)) {
                 className.push('enemy1-path');
             }
-            if (this.enemyPaths[1].find(enemyPos => enemyPos.id === position.id)) {
+            if (this.e2Path.find(enemyPos => enemyPos.id === position.id)) {
                 className.push('enemy2-path');
             }
             if (this.reachablePositions.find(pos => pos.id === position.id)) {

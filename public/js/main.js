@@ -45,7 +45,8 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reac
         board.players = players;
         board.soundTokens = soundTokens;
         board.sightTokens = sightTokens;
-        board.enemyPaths = enemyPaths;
+        board.e1Path = enemyPaths[0];
+        board.e2Path = enemyPaths[1];
         board.reachablePositions = reachablePositions;
         board.renderBoard();
     }
@@ -180,12 +181,13 @@ const showBtnsSelectPath = (paths) => {
 }
 
 const showSelectedPath = (paths, num) => {
-    board.enemyPath = paths[num];
+    board[currentPlayer.id.concat('Path')] = paths[num];
     board.renderBoard();
-    userOptions.renderConfirmDestinationBtn(selectPath, showBtnsSelectPath, paths);
+    userOptions.renderConfirmDestinationBtn(selectPath, showBtnsSelectPath, paths, paths[num]);
 }
 
-const selectPath = () => {
-    let path = board.enemyPath;
+const selectPath = (path) => {
+    userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
+    userOptions.disableBtns();
     socket.emit('select path', { path });
 }

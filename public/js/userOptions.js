@@ -43,12 +43,12 @@ class UserOptions {
         btns.forEach(btn => btn.disabled = false);
     }
 
-    renderConfirmDestinationBtn = (handlerConfirm, handlerBack, paramBack) => {
+    renderConfirmDestinationBtn = (handlerConfirm, handlerBack, paramBack, paramConfirm) => {
         this.wrapper.innerHTML = this._renderBtn('Confirm');
         this.wrapper.innerHTML += this._renderBtn('Back');
         const confirmBtn = document.querySelector('button');
         const backBtn = document.querySelectorAll('button')[1];
-        confirmBtn.addEventListener('click', e => handlerConfirm());
+        confirmBtn.addEventListener('click', e => handlerConfirm(paramConfirm));
         backBtn.addEventListener('click', e => handlerBack(paramBack));
     }
 
