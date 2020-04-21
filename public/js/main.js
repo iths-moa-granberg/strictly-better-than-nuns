@@ -32,11 +32,11 @@ socket.on('set up player', ({ id, home, key, goal, isEvil }) => {
 
 socket.on('set up enemy', ({ startPositions }) => {
     myPlayer = {
-        enemy1: new Enemy('enemy1', startPositions[0]),
-        enemy2: new Enemy('enemy2', startPositions[1]),
+        e1: new Enemy('e1', startPositions[0]),
+        e2: new Enemy('e2', startPositions[1]),
         isEvil: true,
     };
-    currentPlayer = myPlayer.enemy1;
+    currentPlayer = myPlayer.e1;
 });
 
 socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
@@ -99,7 +99,7 @@ const askToConfirmDestination = () => {
 
 const takeStep = (position, possibleSteps) => {
     if (currentPlayer.position.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id)) {
-        board.activePlayer.position = position;
+        currentPlayer.position = position;
         if (myPlayer.isEvil) {
             socket.emit('enemy takes step', { position });
         } else {
@@ -128,7 +128,6 @@ socket.on('update player', ({ hasKey, hasGoal, visible }) => {
     myPlayer.hasKey = hasKey;
     myPlayer.hasGoal = hasGoal;
     myPlayer.visible = visible;
-    currentPlayer = myPlayer;
 });
 
 socket.on('player select token', ({ heardTo, id, turn }) => {
@@ -151,10 +150,24 @@ const playerPlaceToken = (position, turn, heardTo) => {
 
 socket.on('enemy turn', () => {
     if (myPlayer.isEvil) {
-        userOptions.enableBtns();
+        userOptions.renderSelectEnemyBtns(selectEnemy);
     } else {
         userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
         userOptions.disableBtns();
+    }
+});
+
+const selectEnemy = (enemyID) => {
+    currentPlayer = myPlayer[enemyID];
+    socket.emit('select enemy', { enemyID });
+    userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
+}
+
+socket.on('next enemy turn', () => {
+    if (currentPlayer.id === 'e1') {
+        selectEnemy('e2');
+    } else {
+        selectEnemy('e1');
     }
 });
 

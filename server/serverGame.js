@@ -11,6 +11,7 @@ class Game {
         this.soundTokens = [];
         this.sightTokens = [];
         this.enemyJoined = false;
+        this.enemyMovesCompleted = 0;
     }
 
     addPlayer = (newPlayer) => {
@@ -51,7 +52,7 @@ class Game {
                 this.addCaughtPlayer(player);
             }
         }
-        if (this.enemyWinCounter > this.player.length) {
+        if (this.enemyWinCounter > this.players.length) {
             console.log('enemy win');
         }
     }

@@ -92,4 +92,11 @@ class UserOptions {
             btn.addEventListener('click', e => handler(paths, btn.innerText));
         }
     }
+
+    renderSelectEnemyBtns = (handler) => {
+        this.wrapper.innerHTML = 'choose which enemy to start with';
+        this.wrapper.innerHTML += this._renderBtn('e1');
+        this.wrapper.innerHTML += this._renderBtn('e2');
+        this._addListeners(handler);
+    }
 }
