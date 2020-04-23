@@ -53,7 +53,10 @@ socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reac
 });
 
 socket.on('players turn', ({ resetPosition, caughtPlayers }) => {
-    if (!myPlayer.isEvil) {
+    if (myPlayer.isEvil) {
+        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
+        userOptions.disableBtns();
+    } else {
         if (resetPosition) {
             myPlayer.position = resetPosition;
             board.renderBoard();
@@ -63,19 +66,16 @@ socket.on('players turn', ({ resetPosition, caughtPlayers }) => {
             userOptions.renderCaughtInstr();
             socket.emit('player selects pace', ({ pace: 'walk' }));
         }
-    } else {
-        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
-        userOptions.disableBtns();
     }
 });
 
 const selectPace = (pace) => {
-    if (!myPlayer.isEvil) {
-        socket.emit('player selects pace', ({ pace }));
-        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
-    } else {
+    if (myPlayer.isEvil) {
         socket.emit('enemy selects pace', ({ pace }));
         userOptions.renderPaceBtns(selectPace, ['Walk', 'Run'], pace, 'disabled');
+    } else {
+        socket.emit('player selects pace', ({ pace }));
+        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
     }
 }
 
