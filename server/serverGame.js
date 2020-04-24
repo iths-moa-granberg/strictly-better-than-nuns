@@ -25,11 +25,11 @@ class Game {
         }
     }
 
-    addToken = (position, type) => {
+    addToken = (positionID, type, enemy) => {
         if (type === 'sound') {
-            this.soundTokens.push(position);
+            this.soundTokens.push({ id: positionID, enemy });
         } else if (type === 'sight') {
-            this.sightTokens.push(position);
+            this.sightTokens.push({ id: positionID, enemy });
         }
     }
 

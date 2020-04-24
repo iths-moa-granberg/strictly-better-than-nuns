@@ -14,7 +14,7 @@ class Player {
 
         this.pace = '';
         this.stepsLeft = 0;
-        this.path = [{ position: home, visible: this.visible }];
+        this.path = [{ position: home, visible: this.visible, enemyID: [] }];
 
         this.hasKey = false;
         this.hasGoal = false;
@@ -41,14 +41,15 @@ class Player {
         }
     }
 
-    resetPath = () => {
-        this.path = [{ position: this.position, visible: this.visible }];
+    resetPath = (enemyID) => {
+        this.path = [{ position: this.position, visible: this.visible, enemyID }];
     }
 
-    updatePathVisibility = (position) => {
+    updatePathVisibility = (position, enemyID) => {
         this.path.forEach(obj => {
             if (obj.position.id === position.id) {
                 obj.visible = true;
+                obj.enemyID = enemyID;
             }
         });
     }

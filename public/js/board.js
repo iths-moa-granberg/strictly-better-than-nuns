@@ -23,10 +23,10 @@ class BoardView {
                     child += this._renderPlayer(player.id);
                 }
             }
-            if (this.soundTokens.find(tokenPos => tokenPos.id === position.id)) {
+            if (this.soundTokens.find(token => token.id === position.id)) {
                 child += this._renderToken('sound');
             }
-            if (this.sightTokens.find(tokenPos => tokenPos.id === position.id)) {
+            if (this.sightTokens.find(token => token.id === position.id)) {
                 child += this._renderToken('sight');
             }
             if (this.e1Path.find(enemyPos => enemyPos.id === position.id)) {

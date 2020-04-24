@@ -116,11 +116,16 @@ io.on('connection', (socket) => {
         position = game.getServerPosition(position.id)
         socket.player.position = position;
         socket.player.stepsLeft--;
-        socket.player.visible = isSeen(socket.player);
+        const seenBy = isSeen(socket.player);
+        if (seenBy.length) {
+            socket.player.visible = true;
+        } else {
+            socket.player.visible = false;
+        }
         if (game.isCaught(socket.player) && !socket.player.visible) {
             game.removeCaughtPlayer(socket.player);
         }
-        socket.player.path.push({ position, visible: socket.player.visible });
+        socket.player.path.push({ position, visible: socket.player.visible, enemyID: seenBy });
 
         playerStepOptions();
     });
@@ -140,9 +145,10 @@ io.on('connection', (socket) => {
         game.checkEnemyTarget(currentEnemy);
 
         for (let player of game.players) {
-            if (isSeen(player)) {
+            const seenBy = isSeen(player);
+            if (seenBy.length) {
                 player.visible = true;
-                player.updatePathVisibility(player.position);
+                player.updatePathVisibility(player.position, seenBy);
             }
         }
         if (currentEnemy.endOfPath()) {
@@ -199,7 +205,14 @@ io.on('connection', (socket) => {
     }
 
     const isSeen = (player) => {
-        return board.isSeen(player.position, enemy.e1.position, enemy.e1.lastPosition); //TODO: check both enemies, if true link to enemy
+        let seenBy = [];
+        if (board.isSeen(player.position, enemy.e1.position, enemy.e1.lastPosition)) {
+            seenBy.push('e1');
+        }
+        if (board.isSeen(player.position, enemy.e2.position, enemy.e2.lastPosition)) {
+            seenBy.push('e2');
+        }
+        return seenBy;
     }
 
     socket.on('player move completed', () => {
@@ -218,7 +231,7 @@ io.on('connection', (socket) => {
     });
 
     const endPlayerTurn = () => {
-        socket.player.resetPath();
+        socket.player.resetPath(socket.player.path[0].enemyID);
 
         socket.emit('update player', {
             hasKey: socket.player.hasKey,
@@ -235,7 +248,7 @@ io.on('connection', (socket) => {
     socket.on('player reset move', () => {
         socket.player.position = socket.player.path[0].position;
         socket.player.visible = socket.player.path[0].visible;
-        socket.player.resetPath();
+        socket.player.resetPath(socket.player.path[0].enemyID);
         if (socket.player.caught) {
             game.addCaughtPlayer(socket.player);
         }
@@ -246,7 +259,7 @@ io.on('connection', (socket) => {
         let path = player.path.reverse();
         for (let obj of path) {
             if (obj.visible && obj != path[0]) {
-                game.addToken(obj.position, 'sight');
+                game.addToken(obj.position.id, 'sight'); //RÄTT ENEMY
                 return
             }
         }
