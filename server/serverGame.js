@@ -12,6 +12,7 @@ class Game {
         this.sightTokens = [];
         this.enemyJoined = false;
         this.enemyMovesCompleted = 0;
+        this.enemyListened = 0;
     }
 
     addPlayer = (newPlayer) => {

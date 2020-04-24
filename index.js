@@ -178,11 +178,15 @@ io.on('connection', (socket) => {
         game.soundTokens = [];
         game.sightTokens = [];
 
-        if (currentEnemy.pace === 'run') {
-            endEnemyTurn();
+        enemyListen(enemy.e1);
+    }
+
+    const enemyListen = enemy => {
+        if (enemy.pace === 'run') {
+            waitForTokenPlacement(true);
             return;
         }
-        //TODO: make work without running
+
         const sound = board.getRandomSound();
         for (let player of game.players) {
             if (!game.isCaught(player) || player.visible) {
@@ -190,17 +194,25 @@ io.on('connection', (socket) => {
                 const heardTo = board.isHeard(player.position, enemy.position, playerSound);
                 if (heardTo) {
                     if (heardTo.length > 1) {
-                        io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy' }));
+                        io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
                     } else {
-                        game.addToken(heardTo[0], 'sound');
-                        endEnemyTurn();
+                        game.addToken(heardTo[0].id, 'sound', enemy.id);
+                        waitForTokenPlacement();
                     }
                 } else {
-                    endEnemyTurn();
+                    waitForTokenPlacement();
                 }
             } else {
-                endEnemyTurn();
+                waitForTokenPlacement();
             }
+        }
+    }
+
+    const waitForTokenPlacement = (run) => {
+        game.placedSoundCounter++;
+        if (game.placedSoundCounter === game.players.length || run) {
+            game.placedSoundCounter = 0;
+            endEnemyTurn();
         }
     }
 
@@ -218,16 +230,15 @@ io.on('connection', (socket) => {
     socket.on('player move completed', () => {
         socket.player.checkTarget();
 
-        if (!socket.player.visible) {
+        if (socket.player.visible) {
+            endPlayerTurn();
+        } else {
             socket.player.caught = false;
             leaveSight(socket.player);
 
             const sound = board.getSoundReach(socket.player.pace, board.getRandomSound());
-            if (makeSound(socket.player, sound)) {
-                return
-            }
+            playerMakeSound(socket.player, sound);
         }
-        endPlayerTurn();
     });
 
     const endPlayerTurn = () => {
@@ -259,38 +270,53 @@ io.on('connection', (socket) => {
         let path = player.path.reverse();
         for (let obj of path) {
             if (obj.visible && obj != path[0]) {
-                game.addToken(obj.position.id, 'sight'); //RÄTT ENEMY
+                game.addToken(obj.position.id, 'sight', obj.enemyID);
                 return
             }
         }
     }
 
-    const makeSound = (player, sound) => {
-        const heardTo = board.isHeard(player.position, enemy.e1.position, sound); //TODO: check both enemies, link sound to enemy
-        if (heardTo) {
-            if (heardTo.length > 1) {
-                socket.emit('player select token', { heardTo, id: player.id, turn: 'player' });
-                return true;
-            } else {
-                game.addToken(heardTo[0], 'sound');
-            }
+    const playerMakeSound = (player, sound) => {
+        if (game.enemyListened === 0) {
+            game.enemyListened++;
+            makeSound(player, sound, enemy.e1);
+        } else if (game.enemyListened === 1) {
+            game.enemyListened++;
+            makeSound(player, sound, enemy.e2);
+        } else {
+            game.enemyListened = 0;
+            endPlayerTurn();
         }
-        return false;
     }
 
-    socket.on('player placed token', ({ position, turn }) => {
-        game.addToken(position, 'sound');
+    const makeSound = (player, sound, enemy) => {
+        const heardTo = board.isHeard(player.position, enemy.position, sound);
+        if (heardTo) {
+            if (heardTo.length > 1) {
+                socket.emit('player select token', { heardTo, id: player.id, turn: 'player', enemyID: enemy.id, sound });
+                return
+            } else {
+                game.addToken(heardTo[0].id, 'sound', enemy.id);
+            }
+        }
+        playerMakeSound(player, sound);
+    }
+
+    socket.on('player placed token', ({ position, turn, enemyID, sound }) => {
+        game.addToken(position.id, 'sound', enemyID);
         if (turn === 'player') {
-            endPlayerTurn();
+            playerMakeSound(socket.player, sound);
         } else if (turn === 'enemy') {
-            endEnemyTurn();
+            waitForTokenPlacement();
         }
     });
 
     const endEnemyTurn = () => {
-        game.placedSoundCounter++;
-        if (game.placedSoundCounter === game.players.length || enemy.pace === 'run') {
-            game.placedSoundCounter = 0;
+        game.enemyListened++;
+        if (game.enemyListened == 1) {
+            enemyListen(enemy.e2);
+        } else if (game.enemyListened == 2) {
+            game.enemyListened = 0;
             updateBoard();
             startNextTurn();
         }
