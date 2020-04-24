@@ -94,9 +94,18 @@ io.on('connection', (socket) => {
         currentEnemy = enemy[enemyID];
     });
 
+    const playerVisible = (enemy) => {
+        for (let player of game.players) {
+            if (board.isSeen(player.position, enemy.position, enemy.lastPosition)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     const enemyStepOptions = () => {
         let possibleSteps = [];
-        if (game.seenSomeone(currentEnemy.id) || game.heardSomeone(currentEnemy.id) || game.playersIsVisible()) {
+        if (game.seenSomeone(currentEnemy.id) || game.heardSomeone(currentEnemy.id) || playerVisible(currentEnemy)) {
             possibleSteps = board.getReachable(currentEnemy.position, currentEnemy.stepsLeft, true);
         } else if (currentEnemy.isOnPath()) {
             possibleSteps = board.getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);

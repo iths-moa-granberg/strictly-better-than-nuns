@@ -49,10 +49,6 @@ class Game {
         } : { id: '', position: { id: '' } });
     }
 
-    playersIsVisible = () => {
-        return Boolean(this.players.find(player => player.visible === true));
-    }
-
     checkEnemyTarget = (enemy) => {
         for (let player of this.players) {
             if (enemy.checkTarget(player)) {
