@@ -21,7 +21,7 @@ const game = new Game();
 const Board = require('./server/serverBoard');
 const board = new Board();
 
-const enemy = { e1: new Player.Evil('enemy1', enemyPaths[0]), e2: new Player.Evil('enemy2', enemyPaths[2]) };
+const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
 let currentEnemy;
 
 io.on('connection', (socket) => {
@@ -96,7 +96,7 @@ io.on('connection', (socket) => {
 
     const enemyStepOptions = () => {
         let possibleSteps = [];
-        if (game.soundTokens.length || game.sightTokens.length || game.playersIsVisible()) {
+        if (game.seenSomeone(currentEnemy.id) || game.heardSomeone(currentEnemy.id) || game.playersIsVisible()) {
             possibleSteps = board.getReachable(currentEnemy.position, currentEnemy.stepsLeft, true);
         } else if (currentEnemy.isOnPath()) {
             possibleSteps = board.getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);

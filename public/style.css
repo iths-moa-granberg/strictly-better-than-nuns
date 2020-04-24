@@ -29,12 +29,12 @@ body {
     background-color: purple;
 }
 
-.player-enemy1, .e1 {
+.player-e1, .e1 {
     background-color: rgb(97, 80, 80);
     color: white;
 }
 
-.player-enemy2, .e2 {
+.player-e2, .e2 {
     background-color: rgb(40, 104, 104);
     color: white;
 }

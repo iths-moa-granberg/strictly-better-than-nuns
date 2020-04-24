@@ -26,12 +26,20 @@ class Game {
         }
     }
 
-    addToken = (positionID, type, enemy) => {
+    addToken = (positionID, type, enemyID) => {
         if (type === 'sound') {
-            this.soundTokens.push({ id: positionID, enemy });
+            this.soundTokens.push({ id: positionID, enemyID });
         } else if (type === 'sight') {
-            this.sightTokens.push({ id: positionID, enemy });
+            this.sightTokens.push({ id: positionID, enemyID });
         }
+    }
+
+    seenSomeone = enemyID => {
+        return Boolean(this.sightTokens.find(token => token.enemyID.includes(enemyID)));
+    }
+
+    heardSomeone = enemyID => {
+        return Boolean(this.soundTokens.find(token => token.enemyID === enemyID));
     }
 
     getVisiblePlayers = () => {
