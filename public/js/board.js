@@ -4,7 +4,8 @@ class BoardView {
         this.players = [];
         this.soundTokens = [];
         this.sightTokens = [];
-        this.enemyPath = [];
+        this.e1Path = [];
+        this.e2Path = [];
         this.reachablePositions = [];
     }
 
@@ -18,30 +19,35 @@ class BoardView {
                 child += this._renderPlayer(this.activePlayer.id);
             }
             for (let player of this.players) {
-                if (player.positionId === position.id && player.visible && player.id != this.activePlayer.id) {
+                if (player.position.id === position.id && player.id != this.activePlayer.id) {
                     child += this._renderPlayer(player.id);
                 }
             }
-            if (this.soundTokens.find(tokenPos => tokenPos.id === position.id)) {
+            if (this.soundTokens.find(token => token.id === position.id)) {
                 child += this._renderToken('sound');
             }
-            if (this.sightTokens.find(tokenPos => tokenPos.id === position.id)) {
+            if (this.sightTokens.find(token => token.id === position.id)) {
                 child += this._renderToken('sight');
             }
-            if (this.enemyPath.find(enemyPos => enemyPos.id === position.id)) {
-                className.push('enemy-path');
+            if (this.e1Path.find(enemyPos => enemyPos.id === position.id)) {
+                className.push('enemy1-path');
+            }
+            if (this.e2Path.find(enemyPos => enemyPos.id === position.id)) {
+                className.push('enemy2-path');
             }
             if (this.reachablePositions.find(pos => pos.id === position.id)) {
                 className.push('reachable');
             }
-            if (this.activePlayer.key.id === position.id) {
-                className.push('key');
-            }
-            if (this.activePlayer.goal.id === position.id) {
-                className.push('goal');
-            }
-            if (this.activePlayer.home.id === position.id) {
-                className.push('home');
+            if (!this.activePlayer.isEvil) {
+                if (this.activePlayer.key.id === position.id) {
+                    className.push('key');
+                }
+                if (this.activePlayer.goal.id === position.id) {
+                    className.push('goal');
+                }
+                if (this.activePlayer.home.id === position.id) {
+                    className.push('home');
+                }
             }
             document.querySelector('.board-wrapper').innerHTML += this._renderPosition(position, className.join(' '), child);
         }

@@ -43,12 +43,12 @@ class UserOptions {
         btns.forEach(btn => btn.disabled = false);
     }
 
-    renderConfirmDestinationBtn = (handlerConfirm, handlerBack, paramBack) => {
+    renderConfirmDestinationBtn = (handlerConfirm, handlerBack, paramBack, paramConfirm) => {
         this.wrapper.innerHTML = this._renderBtn('Confirm');
         this.wrapper.innerHTML += this._renderBtn('Back');
         const confirmBtn = document.querySelector('button');
         const backBtn = document.querySelectorAll('button')[1];
-        confirmBtn.addEventListener('click', e => handlerConfirm());
+        confirmBtn.addEventListener('click', e => handlerConfirm(paramConfirm));
         backBtn.addEventListener('click', e => handlerBack(paramBack));
     }
 
@@ -91,5 +91,12 @@ class UserOptions {
         for (let btn of btns) {
             btn.addEventListener('click', e => handler(paths, btn.innerText));
         }
+    }
+
+    renderSelectEnemyBtns = (handler) => {
+        this.wrapper.innerHTML = 'choose which enemy to start with';
+        this.wrapper.innerHTML += this._renderBtn('e1');
+        this.wrapper.innerHTML += this._renderBtn('e2');
+        this._addListeners(handler);
     }
 }

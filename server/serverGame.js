@@ -4,20 +4,19 @@ class Game {
     constructor() {
         this.roundCounter = 0;
         this.players = [];
-        this.numOfGoodPlayers = 0;
         this.caughtPlayers = [];
         this.enemyWinCounter = 0;
         this.playerTurnCompleted = 0;
         this.placedSoundCounter = 0;
         this.soundTokens = [];
         this.sightTokens = [];
+        this.enemyJoined = false;
+        this.enemyMovesCompleted = 0;
+        this.enemyListened = 0;
     }
 
     addPlayer = (newPlayer) => {
         this.players.push(newPlayer);
-        if (!newPlayer.isEvil) {
-            this.numOfGoodPlayers++;
-        }
     }
 
     startNextTurn = () => {
@@ -27,35 +26,38 @@ class Game {
         }
     }
 
-    addToken = (position, type) => {
+    addToken = (positionID, type, enemyID) => {
         if (type === 'sound') {
-            this.soundTokens.push(position);
+            this.soundTokens.push({ id: positionID, enemyID });
         } else if (type === 'sight') {
-            this.sightTokens.push(position);
+            this.sightTokens.push({ id: positionID, enemyID });
         }
+    }
+
+    seenSomeone = enemyID => {
+        return Boolean(this.sightTokens.find(token => token.enemyID.includes(enemyID)));
+    }
+
+    heardSomeone = enemyID => {
+        return Boolean(this.soundTokens.find(token => token.enemyID === enemyID));
     }
 
     getVisiblePlayers = () => {
         return this.players.map(player => player.visible ? {
             id: player.id,
-            positionId: player.position.id,
-            visible: player.visible,
-        } : {});
-    }
-
-    playersIsVisible = () => {
-        return Boolean(this.players.find(player => player.visible === true && !player.isEvil));
+            position: player.position,
+        } : { id: '', position: { id: '' } });
     }
 
     checkEnemyTarget = (enemy) => {
         for (let player of this.players) {
-            if (enemy.checkTarget(player)) {
+            if (enemy.checkTarget(player) && !this.caughtPlayers.includes(player.id)) {
                 this.enemyWinCounter++;
                 player.isCaught();
                 this.addCaughtPlayer(player);
             }
         }
-        if (this.enemyWinCounter >= this.numOfGoodPlayers) {
+        if (this.enemyWinCounter > this.players.length) {
             console.log('enemy win');
         }
     }
@@ -74,10 +76,10 @@ class Game {
 
     generatePlayerInfo = () => {
         return {
-            id: this.numOfGoodPlayers,
-            home: positions[1 + this.numOfGoodPlayers],
-            key: positions[12 + this.numOfGoodPlayers],
-            goal: positions[10 + this.numOfGoodPlayers],
+            id: this.players.length,
+            home: positions[1 + this.players.length],
+            key: positions[12 + this.players.length],
+            goal: positions[10 + this.players.length],
         };
     }
 

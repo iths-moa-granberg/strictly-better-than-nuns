@@ -29,8 +29,14 @@ body {
     background-color: purple;
 }
 
-.player-enemy {
-    background-color: black;
+.player-e1, .e1 {
+    background-color: rgb(97, 80, 80);
+    color: white;
+}
+
+.player-e2, .e2 {
+    background-color: rgb(40, 104, 104);
+    color: white;
 }
 
 .position {
@@ -49,8 +55,12 @@ body {
     border: 1px solid green;
 }
 
-.enemy-path {
-    background-color: rgb(160, 160, 160);
+.enemy1-path {
+    background-color: rgb(128, 120, 120);
+}
+
+.enemy2-path {
+    background-color: rgb(139, 157, 157);
 }
 
 .user-options-wrapper > button {
