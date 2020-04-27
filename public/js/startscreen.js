@@ -21,18 +21,20 @@ class StartScreen {
         this.wrapper.innerHTML = '';
 
         openGames.forEach(game => {
-            const div = document.createElement('div');
-            const title = document.createElement('h3');
-            title.innerText = game.name;
-            const users = document.createElement('p');
-            users.innerText = 'Joined players: ' + game.users.join(', ');
-            const joinBtn = document.createElement('button');
-            joinBtn.innerText = 'Join';
-            this.wrapper.appendChild(div);
-            div.appendChild(title);
-            div.appendChild(users);
-            div.appendChild(joinBtn);
-            joinBtn.addEventListener('click', () => joinHandler(game.id));
+            if (game) {
+                const div = document.createElement('div');
+                const title = document.createElement('h3');
+                title.innerText = game.name;
+                const users = document.createElement('p');
+                users.innerText = 'Joined players: ' + game.users.join(', ');
+                const joinBtn = document.createElement('button');
+                joinBtn.innerText = 'Join';
+                this.wrapper.appendChild(div);
+                div.appendChild(title);
+                div.appendChild(users);
+                div.appendChild(joinBtn);
+                joinBtn.addEventListener('click', () => joinHandler(game.id));
+            }
         });
 
         const newBtn = document.createElement('button');

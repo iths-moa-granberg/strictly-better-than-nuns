@@ -22,7 +22,7 @@ const Board = require('./server/serverBoard');
 let games = {};
 
 const getOpenGames = () => {
-    return Object.keys(games).map(id => {        
+    return Object.keys(games).map(id => {
         if (games[id].status === 'open') {
             return { id, name: games[id].name, users: games[id].users }
         }
@@ -85,6 +85,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('start', () => {
+        games[game.id].status = 'closed';
         startNextTurn();
     });
 
