@@ -2,6 +2,7 @@ const positions = require('./serverPositions');
 
 class Game {
     constructor() {
+        this.id = this.generateGameID();
         this.roundCounter = 0;
         this.players = [];
         this.caughtPlayers = [];
@@ -13,6 +14,10 @@ class Game {
         this.enemyJoined = false;
         this.enemyMovesCompleted = 0;
         this.enemyListened = 0;
+    }
+
+    generateGameID = () => {
+        return '_' + Math.random().toString(36).substr(2, 9);
     }
 
     addPlayer = (newPlayer) => {

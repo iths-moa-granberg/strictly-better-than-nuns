@@ -29,34 +29,26 @@ const getOpenGames = () => {
     });
 }
 
-const generateGameID = () => {
-    return '_' + Math.random().toString(36).substr(2, 9);
-}
-
-
 io.on('connection', (socket) => {
     const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
     let currentEnemy;
     let game;
     let board;
-    let room;
 
     socket.emit('start screen', { openGames: getOpenGames() });
 
     socket.on('init new game', ({ username }) => {
         game = new Game();
         board = new Board();
-        const id = generateGameID();
 
-        games[id] = {
+        games[game.id] = {
             game,
             board,
             name: `${username}'s game`,
             status: 'open',
             users: [username],
         }
-        room = id;
-        socket.join(room);
+        socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
     });
 
@@ -65,8 +57,8 @@ io.on('connection', (socket) => {
         game = games[gameID].game;
         board = games[gameID].board;
 
-        room = gameID;
-        socket.join(room);
+        game.id = gameID;
+        socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
     });
 
@@ -87,7 +79,7 @@ io.on('connection', (socket) => {
             socket.emit('set up enemy', {
                 startPositions: [socket.player.e1.position, socket.player.e2.position]
             });
-            io.in(room).emit('disable join as evil');
+            io.in(game.id).emit('disable join as evil');
         }
         updateBoard();
     });
@@ -97,7 +89,7 @@ io.on('connection', (socket) => {
     });
 
     const updateBoard = () => {
-        io.in(room).emit('update board', {
+        io.in(game.id).emit('update board', {
             players: [enemy.e1, enemy.e2].concat(game.getVisiblePlayers()),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
@@ -108,7 +100,7 @@ io.on('connection', (socket) => {
 
     const startNextTurn = () => {
         game.startNextTurn();
-        io.in(room).emit('players turn', { caughtPlayers: game.caughtPlayers });
+        io.in(game.id).emit('players turn', { caughtPlayers: game.caughtPlayers });
     };
 
     const playerStepOptions = () => {
@@ -239,7 +231,7 @@ io.on('connection', (socket) => {
                 const heardTo = board.isHeard(player.position, enemy.position, playerSound);
                 if (heardTo) {
                     if (heardTo.length > 1) {
-                        io.in(room).emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
+                        io.in(game.id).emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
                     } else {
                         game.addToken(heardTo[0].id, 'sound', enemy.id);
                         waitForTokenPlacement();
@@ -371,6 +363,6 @@ io.on('connection', (socket) => {
 
     const startEnemyTurn = () => {
         updateBoard();
-        io.in(room).emit('enemy turn');
+        io.in(game.id).emit('enemy turn');
     }
 });
