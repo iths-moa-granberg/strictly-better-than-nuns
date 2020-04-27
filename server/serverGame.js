@@ -51,7 +51,7 @@ class Game {
 
     checkEnemyTarget = (enemy) => {
         for (let player of this.players) {
-            if (enemy.checkTarget(player)) {
+            if (enemy.checkTarget(player) && !this.caughtPlayers.includes(player.id)) {
                 this.enemyWinCounter++;
                 player.isCaught();
                 this.addCaughtPlayer(player);
