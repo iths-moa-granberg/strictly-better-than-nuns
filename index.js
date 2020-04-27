@@ -94,18 +94,9 @@ io.on('connection', (socket) => {
         currentEnemy = enemy[enemyID];
     });
 
-    const playerVisible = (enemy) => {
-        for (let player of game.players) {
-            if (board.isSeen(player.position, enemy.position, enemy.lastPosition)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     const enemyStepOptions = () => {
         let possibleSteps = [];
-        if (game.seenSomeone(currentEnemy.id) || game.heardSomeone(currentEnemy.id) || playerVisible(currentEnemy)) {
+        if (game.seenSomeone(currentEnemy.id) || game.heardSomeone(currentEnemy.id) || currentEnemy.playersVisible) {
             possibleSteps = board.getReachable(currentEnemy.position, currentEnemy.stepsLeft, true);
         } else if (currentEnemy.isOnPath()) {
             possibleSteps = board.getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
@@ -186,6 +177,8 @@ io.on('connection', (socket) => {
     const enemyMoveComplete = () => {
         game.soundTokens = [];
         game.sightTokens = [];
+        enemy.e1.playersVisible = false;
+        enemy.e2.playersVisible = false;
 
         enemyListen(enemy.e1);
     }
@@ -229,9 +222,11 @@ io.on('connection', (socket) => {
         let seenBy = [];
         if (board.isSeen(player.position, enemy.e1.position, enemy.e1.lastPosition)) {
             seenBy.push('e1');
+            enemy.e1.playersVisible = true;
         }
         if (board.isSeen(player.position, enemy.e2.position, enemy.e2.lastPosition)) {
             seenBy.push('e2');
+            enemy.e2.playersVisible = true;
         }
         return seenBy;
     }

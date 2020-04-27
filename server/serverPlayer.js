@@ -66,6 +66,8 @@ class Enemy extends Player {
 
         this.visible = true;
         this.isEvil = true;
+        
+        this.playersVisible = false;
     }
 
     move = (position) => {
