@@ -17,15 +17,58 @@ app.use(express.static(path.join(__dirname, 'public')));
 const Player = require('./server/serverPlayer');
 const enemyPaths = require('./server/enemyPaths'); //behövs bara i serverPlayer?
 const Game = require('./server/serverGame');
-const game = new Game();
 const Board = require('./server/serverBoard');
-const board = new Board();
 
-const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
-let currentEnemy;
+let games = {};
+
+const getOpenGames = () => {
+    return Object.keys(games).map(id => {        
+        if (games[id].status === 'open') {
+            return { id, name: games[id].name, users: games[id].users }
+        }
+    });
+}
+
+const generateGameID = () => {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
 
 io.on('connection', (socket) => {
-    socket.emit('init', { enemyJoined: game.enemyJoined });
+    const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
+    let currentEnemy;
+    let game;
+    let board;
+    let room;
+
+    socket.emit('start screen', { openGames: getOpenGames() });
+
+    socket.on('init new game', ({ username }) => {
+        game = new Game();
+        board = new Board();
+        const id = generateGameID();
+
+        games[id] = {
+            game,
+            board,
+            name: `${username}'s game`,
+            status: 'open',
+            users: [username],
+        }
+        room = id;
+        socket.join(room);
+        socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+    });
+
+    socket.on('join game', ({ gameID, username }) => {
+        games[gameID].users.push(username);
+        game = games[gameID].game;
+        board = games[gameID].board;
+
+        room = gameID;
+        socket.join(room);
+        socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+    });
 
     socket.on('player joined', ({ good }) => {
         if (good) {
@@ -44,7 +87,7 @@ io.on('connection', (socket) => {
             socket.emit('set up enemy', {
                 startPositions: [socket.player.e1.position, socket.player.e2.position]
             });
-            io.sockets.emit('disable join as evil');
+            io.in(room).emit('disable join as evil');
         }
         updateBoard();
     });
@@ -54,7 +97,7 @@ io.on('connection', (socket) => {
     });
 
     const updateBoard = () => {
-        io.sockets.emit('update board', {
+        io.in(room).emit('update board', {
             players: [enemy.e1, enemy.e2].concat(game.getVisiblePlayers()),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
@@ -65,7 +108,7 @@ io.on('connection', (socket) => {
 
     const startNextTurn = () => {
         game.startNextTurn();
-        io.sockets.emit('players turn', { caughtPlayers: game.caughtPlayers });
+        io.in(room).emit('players turn', { caughtPlayers: game.caughtPlayers });
     };
 
     const playerStepOptions = () => {
@@ -196,7 +239,7 @@ io.on('connection', (socket) => {
                 const heardTo = board.isHeard(player.position, enemy.position, playerSound);
                 if (heardTo) {
                     if (heardTo.length > 1) {
-                        io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
+                        io.in(room).emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
                     } else {
                         game.addToken(heardTo[0].id, 'sound', enemy.id);
                         waitForTokenPlacement();
@@ -328,6 +371,6 @@ io.on('connection', (socket) => {
 
     const startEnemyTurn = () => {
         updateBoard();
-        io.sockets.emit('enemy turn');
+        io.in(room).emit('enemy turn');
     }
 });

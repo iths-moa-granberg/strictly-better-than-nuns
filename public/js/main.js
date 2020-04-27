@@ -1,10 +1,32 @@
 const socket = io();
 const board = new BoardView();
-const userOptions = new UserOptions();
+let startScreen;
+let userOptions;
 let myPlayer;
 let currentPlayer;
+let username;
+
+socket.on('start screen', ({ openGames }) => {
+    startScreen = new StartScreen();
+    startScreen.renderInputUsername(showGames, openGames);
+});
+
+const showGames = (input, openGames) => {
+    username = input;
+    startScreen.renderShowGames(openGames, joinGame, newGame);
+}
+
+const newGame = () => {
+    socket.emit('init new game', ({ username }));
+}
+
+const joinGame = gameID => {
+    socket.emit('join game', ({ gameID, username }));
+}
 
 socket.on('init', ({ enemyJoined }) => {
+    startScreen.renderGameSetup();
+    userOptions = new UserOptions();
     userOptions.renderChoosePlayer(join);
     if (enemyJoined) {
         userOptions.disableBtns('.evil');
