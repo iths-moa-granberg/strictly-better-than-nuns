@@ -10,11 +10,11 @@ class StartScreen {
         `;
     }
 
-    renderInputUsername = (handler, param) => {
+    renderInputUsername = (handler) => {
         const input = document.createElement('input');
         input.placeholder = 'username';
         this.wrapper.appendChild(input);
-        input.addEventListener('change', () => handler(input.value, param));
+        input.addEventListener('change', () => handler(input.value));
     }
 
     renderShowGames = (openGames, joinHandler, newHandler) => {

@@ -4,23 +4,35 @@ let startScreen;
 let userOptions;
 let myPlayer;
 let currentPlayer;
-let username;
+let username = '';
+let games = [];
+let joinedGame = false;
 
 socket.on('start screen', ({ openGames }) => {
+    games = openGames;
     startScreen = new StartScreen();
-    startScreen.renderInputUsername(showGames, openGames);
+    startScreen.renderInputUsername(showGames, games);
 });
 
-const showGames = (input, openGames) => {
+socket.on('update open games', ({ openGames }) => {
+    games = openGames;
+    if (username && !joinedGame) {
+        startScreen.renderShowGames(games, joinGame, newGame);
+    }
+});
+
+const showGames = input => {
     username = input;
-    startScreen.renderShowGames(openGames, joinGame, newGame);
+    startScreen.renderShowGames(games, joinGame, newGame);
 }
 
 const newGame = () => {
+    joinedGame = true;
     socket.emit('init new game', ({ username }));
 }
 
 const joinGame = gameID => {
+    joinedGame = true;
     socket.emit('join game', ({ gameID, username }));
 }
 

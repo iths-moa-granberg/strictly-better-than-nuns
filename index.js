@@ -48,6 +48,7 @@ io.on('connection', (socket) => {
             status: 'open',
             users: [username],
         }
+        io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
     });
@@ -56,8 +57,9 @@ io.on('connection', (socket) => {
         games[gameID].users.push(username);
         game = games[gameID].game;
         board = games[gameID].board;
-
         game.id = gameID;
+
+        io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
     });
@@ -86,6 +88,7 @@ io.on('connection', (socket) => {
 
     socket.on('start', () => {
         games[game.id].status = 'closed';
+        io.emit('update open games', ({ openGames: getOpenGames() }));
         startNextTurn();
     });
 
