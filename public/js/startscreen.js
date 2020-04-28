@@ -26,7 +26,7 @@ class StartScreen {
                 const title = document.createElement('h3');
                 title.innerText = game.name;
                 const users = document.createElement('p');
-                users.innerText = 'Joined players: ' + game.users.map(user => user.username).join(', ');
+                users.innerText = 'Joined players: ' + this.getUsernames(game.users);
                 const joinBtn = document.createElement('button');
                 joinBtn.innerText = 'Join';
                 this.wrapper.appendChild(div);
@@ -41,6 +41,10 @@ class StartScreen {
         newBtn.innerText = 'New game';
         this.wrapper.appendChild(newBtn);
         newBtn.addEventListener('click', () => newHandler());
+    }
+
+    getUsernames = users => {
+        return Object.values(users).map(user => user.username).join(', ');
     }
 
     renderGameSetup = () => {

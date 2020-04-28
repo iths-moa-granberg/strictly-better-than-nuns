@@ -37,24 +37,24 @@ io.on('connection', (socket) => {
 
     socket.emit('start screen', { openGames: getOpenGames() });
 
-    socket.on('init new game', ({ username }) => {
+    socket.on('init new game', ({ user }) => {
         game = new Game();
         board = new Board();
 
         games[game.id] = {
             game,
             board,
-            name: `${username}'s game`,
+            name: `${user.username}'s game`,
             status: 'open',
-            users: [{ username, role: '' }],
+            users: { [user.userID]: { username: user.username, role: '' } },
         }
         io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
     });
 
-    socket.on('join game', ({ gameID, username }) => {
-        games[gameID].users.push({ username, role: '' });
+    socket.on('join game', ({ gameID, user }) => {
+        games[gameID].users[user.userID] = { username: user.username, role: '' };
         game = games[gameID].game;
         board = games[gameID].board;
         game.id = gameID;
@@ -65,10 +65,9 @@ io.on('connection', (socket) => {
         io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
     });
 
-    socket.on('player joined', ({ good, username }) => {
+    socket.on('player joined', ({ good, user }) => {
         if (good) {
-            user = games[game.id].users.find(user => user.username === username);
-            user.role = 'good';
+            games[game.id].users[user.userID].role = 'good';
             socket.player = new Player.Good(game.generatePlayerInfo());
             game.addPlayer(socket.player);
             socket.emit('set up player', {
@@ -79,8 +78,7 @@ io.on('connection', (socket) => {
                 isEvil: socket.player.isEvil,
             });
         } else {
-            user = games[game.id].users.find(user => user.username === username);
-            user.role = 'evil';
+            games[game.id].users[user.userID].role = 'evil';
             socket.player = enemy;
             game.enemyJoined = true;
             socket.emit('set up enemy', {
@@ -101,10 +99,10 @@ io.on('connection', (socket) => {
         if (users.length < 2) {
             return false;
         }
-        if (users.find(user => user.role === '')) {
+        if (Object.values(users).find(user => user.role === '')) {
             return false;
         }
-        return users.filter(user => user.role === 'evil').length;
+        return Object.values(users).filter(user => user.role === 'evil').length;
     }
 
     socket.on('start', () => {

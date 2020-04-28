@@ -4,7 +4,7 @@ let startScreen;
 let userOptions;
 let myPlayer;
 let currentPlayer;
-let username = '';
+let user = {};
 let games = [];
 let joinedGame = false;
 
@@ -16,24 +16,25 @@ socket.on('start screen', ({ openGames }) => {
 
 socket.on('update open games', ({ openGames }) => {
     games = openGames;
-    if (username && !joinedGame) {
+    if (user.length && !joinedGame) {
         startScreen.renderShowGames(games, joinGame, newGame);
     }
 });
 
 const showGames = input => {
-    username = input;
+    user.username = input;
+    user.userID = input + '_' + Math.random().toString(36).substr(2, 9);
     startScreen.renderShowGames(games, joinGame, newGame);
 }
 
 const newGame = () => {
     joinedGame = true;
-    socket.emit('init new game', ({ username }));
+    socket.emit('init new game', ({ user }));
 }
 
 const joinGame = gameID => {
     joinedGame = true;
-    socket.emit('join game', ({ gameID, username }));
+    socket.emit('join game', ({ gameID, user }));
 }
 
 socket.on('init', ({ enemyJoined }) => {
@@ -46,7 +47,7 @@ socket.on('init', ({ enemyJoined }) => {
 });
 
 const join = (good) => {
-    socket.emit('player joined', ({ good, username }));
+    socket.emit('player joined', ({ good, user }));
     userOptions.renderWaiting('waiting for all players to choose role');
 }
 
