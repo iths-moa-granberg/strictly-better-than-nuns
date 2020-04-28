@@ -46,13 +46,28 @@ socket.on('init', ({ enemyJoined }) => {
 });
 
 const join = (good) => {
-    socket.emit('player joined', ({ good }));
-    userOptions.renderStartGame(startGame);
+    socket.emit('player joined', ({ good, username }));
+    userOptions.renderWaiting('waiting for all players to choose role');
 }
 
 socket.on('disable join as evil', () => {
     userOptions.disableBtns('.evil');
 });
+
+socket.on('waiting for players', ({ enemyJoined }) => {
+    if (myPlayer) {
+        userOptions.renderWaiting('waiting for all players to choose role');
+    } else {
+        userOptions.renderChoosePlayer(join);
+        if (enemyJoined) {
+            userOptions.disableBtns('.evil');
+        }
+    }
+});
+
+socket.on('players ready', () => {
+    userOptions.renderStartGame(startGame);
+})
 
 const startGame = () => {
     userOptions.clear();

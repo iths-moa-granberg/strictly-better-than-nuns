@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
             board,
             name: `${username}'s game`,
             status: 'open',
-            users: [username],
+            users: [{ username, role: '' }],
         }
         io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('join game', ({ gameID, username }) => {
-        games[gameID].users.push(username);
+        games[gameID].users.push({ username, role: '' });
         game = games[gameID].game;
         board = games[gameID].board;
         game.id = gameID;
@@ -62,10 +62,13 @@ io.on('connection', (socket) => {
         io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+        io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
     });
 
-    socket.on('player joined', ({ good }) => {
+    socket.on('player joined', ({ good, username }) => {
         if (good) {
+            user = games[game.id].users.find(user => user.username === username);
+            user.role = 'good';
             socket.player = new Player.Good(game.generatePlayerInfo());
             game.addPlayer(socket.player);
             socket.emit('set up player', {
@@ -76,6 +79,8 @@ io.on('connection', (socket) => {
                 isEvil: socket.player.isEvil,
             });
         } else {
+            user = games[game.id].users.find(user => user.username === username);
+            user.role = 'evil';
             socket.player = enemy;
             game.enemyJoined = true;
             socket.emit('set up enemy', {
@@ -84,7 +89,23 @@ io.on('connection', (socket) => {
             io.in(game.id).emit('disable join as evil');
         }
         updateBoard();
+        if (playersReady()) {
+            io.in(game.id).emit('players ready');
+        } else {
+            io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
+        }
     });
+
+    const playersReady = () => {
+        let users = games[game.id].users;
+        if (users.length < 2) {
+            return false;
+        }
+        if (users.find(user => user.role === '')) {
+            return false;
+        }
+        return users.filter(user => user.role === 'evil').length;
+    }
 
     socket.on('start', () => {
         games[game.id].status = 'closed';

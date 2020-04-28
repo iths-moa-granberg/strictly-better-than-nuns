@@ -26,7 +26,7 @@ class StartScreen {
                 const title = document.createElement('h3');
                 title.innerText = game.name;
                 const users = document.createElement('p');
-                users.innerText = 'Joined players: ' + game.users.join(', ');
+                users.innerText = 'Joined players: ' + game.users.map(user => user.username).join(', ');
                 const joinBtn = document.createElement('button');
                 joinBtn.innerText = 'Join';
                 this.wrapper.appendChild(div);
