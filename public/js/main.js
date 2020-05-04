@@ -16,7 +16,7 @@ socket.on('start screen', ({ openGames }) => {
 
 socket.on('update open games', ({ openGames }) => {
     games = openGames;
-    if (user.length && !joinedGame) {
+    if (Object.keys(user).length && !joinedGame) {
         startScreen.renderShowGames(games, joinGame, newGame);
     }
 });
