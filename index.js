@@ -172,12 +172,10 @@ io.on('connection', (socket) => {
         position = game.getServerPosition(position.id)
         socket.player.position = position;
         socket.player.stepsLeft--;
-        const seenBy = isSeen(socket.player);
-        if (seenBy.length) {
-            socket.player.visible = true;
-        } else {
-            socket.player.visible = false;
-        }
+
+        const seenBy = isSeen(socket.player, game.enemies.e1).concat(isSeen(socket.player, game.enemies.e2));
+        socket.player.visible = Boolean(seenBy.length);
+
         if (game.isCaught(socket.player) && !socket.player.visible) {
             game.removeCaughtPlayer(socket.player);
         }
@@ -201,7 +199,7 @@ io.on('connection', (socket) => {
         game.checkEnemyTarget(currentEnemy);
 
         for (let player of game.players) {
-            const seenBy = isSeen(player);
+            const seenBy = isSeen(player, currentEnemy);
             if (seenBy.length) {
                 player.visible = true;
                 player.updatePathVisibility(player.position, seenBy);
@@ -274,15 +272,11 @@ io.on('connection', (socket) => {
         }
     }
 
-    const isSeen = (player) => {
+    const isSeen = (player, enemy) => {
         let seenBy = [];
-        if (board.isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition)) {
-            seenBy.push('e1');
-            game.enemies.e1.playersVisible = true;
-        }
-        if (board.isSeen(player.position, game.enemies.e2.position, game.enemies.e2.lastPosition)) {
-            seenBy.push('e2');
-            game.enemies.e2.playersVisible = true;
+        if (board.isSeen(player.position, enemy.position, enemy.lastPosition)) {
+            seenBy.push(enemy.id);
+            enemy.playersVisible = true;
         }
         return seenBy;
     }
