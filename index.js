@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = exports.io = require('socket.io')(server);
 const port = process.env.PORT || 4000;
 
 server.listen(port, () => {
@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const Player = require('./server/serverPlayer');
 const Game = require('./server/serverGame');
 const Board = require('./server/serverBoard');
+const { logProgress } = require('./server/serverProgressLog');
 
 let games = {};
 
@@ -49,6 +50,8 @@ io.on('connection', (socket) => {
         io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+
+        logProgress(`${user.username} has joined`, { room: game.id });
     });
 
     socket.on('join game', ({ gameID, user }) => {
@@ -61,6 +64,8 @@ io.on('connection', (socket) => {
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
         io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
+
+        logProgress(`${user.username} has joined`, { room: game.id });
     });
 
     socket.on('player joined', ({ good, user }) => {
