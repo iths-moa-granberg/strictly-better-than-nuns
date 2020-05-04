@@ -1,5 +1,6 @@
 const positions = require('./serverPositions');
 const Player = require('./serverPlayer'); 
+const { logProgress } = require('./serverProgressLog');
 
 class Game {
     constructor() {
@@ -63,10 +64,12 @@ class Game {
                 this.enemyWinCounter++;
                 player.isCaught();
                 this.addCaughtPlayer(player);
+
+                logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id });
             }
         }
         if (this.enemyWinCounter > this.players.length) {
-            console.log('enemy win');
+            logProgress(`Enemy wins!`, { room: this.id });
         }
     }
 
@@ -82,12 +85,13 @@ class Game {
         return this.caughtPlayers.includes(player.id);
     }
 
-    generatePlayerInfo = () => {
+    generatePlayerInfo = username => {
         return {
             id: this.players.length,
             home: positions[1 + this.players.length],
             key: positions[12 + this.players.length],
             goal: positions[10 + this.players.length],
+            username,
         };
     }
 
