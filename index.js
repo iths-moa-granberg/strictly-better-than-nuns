@@ -94,7 +94,7 @@ io.on('connection', (socket) => {
 
     const playersReady = () => {
         let users = games[game.id].users;
-        if (users.length < 2) {
+        if (Object.values(users).length < 2) {
             return false;
         }
         if (Object.values(users).find(user => user.role === '')) {
