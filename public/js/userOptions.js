@@ -99,4 +99,8 @@ class UserOptions {
         this.wrapper.innerHTML += this._renderBtn('e2');
         this._addListeners(handler);
     }
+
+    renderWaiting = text => {
+        this.wrapper.innerHTML = text;
+    }
 }

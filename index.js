@@ -17,18 +17,57 @@ app.use(express.static(path.join(__dirname, 'public')));
 const Player = require('./server/serverPlayer');
 const enemyPaths = require('./server/enemyPaths'); //behövs bara i serverPlayer?
 const Game = require('./server/serverGame');
-const game = new Game();
 const Board = require('./server/serverBoard');
-const board = new Board();
 
-const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
-let currentEnemy;
+let games = {};
+
+const getOpenGames = () => {
+    return Object.keys(games).map(id => {
+        if (games[id].status === 'open') {
+            return { id, name: games[id].name, users: games[id].users }
+        }
+    });
+}
 
 io.on('connection', (socket) => {
-    socket.emit('init', { enemyJoined: game.enemyJoined });
+    const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
+    let currentEnemy;
+    let game;
+    let board;
 
-    socket.on('player joined', ({ good }) => {
+    socket.emit('start screen', { openGames: getOpenGames() });
+
+    socket.on('init new game', ({ user }) => {
+        game = new Game();
+        board = new Board();
+
+        games[game.id] = {
+            game,
+            board,
+            name: `${user.username}'s game`,
+            status: 'open',
+            users: { [user.userID]: { username: user.username, role: '' } },
+        }
+        io.emit('update open games', ({ openGames: getOpenGames() }));
+        socket.join(game.id);
+        socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+    });
+
+    socket.on('join game', ({ gameID, user }) => {
+        games[gameID].users[user.userID] = { username: user.username, role: '' };
+        game = games[gameID].game;
+        board = games[gameID].board;
+        game.id = gameID;
+
+        io.emit('update open games', ({ openGames: getOpenGames() }));
+        socket.join(game.id);
+        socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+        io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
+    });
+
+    socket.on('player joined', ({ good, user }) => {
         if (good) {
+            games[game.id].users[user.userID].role = 'good';
             socket.player = new Player.Good(game.generatePlayerInfo());
             game.addPlayer(socket.player);
             socket.emit('set up player', {
@@ -39,22 +78,41 @@ io.on('connection', (socket) => {
                 isEvil: socket.player.isEvil,
             });
         } else {
+            games[game.id].users[user.userID].role = 'evil';
             socket.player = enemy;
             game.enemyJoined = true;
             socket.emit('set up enemy', {
                 startPositions: [socket.player.e1.position, socket.player.e2.position]
             });
-            io.sockets.emit('disable join as evil');
+            io.in(game.id).emit('disable join as evil');
         }
         updateBoard();
+        if (playersReady()) {
+            io.in(game.id).emit('players ready');
+        } else {
+            io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
+        }
     });
 
+    const playersReady = () => {
+        let users = games[game.id].users;
+        if (users.length < 2) {
+            return false;
+        }
+        if (Object.values(users).find(user => user.role === '')) {
+            return false;
+        }
+        return Object.values(users).filter(user => user.role === 'evil').length;
+    }
+
     socket.on('start', () => {
+        games[game.id].status = 'closed';
+        io.emit('update open games', ({ openGames: getOpenGames() }));
         startNextTurn();
     });
 
     const updateBoard = () => {
-        io.sockets.emit('update board', {
+        io.in(game.id).emit('update board', {
             players: [enemy.e1, enemy.e2].concat(game.getVisiblePlayers()),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
@@ -65,7 +123,7 @@ io.on('connection', (socket) => {
 
     const startNextTurn = () => {
         game.startNextTurn();
-        io.sockets.emit('players turn', { caughtPlayers: game.caughtPlayers });
+        io.in(game.id).emit('players turn', { caughtPlayers: game.caughtPlayers });
     };
 
     const playerStepOptions = () => {
@@ -196,7 +254,7 @@ io.on('connection', (socket) => {
                 const heardTo = board.isHeard(player.position, enemy.position, playerSound);
                 if (heardTo) {
                     if (heardTo.length > 1) {
-                        io.sockets.emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
+                        io.in(game.id).emit('player select token', ({ heardTo, id: player.id, turn: 'enemy', enemyID: enemy.id }));
                     } else {
                         game.addToken(heardTo[0].id, 'sound', enemy.id);
                         waitForTokenPlacement();
@@ -328,6 +386,6 @@ io.on('connection', (socket) => {
 
     const startEnemyTurn = () => {
         updateBoard();
-        io.sockets.emit('enemy turn');
+        io.in(game.id).emit('enemy turn');
     }
 });
