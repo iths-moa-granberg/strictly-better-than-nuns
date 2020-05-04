@@ -29,7 +29,6 @@ const getOpenGames = () => {
 }
 
 io.on('connection', (socket) => {
-    const enemy = { e1: new Player.Evil('e1'), e2: new Player.Evil('e2') };
     let currentEnemy;
     let game;
     let board;
@@ -78,7 +77,7 @@ io.on('connection', (socket) => {
             });
         } else {
             games[game.id].users[user.userID].role = 'evil';
-            socket.player = enemy;
+            socket.player = game.enemies;
             game.enemyJoined = true;
             socket.emit('set up enemy', {
                 startPositions: [socket.player.e1.position, socket.player.e2.position]
@@ -112,10 +111,10 @@ io.on('connection', (socket) => {
 
     const updateBoard = () => {
         io.in(game.id).emit('update board', {
-            players: [enemy.e1, enemy.e2].concat(game.getVisiblePlayers()),
+            players: [game.enemies.e1, game.enemies.e2].concat(game.getVisiblePlayers()),
             soundTokens: game.soundTokens,
             sightTokens: game.sightTokens,
-            enemyPaths: [enemy.e1.path, enemy.e2.path],
+            enemyPaths: [game.enemies.e1.path, game.enemies.e2.path],
             reachablePositions: [],
         });
     }
@@ -148,7 +147,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('select enemy', ({ enemyID }) => {
-        currentEnemy = enemy[enemyID];
+        currentEnemy = game.enemies[enemyID];
     });
 
     const enemyStepOptions = () => {
@@ -234,10 +233,10 @@ io.on('connection', (socket) => {
     const enemyMoveComplete = () => {
         game.soundTokens = [];
         game.sightTokens = [];
-        enemy.e1.playersVisible = false;
-        enemy.e2.playersVisible = false;
+        game.enemies.e1.playersVisible = false;
+        game.enemies.e2.playersVisible = false;
 
-        enemyListen(enemy.e1);
+        enemyListen(game.enemies.e1);
     }
 
     const enemyListen = enemy => {
@@ -277,13 +276,13 @@ io.on('connection', (socket) => {
 
     const isSeen = (player) => {
         let seenBy = [];
-        if (board.isSeen(player.position, enemy.e1.position, enemy.e1.lastPosition)) {
+        if (board.isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition)) {
             seenBy.push('e1');
-            enemy.e1.playersVisible = true;
+            game.enemies.e1.playersVisible = true;
         }
-        if (board.isSeen(player.position, enemy.e2.position, enemy.e2.lastPosition)) {
+        if (board.isSeen(player.position, game.enemies.e2.position, game.enemies.e2.lastPosition)) {
             seenBy.push('e2');
-            enemy.e2.playersVisible = true;
+            game.enemies.e2.playersVisible = true;
         }
         return seenBy;
     }
@@ -340,10 +339,10 @@ io.on('connection', (socket) => {
     const playerMakeSound = (player, sound) => {
         if (game.enemyListened === 0) {
             game.enemyListened++;
-            makeSound(player, sound, enemy.e1);
+            makeSound(player, sound, game.enemies.e1);
         } else if (game.enemyListened === 1) {
             game.enemyListened++;
-            makeSound(player, sound, enemy.e2);
+            makeSound(player, sound, game.enemies.e2);
         } else {
             game.enemyListened = 0;
             endPlayerTurn();
@@ -375,7 +374,7 @@ io.on('connection', (socket) => {
     const endEnemyTurn = () => {
         game.enemyListened++;
         if (game.enemyListened == 1) {
-            enemyListen(enemy.e2);
+            enemyListen(game.enemies.e2);
         } else if (game.enemyListened == 2) {
             game.enemyListened = 0;
             updateBoard();

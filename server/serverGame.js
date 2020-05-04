@@ -1,4 +1,5 @@
 const positions = require('./serverPositions');
+const Player = require('./serverPlayer'); 
 
 class Game {
     constructor() {
@@ -14,6 +15,8 @@ class Game {
         this.enemyJoined = false;
         this.enemyMovesCompleted = 0;
         this.enemyListened = 0;
+
+        this.enemies = { e1: new Player.Evil('e1'), e2: new Player.Evil('e2') };
     }
 
     generateGameID = () => {
