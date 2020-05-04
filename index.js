@@ -15,7 +15,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 const Player = require('./server/serverPlayer');
-const enemyPaths = require('./server/enemyPaths'); //behövs bara i serverPlayer?
 const Game = require('./server/serverGame');
 const Board = require('./server/serverBoard');
 
@@ -30,7 +29,7 @@ const getOpenGames = () => {
 }
 
 io.on('connection', (socket) => {
-    const enemy = { e1: new Player.Evil('e1', enemyPaths[0]), e2: new Player.Evil('e2', enemyPaths[2]) };
+    const enemy = { e1: new Player.Evil('e1'), e2: new Player.Evil('e2') };
     let currentEnemy;
     let game;
     let board;

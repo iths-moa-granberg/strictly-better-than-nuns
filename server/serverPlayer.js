@@ -56,17 +56,21 @@ class Player {
 }
 
 class Enemy extends Player {
-    constructor(id, path) {
-        super({ id, path });
+    constructor(id) {
+        super({ id });
 
-        this.path = path;
+        if (id === 'e1') {
+            this.path = enemyPaths[0];
+        } else {
+            this.path = enemyPaths[2];
+        }
 
-        this.position = path[0];
-        this.lastPosition = path[0];
+        this.position = this.path[0];
+        this.lastPosition = this.path[0];
 
         this.visible = true;
         this.isEvil = true;
-        
+
         this.playersVisible = false;
     }
 
