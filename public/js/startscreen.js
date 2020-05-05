@@ -51,6 +51,7 @@ class StartScreen {
         this.wrapper.innerHTML = `
         <div class="board-wrapper"></div>
         <div class="user-options-wrapper"></div>
+        <div class="progress-log-wrapper"></div>
         `;
     }
 }

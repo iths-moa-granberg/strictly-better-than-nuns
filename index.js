@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = exports.io = require('socket.io')(server);
 const port = process.env.PORT || 4000;
 
 server.listen(port, () => {
@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const Player = require('./server/serverPlayer');
 const Game = require('./server/serverGame');
 const Board = require('./server/serverBoard');
+const { logProgress } = require('./server/serverProgressLog');
 
 let games = {};
 
@@ -49,6 +50,8 @@ io.on('connection', (socket) => {
         io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
+
+        logProgress(`${user.username} has joined`, { room: game.id });
     });
 
     socket.on('join game', ({ gameID, user }) => {
@@ -61,12 +64,15 @@ io.on('connection', (socket) => {
         socket.join(game.id);
         socket.emit('init', ({ enemyJoined: game.enemyJoined }));
         io.in(game.id).emit('waiting for players', ({ enemyJoined: game.enemyJoined }));
+
+        logProgress(`${user.username} has joined`, { room: game.id });
     });
 
     socket.on('player joined', ({ good, user }) => {
         if (good) {
             games[game.id].users[user.userID].role = 'good';
-            socket.player = new Player.Good(game.generatePlayerInfo());
+            socket.player = new Player.Good(game.generatePlayerInfo(user.username));
+
             game.addPlayer(socket.player);
             socket.emit('set up player', {
                 id: socket.player.id,
@@ -84,6 +90,9 @@ io.on('connection', (socket) => {
             });
             io.in(game.id).emit('disable join as evil');
         }
+
+        logProgress(`${user.username} is ${games[game.id].users[user.userID].role}`, { room: game.id });
+
         updateBoard();
         if (playersReady()) {
             io.in(game.id).emit('players ready');
@@ -104,6 +113,8 @@ io.on('connection', (socket) => {
     }
 
     socket.on('start', () => {
+        logProgress(`The game has started!`, { room: game.id });
+
         games[game.id].status = 'closed';
         io.emit('update open games', ({ openGames: getOpenGames() }));
         startNextTurn();
@@ -121,6 +132,9 @@ io.on('connection', (socket) => {
 
     const startNextTurn = () => {
         game.startNextTurn();
+
+        logProgress(`Players turn`, { room: game.id });
+
         io.in(game.id).emit('players turn', { caughtPlayers: game.caughtPlayers });
     };
 
@@ -166,6 +180,8 @@ io.on('connection', (socket) => {
         currentEnemy.pace = pace;
         currentEnemy.stepsLeft = pace === 'walk' ? 4 : 6;
         enemyStepOptions();
+
+        logProgress(`${currentEnemy.id} is ${pace}ing`, { room: game.id });
     });
 
     socket.on('player takes step', ({ position }) => {
@@ -175,9 +191,13 @@ io.on('connection', (socket) => {
 
         const seenBy = isSeen(socket.player, game.enemies.e1).concat(isSeen(socket.player, game.enemies.e2));
         socket.player.visible = Boolean(seenBy.length);
+        if (seenBy.length) {
+            logProgress(`You are seen! Click back if you want to take a different route`, { socket });
+        }
 
         if (game.isCaught(socket.player) && !socket.player.visible) {
             game.removeCaughtPlayer(socket.player);
+            logProgress(`You are out of sight and can move freely again`, { socket });
         }
         socket.player.path.push({ position, visible: socket.player.visible, enemyID: seenBy });
 
@@ -190,6 +210,8 @@ io.on('connection', (socket) => {
 
     socket.on('select path', ({ path }) => {
         currentEnemy.path = path;
+        logProgress(`${currentEnemy.id} has selected a new path`, { room: game.id });
+
         actOnEnemyStep();
     });
 
@@ -203,6 +225,8 @@ io.on('connection', (socket) => {
             if (seenBy.length) {
                 player.visible = true;
                 player.updatePathVisibility(player.position, seenBy);
+
+                logProgress(`${player.username} is seen by ${currentEnemy.id}`, { room: game.id });
             }
         }
         if (currentEnemy.endOfPath()) {
@@ -282,7 +306,7 @@ io.on('connection', (socket) => {
     }
 
     socket.on('player move completed', () => {
-        socket.player.checkTarget();
+        socket.player.checkTarget(socket, game.id);
 
         if (socket.player.visible) {
             endPlayerTurn();
@@ -306,6 +330,7 @@ io.on('connection', (socket) => {
         game.playerTurnCompleted++;
         if (game.playerTurnCompleted === game.players.length) {
             game.playerTurnCompleted = 0;
+            logSound();
             startEnemyTurn();
         }
     }
@@ -325,6 +350,7 @@ io.on('connection', (socket) => {
         for (let obj of path) {
             if (obj.visible && obj != path[0]) {
                 game.addToken(obj.position.id, 'sight', obj.enemyID);
+                logProgress(`${player.username} has disappeared`, { room: game.id });
                 return
             }
         }
@@ -370,6 +396,8 @@ io.on('connection', (socket) => {
         if (game.enemyListened == 1) {
             enemyListen(game.enemies.e2);
         } else if (game.enemyListened == 2) {
+            logSound();
+
             game.enemyListened = 0;
             updateBoard();
             startNextTurn();
@@ -379,5 +407,20 @@ io.on('connection', (socket) => {
     const startEnemyTurn = () => {
         updateBoard();
         io.in(game.id).emit('enemy turn');
+
+        logProgress(`Enemy turn`, { room: game.id });
+    }
+
+    const logSound = () => {
+        if (game.soundTokens.find(token => token.enemyID === 'e1') && game.soundTokens.find(token => token.enemyID === 'e2')) {
+            logProgress(`Both enemies heard someone!`, { room: game.id });
+        } else {
+            if (game.soundTokens.find(token => token.enemyID === 'e1')) {
+                logProgress(`e1 heard someone!`, { room: game.id });
+            }
+            if (game.soundTokens.find(token => token.enemyID === 'e2')) {
+                logProgress(`e2 heard someone!`, { room: game.id });
+            }
+        }
     }
 });

@@ -1,7 +1,8 @@
 const enemyPaths = require('./enemyPaths.js');
+const { logProgress } = require('./serverProgressLog');
 
 class Player {
-    constructor({ id, home, key, goal }) {
+    constructor({ id, home, key, goal, username }) {
         this.id = id;
         this.position = home;
 
@@ -20,6 +21,8 @@ class Player {
         this.hasGoal = false;
 
         this.caught = false;
+
+        this.username = username;
     }
 
     isCaught = () => {
@@ -27,17 +30,19 @@ class Player {
         this.hasGoal = false;
     }
 
-    checkTarget = () => {
+    checkTarget = (socket, room) => {
         if (this.hasKey) {
             if (this.hasGoal) {
                 if (this.home.id === this.position.id) {
-                    console.log('win');
+                    logProgress(`${this.username} has won!`, { room });
                 }
             } else if (this.goal.id === this.position.id) {
                 this.hasGoal = true;
+                logProgress(`You have reached your goal!`, { socket });
             }
         } else if (this.key.id === this.position.id) {
             this.hasKey = true;
+            logProgress(`You have reached your key!`, { socket });
         }
     }
 
