@@ -1,4 +1,3 @@
-// Setup basic express server
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -10,14 +9,13 @@ server.listen(port, () => {
     console.log('Server listening at port %d', port);
 });
 
-// Routing
 app.use(express.static(path.join(__dirname, 'public')));
 
+const Player = require('./server/modules/serverPlayer');
+const Game = require('./server/modules/serverGame');
+const Board = require('./server/modules/serverBoard');
 
-const Player = require('./server/serverPlayer');
-const Game = require('./server/serverGame');
-const Board = require('./server/serverBoard');
-const { logProgress } = require('./server/serverProgressLog');
+const { logProgress } = require('./server/controllers/serverProgressLog');
 
 let games = {};
 

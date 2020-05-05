@@ -1,4 +1,4 @@
-const io = require('../index').io;
+const io = require('../../index').io;
 
 const logProgress = (msg, { socket, room }) => {
     if (room) {

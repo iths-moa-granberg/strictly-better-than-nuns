@@ -1,5 +1,5 @@
 const enemyPaths = require('./enemyPaths.js');
-const { logProgress } = require('./serverProgressLog');
+const { logProgress } = require('../controllers/serverProgressLog');
 
 class Player {
     constructor({ id, home, key, goal, username }) {

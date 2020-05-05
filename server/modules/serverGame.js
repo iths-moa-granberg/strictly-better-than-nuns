@@ -1,6 +1,6 @@
 const positions = require('./serverPositions');
 const Player = require('./serverPlayer');
-const { logProgress } = require('./serverProgressLog');
+const { logProgress } = require('../controllers/serverProgressLog');
 
 class Game {
     constructor() {
