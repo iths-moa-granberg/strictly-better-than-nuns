@@ -1,5 +1,5 @@
 const positions = require('./serverPositions');
-const Player = require('./serverPlayer'); 
+const Player = require('./serverPlayer');
 const { logProgress } = require('./serverProgressLog');
 
 class Game {

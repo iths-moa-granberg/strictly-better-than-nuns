@@ -330,6 +330,7 @@ io.on('connection', (socket) => {
         game.playerTurnCompleted++;
         if (game.playerTurnCompleted === game.players.length) {
             game.playerTurnCompleted = 0;
+            logSound();
             startEnemyTurn();
         }
     }
@@ -395,6 +396,8 @@ io.on('connection', (socket) => {
         if (game.enemyListened == 1) {
             enemyListen(game.enemies.e2);
         } else if (game.enemyListened == 2) {
+            logSound();
+
             game.enemyListened = 0;
             updateBoard();
             startNextTurn();
@@ -406,5 +409,18 @@ io.on('connection', (socket) => {
         io.in(game.id).emit('enemy turn');
 
         logProgress(`Enemy turn`, { room: game.id });
+    }
+
+    const logSound = () => {
+        if (game.soundTokens.find(token => token.enemyID === 'e1') && game.soundTokens.find(token => token.enemyID === 'e2')) {
+            logProgress(`Both enemies heard someone!`, { room: game.id });
+        } else {
+            if (game.soundTokens.find(token => token.enemyID === 'e1')) {
+                logProgress(`e1 heard someone!`, { room: game.id });
+            }
+            if (game.soundTokens.find(token => token.enemyID === 'e2')) {
+                logProgress(`e2 heard someone!`, { room: game.id });
+            }
+        }
     }
 });
