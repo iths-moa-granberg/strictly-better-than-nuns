@@ -1,6 +1,7 @@
 const positions = require('./serverPositions');
 const Player = require('./serverPlayer');
-const { logProgress } = require('../controllers/serverProgressLog');
+const Board = require('./serverBoard');
+const { logProgress } = require('../controllers/sharedFunctions');
 
 class Game {
     constructor() {
@@ -17,6 +18,7 @@ class Game {
         this.enemyMovesCompleted = 0;
         this.enemyListened = 0;
 
+        this.board = new Board();
         this.enemies = { e1: new Player.Evil('e1'), e2: new Player.Evil('e2') };
     }
 
