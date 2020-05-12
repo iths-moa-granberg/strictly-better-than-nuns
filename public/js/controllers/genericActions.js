@@ -62,6 +62,7 @@ const takeStep = (position, possibleSteps) => {
         currentPlayer.position = position;
         if (myPlayer.isEvil) {
             socket.emit('enemy takes step', { position });
+            userOptions.disableBtns();
         } else {
             socket.emit('player takes step', { position });
             askToConfirmDestination();
