@@ -36,11 +36,17 @@ const logSound = game => {
     }
 }
 
-const isSeen = (player, enemy, game) => {
+const isSeen = (player, game) => {
     let seenBy = [];
-    if (game.board.isSeen(player.position, enemy.position, enemy.lastPosition)) {
-        seenBy.push(enemy.id);
-        enemy.playersVisible = true;
+    if (game.board.isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition)
+        || game.enemies.e1.position.id === player.position.id) {
+        seenBy.push('e1');
+        game.enemies.e1.playersVisible = true;
+    }
+    if (game.board.isSeen(player.position, game.enemies.e2.position, game.enemies.e2.lastPosition)
+        || game.enemies.e2.position.id === player.position.id) {
+        seenBy.push('e2');
+        game.enemies.e2.playersVisible = true;
     }
     return seenBy;
 }

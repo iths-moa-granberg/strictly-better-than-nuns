@@ -34,7 +34,7 @@ io.on('connection', socket => {
         socket.game.checkEnemyTarget(currentEnemy);
 
         for (let player of socket.game.players) {
-            const seenBy = isSeen(player, currentEnemy, socket.game);
+            const seenBy = isSeen(player, socket.game);
             if (seenBy.length) {
                 player.visible = true;
                 player.updatePathVisibility(player.position, seenBy);

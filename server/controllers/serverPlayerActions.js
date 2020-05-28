@@ -31,8 +31,7 @@ io.on('connection', socket => {
         socket.player.position = position;
         socket.player.stepsLeft--;
 
-        const seenBy = isSeen(socket.player, socket.game.enemies.e1, socket.game)
-            .concat(isSeen(socket.player, socket.game.enemies.e2, socket.game));
+        const seenBy = isSeen(socket.player, socket.game);
         socket.player.visible = Boolean(seenBy.length);
         if (seenBy.length) {
             logProgress(`You are seen! Click back if you want to take a different route`, { socket });
