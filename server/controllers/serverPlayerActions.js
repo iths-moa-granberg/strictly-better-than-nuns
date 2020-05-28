@@ -59,7 +59,7 @@ io.on('connection', socket => {
     socket.on('player move completed', () => {
         socket.player.checkTarget(socket, socket.game.id);
 
-        if (socket.player.visible) {
+        if (socket.player.visible || socket.player.caught) { 
             endPlayerTurn();
         } else {
             socket.player.caught = false;
