@@ -20,6 +20,7 @@ interface Player {
 }
 
 interface Enemy {
+    id: string;
     position: Position;
     isEvil: boolean;
     stepsLeft: number;
@@ -111,7 +112,8 @@ class Enemy {
         } else {
             this.path = enemyPaths[2];
         }
-
+        
+        this.id = id; // TODOMOA
         this.position = this.path[0];
         this.lastPosition = this.path[0];
 

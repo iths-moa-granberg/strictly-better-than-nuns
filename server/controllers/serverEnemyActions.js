@@ -1,8 +1,13 @@
 import {io} from '../../index';
 import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
 
-io.on('connection', socket => {
+// TODOMOA
+// interface ExtendedSocket extends SocketIO.Socket {
+//     game: Game;
+// }
 
+// io.on('connection', (socket: ExtendedSocket) => {
+io.on('connection', socket => {
     socket.on('select enemy', ({ enemyID }) => {
         currentEnemy = socket.game.enemies[enemyID];
     });
