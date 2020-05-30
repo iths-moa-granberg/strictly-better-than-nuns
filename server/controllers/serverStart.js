@@ -3,7 +3,7 @@ const io = require('../../index').io;
 // const Game = require('../modules/serverGame');
 // const Player = require('../modules/serverPlayer');
 const Game = require('../../build/server/modules/serverGame');
-const Player = require('../../build/server/modules/serverPlayer');
+const { Player } = require('../../build/server/modules/serverPlayer');
 const { updateBoard, startNextTurn, logProgress } = require('./sharedFunctions');
 
 let games = {};
@@ -51,7 +51,7 @@ io.on('connection', socket => {
     socket.on('player joined', ({ good, user }) => {
         if (good) {
             games[socket.game.id].users[user.userID].role = 'good';
-            socket.player = new Player.Good(socket.game.generatePlayerInfo(user.username));
+            socket.player = new Player(socket.game.generatePlayerInfo(user.username));
 
             socket.game.addPlayer(socket.player);
             socket.emit('set up player', {
