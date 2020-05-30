@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "lib": [
+      "es2019"
+    ],
     "module": "commonjs",
     "rootDir": ".",
-    "outDir": "./build",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
     "watch": true
   },
   "include": [
-    "./server/**/*"
+    "./server/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules" /* exclude everything in node_modules */
   ]
 }
