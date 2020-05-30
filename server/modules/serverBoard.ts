@@ -1,9 +1,18 @@
-const positions = require('./serverPositions');
+const positions: Position[] = require('./serverPositions');
+
+interface Position {
+    id: number,
+    x: number;
+    y: number;
+    neighbours: number[];
+    inSight: number[];
+    requireKey?: boolean;
+}
 
 class Board {
     constructor() { }
 
-    getReachable = (startPosition, totalSteps, hasKey) => {
+    getReachable = (startPosition: Position, totalSteps: number, hasKey: boolean) => {
         let possiblePos = [startPosition];
         for (let steps = 0; steps < totalSteps; steps++) {
             for (let pos of possiblePos) {
@@ -17,21 +26,21 @@ class Board {
         return possiblePos.filter(pos => pos.id != startPosition.id);
     }
 
-    _getNeighbours = (position) => {
+    _getNeighbours = (position: Position) => {
         return position.neighbours.map(neighbour => positions[neighbour]);
     }
 
-    getEnemyStandardReachable = (start, path, totalSteps) => {
+    getEnemyStandardReachable = (start: Position, path: Position[], totalSteps: number) => {
         let serverStart = path.find(obj => obj.id === start.id);
-        return path.filter((pos, index) => index > path.indexOf(serverStart))
+        return path.filter((pos, index) => index > path.indexOf(serverStart!))
             .filter((pos, index) => index < totalSteps);
     }
 
-    getClosestWayHome = (start, end, hasKey) => {
+    getClosestWayHome = (start: Position, end: Position, hasKey: boolean) => {
         return this._getClosestPaths(start, end, hasKey).flat().filter(pos => pos.id != start.id);
     }
 
-    _getClosestPaths = (start, end, hasKey) => {
+    _getClosestPaths = (start: Position, end: Position, hasKey: boolean) => {
         let queue = this._getQueue(start, end, hasKey);
         let paths = [[end]];
 
@@ -69,8 +78,8 @@ class Board {
         return paths;
     }
 
-    getClosestWayToPath = (start, path) => {
-        let allPaths = [];
+    getClosestWayToPath = (start: Position, path: Position[]) => {
+        let allPaths: Position[][] = [];
         let shortestPathLength = 100; //magic number, max distance bw any pos board
         for (let position of path) {
             let paths = this._getClosestPaths(start, position, true);
@@ -84,12 +93,12 @@ class Board {
             .filter(pos => pos.id != start.id);
     }
 
-    _getQueue = (start, end, hasKey) => {
+    _getQueue = (start: Position, end: Position, hasKey: boolean) => {
         let tested = [start];
         let queue = [[start]];
 
         for (let stepArr of queue) {
-            let nextStep = [];
+            let nextStep: Position[] = [];
             for (let pos of stepArr) {
                 let neighbours = this._getNeighbours(pos);
                 neighbours = neighbours.filter(neighbour => !tested.find(pos => neighbour.id === pos.id))
@@ -107,17 +116,17 @@ class Board {
         return queue;
     }
 
-    _getPlaceInQueue = (position, queue) => {
+    _getPlaceInQueue = (position: Position, queue: Position[][]) => {
         return queue.findIndex(place => place.find(pos => pos.id === position.id));
     }
 
-    isHeard = (playerPos, enemyPos, sound) => {
+    isHeard = (playerPos: Position, enemyPos: Position, sound: number) => {
         const reaches = this.getReachable(playerPos, sound, true);
 
         if (reaches.find(pos => pos.id === enemyPos.id)) {
             const soundPaths = this._getClosestPaths(playerPos, enemyPos, true);
 
-            let tokenPositions = [];
+            let tokenPositions: Position[] = [];
             for (let path of soundPaths) {
                 if (!tokenPositions.find(pos => pos.id === path[1].id)) {
                     tokenPositions.push(path[1]);
@@ -133,14 +142,14 @@ class Board {
         return Math.floor(Math.random() * 6) + 1;
     }
 
-    getSoundReach = (pace, sound) => {
+    getSoundReach = (pace: string, sound: number) => {
         return pace === 'stand' ? sound - 3
             : pace === 'sneak' ? sound - 2
                 : pace === 'walk' ? sound - 1
                     : sound;
     }
 
-    isSeen = (position, enemyPos, enemyLastPos) => {
+    isSeen = (position: Position, enemyPos: Position, enemyLastPos: Position) => {
         if (enemyPos.x === enemyLastPos.x) {
             if (enemyPos.y < enemyLastPos.y) {
                 return enemyPos.inSight.includes(position.id) && position.y <= enemyPos.y;
@@ -153,6 +162,8 @@ class Board {
             } else {
                 return enemyPos.inSight.includes(position.id) && position.x >= enemyPos.x;
             }
+        } else {
+            return false;
         }
     }
 }

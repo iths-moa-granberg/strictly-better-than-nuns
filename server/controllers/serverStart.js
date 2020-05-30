@@ -1,7 +1,9 @@
 const io = require('../../index').io;
 
-const Game = require('../modules/serverGame');
-const Player = require('../modules/serverPlayer');
+// const Game = require('../modules/serverGame');
+// const Player = require('../modules/serverPlayer');
+const Game = require('../../build/server/modules/serverGame');
+const Player = require('../../build/server/modules/serverPlayer');
 const { updateBoard, startNextTurn, logProgress } = require('./sharedFunctions');
 
 let games = {};

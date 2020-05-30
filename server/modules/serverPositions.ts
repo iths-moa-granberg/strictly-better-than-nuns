@@ -1,4 +1,17 @@
-const positions = {
+interface Position {
+    id: number,
+    x: number;
+    y: number;
+    neighbours: number[];
+    inSight: number[];
+    requireKey?: boolean;
+}
+
+// export interface Positions {
+//     [key: number]: Position;
+// }
+
+module.exports = {
     1: {
         id: 1,
         x: 5,
@@ -128,5 +141,4 @@ const positions = {
         inSight: [10, 12, 14, 15, 11,],
     },
 };
-
-module.exports = positions;
+// module.exports = positions;

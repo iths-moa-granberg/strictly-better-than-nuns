@@ -1,7 +1,48 @@
 const positions = require('./serverPositions');
-const Player = require('./serverPlayer');
-const Board = require('./serverBoard');
-const { logProgress } = require('../controllers/sharedFunctions');
+const { Player, Enemy } = require('./serverPlayer');
+const Board: Board = require('./serverBoard');
+const { logProgress } = require('../../../server/controllers/sharedFunctions');
+
+interface Game {
+    id: string;
+    roundCounter: number;
+    players: Player[];
+    caughtPlayers: string[];
+    enemyWinCounter: number;
+    playerTurnCompleted: number;
+    placedSoundCounter: number;
+
+    // soundTokens: Token[];
+    // sightTokens: Token[];
+    soundTokens: SoundToken[];
+    sightTokens: SightToken[];
+
+    enemyJoined: boolean;
+    enemyMovesCompleted: number;
+    enemyListened: number;
+    board: Board;
+    enemies: Enemies;
+}
+
+interface Enemies {
+    e1: Enemy;
+    e2: Enemy;
+}
+
+interface SightToken {
+    id: number;
+    enemyID: string[];
+}
+
+interface SoundToken {
+    id: number;
+    enemyID: string;
+}
+
+interface Token {
+    id: number;
+    enemyID: string | string[];
+}
 
 class Game {
     constructor() {
@@ -19,14 +60,14 @@ class Game {
         this.enemyListened = 0;
 
         this.board = new Board();
-        this.enemies = { e1: new Player.Evil('e1'), e2: new Player.Evil('e2') };
+        this.enemies = { e1: new Enemy('e1'), e2: new Enemy('e2') };
     }
 
     generateGameID = () => {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
 
-    addPlayer = (newPlayer) => {
+    addPlayer = (newPlayer: Player) => {
         this.players.push(newPlayer);
     }
 
@@ -37,7 +78,7 @@ class Game {
         }
     }
 
-    addToken = (positionID, type, enemyID) => {
+    addToken = (positionID: number, type: string, enemyID: string[] | string) => {
         if (type === 'sound') {
             this.soundTokens.push({ id: positionID, enemyID });
         } else if (type === 'sight') {
@@ -45,12 +86,13 @@ class Game {
         }
     }
 
-    seenSomeone = enemyID => {
+    seenSomeone = (enemyID: string) => {
         return Boolean(this.sightTokens.find(token => token.enemyID.includes(enemyID)));
     }
 
-    heardSomeone = enemyID => {
+    heardSomeone = (enemyID: string) => {
         return Boolean(this.soundTokens.find(token => token.enemyID === enemyID));
+
     }
 
     getVisiblePlayers = () => {
@@ -60,7 +102,7 @@ class Game {
         } : { id: '', position: { id: '' } });
     }
 
-    checkEnemyTarget = (enemy) => {
+    checkEnemyTarget = (enemy: Enemy) => {
         for (let player of this.players) {
             if (enemy.checkTarget(player) && !this.caughtPlayers.includes(player.id)) {
                 this.enemyWinCounter++;
@@ -75,19 +117,19 @@ class Game {
         }
     }
 
-    addCaughtPlayer = (player) => {
+    addCaughtPlayer = (player: Player) => {
         this.caughtPlayers.push(player.id);
     }
 
-    removeCaughtPlayer = (player) => {
+    removeCaughtPlayer = (player: Player) => {
         this.caughtPlayers = this.caughtPlayers.filter(id => id != player.id);
     }
 
-    isCaught = (player) => {
+    isCaught = (player: Player) => {
         return this.caughtPlayers.includes(player.id);
     }
 
-    generatePlayerInfo = username => {
+    generatePlayerInfo = (username: string) => {
         return {
             id: this.players.length,
             home: positions[1 + this.players.length],
@@ -97,7 +139,7 @@ class Game {
         };
     }
 
-    getServerPosition = (id) => {
+    getServerPosition = (id: number) => {
         return positions[id];
     }
 }
