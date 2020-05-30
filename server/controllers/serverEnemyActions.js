@@ -1,6 +1,5 @@
-const io = require('../../index').io;
-
-const { updateBoard, startNextTurn, logProgress, logSound, isSeen } = require('./sharedFunctions');
+import {io} from '../../index';
+import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
 
 io.on('connection', socket => {
 

@@ -1,14 +1,6 @@
-const enemyPaths: Position[][] = require('./enemyPaths');
-const { logProgress } = require('../../../server/controllers/sharedFunctions'); //bullshit
-
-interface Position {
-    id: number,
-    x: number;
-    y: number;
-    neighbours: number[];
-    inSight: number[];
-    requireKey?: boolean;
-}
+import enemyPaths from './enemyPaths';
+import { logProgress } from '../controllers/sharedFunctions';
+import {Position} from '../types';
 
 interface Player {
     id: string;
@@ -53,7 +45,7 @@ interface PlayerConstructor {
 
 class Player {
     constructor(user: PlayerConstructor) {
-        // constructor({ id, home, key, goal, username }) {
+        // constructor({ id, home, key, goal, username }: PlayerConstructor) { // TODOMOA
         this.id = user.id;
         this.position = user.home;
 
@@ -85,15 +77,15 @@ class Player {
         if (this.hasKey) {
             if (this.hasGoal) {
                 if (this.home.id === this.position.id) {
-                    logProgress(`${this.username} has won!`, { room });
+                    logProgress(`${this.username} has won!`, { room, socket: undefined }); // TODOMOA
                 }
             } else if (this.goal.id === this.position.id) {
                 this.hasGoal = true;
-                logProgress(`You have reached your goal!`, { socket });
+                logProgress(`You have reached your goal!`, { socket, room: undefined }); // TODOMOA
             }
         } else if (this.key.id === this.position.id) {
             this.hasKey = true;
-            logProgress(`You have reached your key!`, { socket });
+            logProgress(`You have reached your key!`, { socket, room: undefined }); // TODOMOA
         }
     }
 
@@ -151,5 +143,4 @@ class Enemy {
     }
 }
 
-// module.exports = { Good: Player, Evil: Enemy };
-module.exports = { Player, Enemy }
+export {Player, Enemy};

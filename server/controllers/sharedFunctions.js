@@ -1,6 +1,6 @@
-const io = require('../../index').io;
+import {io} from '../../index';
 
-const updateBoard = game => {
+export const updateBoard = game => {
     io.in(game.id).emit('update board', {
         players: [game.enemies.e1, game.enemies.e2].concat(game.getVisiblePlayers()),
         soundTokens: game.soundTokens,
@@ -10,12 +10,12 @@ const updateBoard = game => {
     });
 }
 
-const startNextTurn = game => {
+export const startNextTurn = game => {
     game.startNextTurn();
     io.in(game.id).emit('players turn', { caughtPlayers: game.caughtPlayers });
 };
 
-const logProgress = (msg, { socket, room }) => {
+export const logProgress = (msg, { socket, room }) => {
     if (room) {
         io.in(room).emit('progress', { msg });
     } else {
@@ -23,7 +23,7 @@ const logProgress = (msg, { socket, room }) => {
     }
 }
 
-const logSound = game => {
+export const logSound = game => {
     if (game.soundTokens.find(token => token.enemyID === 'e1') && game.soundTokens.find(token => token.enemyID === 'e2')) {
         logProgress(`Both enemies heard someone!`, { room: game.id });
     } else {
@@ -36,7 +36,7 @@ const logSound = game => {
     }
 }
 
-const isSeen = (player, game) => {
+export const isSeen = (player, game) => {
     let seenBy = [];
     if (game.board.isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition)
         || game.enemies.e1.position.id === player.position.id) {
@@ -50,5 +50,3 @@ const isSeen = (player, game) => {
     }
     return seenBy;
 }
-
-module.exports = { updateBoard, startNextTurn, logProgress, logSound, isSeen };

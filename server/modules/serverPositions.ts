@@ -1,17 +1,10 @@
-interface Position {
-    id: number,
-    x: number;
-    y: number;
-    neighbours: number[];
-    inSight: number[];
-    requireKey?: boolean;
+import {Position} from '../types';
+
+interface Positions {
+    [key: number]: Position;
 }
 
-// export interface Positions {
-//     [key: number]: Position;
-// }
-
-module.exports = {
+const positions: Positions = {
     1: {
         id: 1,
         x: 5,
@@ -141,4 +134,5 @@ module.exports = {
         inSight: [10, 12, 14, 15, 11,],
     },
 };
-// module.exports = positions;
+
+export default positions;

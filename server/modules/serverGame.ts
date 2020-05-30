@@ -1,7 +1,7 @@
-const positions = require('./serverPositions');
-const { Player, Enemy } = require('./serverPlayer');
-const Board: Board = require('./serverBoard');
-const { logProgress } = require('../../../server/controllers/sharedFunctions');
+import positions from './serverPositions';
+import { Player, Enemy } from './serverPlayer';
+import Board from './serverBoard';
+import { logProgress } from '../controllers/sharedFunctions';
 
 interface Game {
     id: string;
@@ -80,9 +80,9 @@ class Game {
 
     addToken = (positionID: number, type: string, enemyID: string[] | string) => {
         if (type === 'sound') {
-            this.soundTokens.push({ id: positionID, enemyID });
+            this.soundTokens.push({ id: positionID, enemyID: enemyID as string }); // TODOMOA
         } else if (type === 'sight') {
-            this.sightTokens.push({ id: positionID, enemyID });
+            this.sightTokens.push({ id: positionID, enemyID: enemyID as string[] }); // TODOMOA
         }
     }
 
@@ -109,11 +109,11 @@ class Game {
                 player.isCaught();
                 this.addCaughtPlayer(player);
 
-                logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id });
+                logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id, socket: undefined }); // TODOMOA
             }
         }
         if (this.enemyWinCounter > this.players.length) {
-            logProgress(`Enemy wins!`, { room: this.id });
+            logProgress(`Enemy wins!`, { room: this.id, socket: undefined }); // TODOMOA
         }
     }
 
@@ -144,4 +144,4 @@ class Game {
     }
 }
 
-module.exports = Game;
+export default Game;

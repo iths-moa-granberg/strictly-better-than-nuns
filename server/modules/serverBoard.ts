@@ -1,13 +1,5 @@
-const positions: Position[] = require('./serverPositions');
-
-interface Position {
-    id: number,
-    x: number;
-    y: number;
-    neighbours: number[];
-    inSight: number[];
-    requireKey?: boolean;
-}
+import positions from './serverPositions';
+import {Position} from '../types';
 
 class Board {
     constructor() { }
@@ -168,4 +160,4 @@ class Board {
     }
 }
 
-module.exports = Board;
+export default Board;
