@@ -12,5 +12,10 @@ export interface Position {
 
 export interface ExtendedSocket extends SocketIO.Socket {
     game: Game;
-    player: Player | Enemy;
+    player: Player | Enemies;
+}
+
+export interface Enemies {
+    e1: Enemy;
+    e2: Enemy;
 }

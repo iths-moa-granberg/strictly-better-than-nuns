@@ -2,6 +2,7 @@ import positions from './serverPositions';
 import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
 import { logProgress } from '../controllers/sharedFunctions';
+import { Enemies } from '../types';
 
 interface Game {
     id: string;
@@ -22,11 +23,6 @@ interface Game {
     enemies: Enemies;
 }
 
-interface Enemies {
-    e1: Enemy;
-    e2: Enemy;
-}
-
 interface SightToken {
     id: number;
     enemyID: string[];
@@ -35,11 +31,6 @@ interface SightToken {
 interface SoundToken {
     id: number;
     enemyID: string;
-}
-
-interface Token {
-    id: number;
-    enemyID: string | string[];
 }
 
 class Game {
