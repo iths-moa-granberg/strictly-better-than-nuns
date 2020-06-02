@@ -1,10 +1,5 @@
-import {io} from '../../index';
+import { io } from '../../index';
 import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
-
-// TODOMOA
-// interface ExtendedSocket extends SocketIO.Socket {
-//     game: Game;
-// }
 
 // io.on('connection', (socket: ExtendedSocket) => {
 io.on('connection', socket => {
