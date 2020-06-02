@@ -1,4 +1,4 @@
-import {io} from '../../index';
+import { io } from '../../index';
 
 export const updateBoard = game => {
     io.in(game.id).emit('update board', {

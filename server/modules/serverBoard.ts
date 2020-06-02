@@ -1,5 +1,5 @@
 import positions from './serverPositions';
-import {Position} from '../types';
+import { Position } from '../types';
 
 class Board {
     constructor() { }

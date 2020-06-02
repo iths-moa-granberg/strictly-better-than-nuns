@@ -1,4 +1,4 @@
-import {io} from '../../index';
+import { io } from '../../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
 
 io.on('connection', socket => {
@@ -58,7 +58,7 @@ io.on('connection', socket => {
     socket.on('player move completed', () => {
         socket.player.checkTarget(socket, socket.game.id);
 
-        if (socket.player.visible || socket.player.caught) { 
+        if (socket.player.visible || socket.player.caught) {
             endPlayerTurn();
         } else {
             socket.player.caught = false;

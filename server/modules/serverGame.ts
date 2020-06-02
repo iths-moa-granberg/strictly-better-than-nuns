@@ -12,8 +12,6 @@ interface Game {
     playerTurnCompleted: number;
     placedSoundCounter: number;
 
-    // soundTokens: Token[];
-    // sightTokens: Token[];
     soundTokens: SoundToken[];
     sightTokens: SightToken[];
 
@@ -80,9 +78,9 @@ class Game {
 
     addToken = (positionID: number, type: string, enemyID: string[] | string) => {
         if (type === 'sound') {
-            this.soundTokens.push({ id: positionID, enemyID: enemyID as string }); // TODOMOA
+            this.soundTokens.push({ id: positionID, enemyID: enemyID as string });
         } else if (type === 'sight') {
-            this.sightTokens.push({ id: positionID, enemyID: enemyID as string[] }); // TODOMOA
+            this.sightTokens.push({ id: positionID, enemyID: enemyID as string[] });
         }
     }
 
