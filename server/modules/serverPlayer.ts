@@ -77,15 +77,15 @@ class Player {
         if (this.hasKey) {
             if (this.hasGoal) {
                 if (this.home.id === this.position.id) {
-                    logProgress(`${this.username} has won!`, { room, socket: undefined }); // TODOMOA
+                    logProgress(`${this.username} has won!`, { room });
                 }
             } else if (this.goal.id === this.position.id) {
                 this.hasGoal = true;
-                logProgress(`You have reached your goal!`, { socket, room: undefined }); // TODOMOA
+                logProgress(`You have reached your goal!`, { socket });
             }
         } else if (this.key.id === this.position.id) {
             this.hasKey = true;
-            logProgress(`You have reached your key!`, { socket, room: undefined }); // TODOMOA
+            logProgress(`You have reached your key!`, { socket });
         }
     }
 

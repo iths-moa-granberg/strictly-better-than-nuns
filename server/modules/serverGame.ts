@@ -85,10 +85,7 @@ class Game {
     }
 
     getVisiblePlayers = () => {
-        return this.players.map(player => player.visible ? {
-            id: player.id,
-            position: player.position,
-        } : { id: '', position: { id: '' } });
+        return this.players.filter(player => player.visible).map(player => { return { id: player.id, position: player.position } });
     }
 
     checkEnemyTarget = (enemy: Enemy) => {
@@ -98,11 +95,11 @@ class Game {
                 player.isCaught();
                 this.addCaughtPlayer(player);
 
-                logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id, socket: undefined }); // TODOMOA
+                logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id });
             }
         }
         if (this.enemyWinCounter > this.players.length) {
-            logProgress(`Enemy wins!`, { room: this.id, socket: undefined }); // TODOMOA
+            logProgress(`Enemy wins!`, { room: this.id });
         }
     }
 
@@ -120,7 +117,7 @@ class Game {
 
     generatePlayerInfo = (username: string) => {
         return {
-            id: this.players.length,
+            id: this.players.length.toString(),
             home: positions[1 + this.players.length],
             key: positions[12 + this.players.length],
             goal: positions[10 + this.players.length],
