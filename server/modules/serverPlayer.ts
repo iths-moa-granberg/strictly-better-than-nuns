@@ -1,6 +1,6 @@
 import enemyPaths from './enemyPaths';
 import { logProgress } from '../controllers/sharedFunctions';
-import {Position} from '../types';
+import { Position } from '../types';
 
 interface Player {
     id: string;
@@ -45,28 +45,27 @@ interface PlayerConstructor {
 }
 
 class Player {
-    constructor(user: PlayerConstructor) {
-        // constructor({ id, home, key, goal, username }: PlayerConstructor) { // TODOMOA
-        this.id = user.id;
-        this.position = user.home;
+    constructor({ id, home, key, goal, username }: PlayerConstructor) {
+        this.id = id;
+        this.position = home;
 
-        this.home = user.home;
-        this.key = user.key;
-        this.goal = user.goal;
+        this.home = home;
+        this.key = key;
+        this.goal = goal;
 
         this.visible = false;
         this.isEvil = false;
 
         this.pace = '';
         this.stepsLeft = 0;
-        this.path = [{ position: user.home, visible: this.visible, enemyID: [] }];
+        this.path = [{ position: home, visible: this.visible, enemyID: [] }];
 
         this.hasKey = false;
         this.hasGoal = false;
 
         this.caught = false;
 
-        this.username = user.username;
+        this.username = username;
     }
 
     isCaught = () => {
@@ -112,8 +111,8 @@ class Enemy {
         } else {
             this.path = enemyPaths[2];
         }
-        
-        this.id = id; // TODOMOA
+
+        this.id = id;
         this.position = this.path[0];
         this.lastPosition = this.path[0];
 
@@ -145,4 +144,4 @@ class Enemy {
     }
 }
 
-export {Player, Enemy};
+export { Player, Enemy };
