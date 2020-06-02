@@ -24,6 +24,7 @@ interface Enemy {
     position: Position;
     isEvil: boolean;
     stepsLeft: number;
+    pace: string;
 
     playersVisible: boolean;
     path: Position[];

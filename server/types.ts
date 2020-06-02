@@ -16,6 +16,5 @@ export interface ExtendedSocket extends SocketIO.Socket {
 }
 
 export interface Enemies {
-    e1: Enemy;
-    e2: Enemy;
+    [key: string]: Enemy
 }
