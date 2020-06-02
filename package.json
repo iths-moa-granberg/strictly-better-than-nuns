@@ -27,7 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server-start": "PORT=3002 ts-node -O '{\"module\":\"commonjs\"}' -s ./server/index.ts"
+    "server-start": "PORT=3002 nodemon server/index.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
