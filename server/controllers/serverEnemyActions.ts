@@ -1,6 +1,6 @@
 import { io } from '../../index';
 import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
-import { ExtendedSocket, Position } from '../types';
+import { ExtendedSocket, Position, ClientPosition } from '../types';
 import { Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -30,9 +30,9 @@ io.on('connection', (socket: ExtendedSocket) => {
         socket.emit('possible steps', { possibleSteps, stepsLeft: currentEnemy.stepsLeft });
     }
 
-    socket.on('enemy takes step', ({ position }: { position: Position }) => {
-        position = socket.game.getServerPosition(position.id);
-        currentEnemy.move(position);
+    socket.on('enemy takes step', ({ position }: { position: ClientPosition }) => {
+        const serverPosition = socket.game.getServerPosition(position.id);
+        currentEnemy.move(serverPosition);
         socket.game.checkEnemyTarget(currentEnemy);
 
         for (let player of socket.game.players) {

@@ -10,9 +10,21 @@ export interface Position {
     requireKey?: boolean;
 }
 
+export interface ClientPosition {
+    id: number;
+    x: number;
+    y: number;
+    neighbours: number[];
+}
+
 export interface ExtendedSocket extends SocketIO.Socket {
     game: Game;
     player: Player | Enemies;
+}
+
+export interface PlayerSocket extends SocketIO.Socket {
+    game: Game;
+    player: Player;
 }
 
 export interface Enemies {
