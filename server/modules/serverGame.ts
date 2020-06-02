@@ -1,7 +1,37 @@
-const positions = require('./serverPositions');
-const Player = require('./serverPlayer');
-const Board = require('./serverBoard');
-const { logProgress } = require('../controllers/sharedFunctions');
+import positions from './serverPositions';
+import { Player, Enemy } from './serverPlayer';
+import Board from './serverBoard';
+import { logProgress } from '../controllers/sharedFunctions';
+import { Enemies } from '../types';
+
+interface Game {
+    id: string;
+    roundCounter: number;
+    players: Player[];
+    caughtPlayers: string[];
+    enemyWinCounter: number;
+    playerTurnCompleted: number;
+    placedSoundCounter: number;
+
+    soundTokens: SoundToken[];
+    sightTokens: SightToken[];
+
+    enemyJoined: boolean;
+    enemyMovesCompleted: number;
+    enemyListened: number;
+    board: Board;
+    enemies: Enemies;
+}
+
+interface SightToken {
+    id: number;
+    enemyID: string[];
+}
+
+interface SoundToken {
+    id: number;
+    enemyID: string;
+}
 
 class Game {
     constructor() {
@@ -19,14 +49,14 @@ class Game {
         this.enemyListened = 0;
 
         this.board = new Board();
-        this.enemies = { e1: new Player.Evil('e1'), e2: new Player.Evil('e2') };
+        this.enemies = { e1: new Enemy('e1'), e2: new Enemy('e2') };
     }
 
     generateGameID = () => {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
 
-    addPlayer = (newPlayer) => {
+    addPlayer = (newPlayer: Player) => {
         this.players.push(newPlayer);
     }
 
@@ -37,30 +67,28 @@ class Game {
         }
     }
 
-    addToken = (positionID, type, enemyID) => {
+    addToken = (positionID: number, type: string, enemyID: string[] | string) => {
         if (type === 'sound') {
-            this.soundTokens.push({ id: positionID, enemyID });
+            this.soundTokens.push({ id: positionID, enemyID: enemyID as string });
         } else if (type === 'sight') {
-            this.sightTokens.push({ id: positionID, enemyID });
+            this.sightTokens.push({ id: positionID, enemyID: enemyID as string[] });
         }
     }
 
-    seenSomeone = enemyID => {
+    seenSomeone = (enemyID: string) => {
         return Boolean(this.sightTokens.find(token => token.enemyID.includes(enemyID)));
     }
 
-    heardSomeone = enemyID => {
+    heardSomeone = (enemyID: string) => {
         return Boolean(this.soundTokens.find(token => token.enemyID === enemyID));
+
     }
 
     getVisiblePlayers = () => {
-        return this.players.map(player => player.visible ? {
-            id: player.id,
-            position: player.position,
-        } : { id: '', position: { id: '' } });
+        return this.players.filter(player => player.visible).map(player => { return { id: player.id, position: player.position } });
     }
 
-    checkEnemyTarget = (enemy) => {
+    checkEnemyTarget = (enemy: Enemy) => {
         for (let player of this.players) {
             if (enemy.checkTarget(player) && !this.caughtPlayers.includes(player.id)) {
                 this.enemyWinCounter++;
@@ -75,21 +103,21 @@ class Game {
         }
     }
 
-    addCaughtPlayer = (player) => {
+    addCaughtPlayer = (player: Player) => {
         this.caughtPlayers.push(player.id);
     }
 
-    removeCaughtPlayer = (player) => {
+    removeCaughtPlayer = (player: Player) => {
         this.caughtPlayers = this.caughtPlayers.filter(id => id != player.id);
     }
 
-    isCaught = (player) => {
+    isCaught = (player: Player) => {
         return this.caughtPlayers.includes(player.id);
     }
 
-    generatePlayerInfo = username => {
+    generatePlayerInfo = (username: string) => {
         return {
-            id: this.players.length,
+            id: this.players.length.toString(),
             home: positions[1 + this.players.length],
             key: positions[12 + this.players.length],
             goal: positions[10 + this.players.length],
@@ -97,9 +125,9 @@ class Game {
         };
     }
 
-    getServerPosition = (id) => {
+    getServerPosition = (id: number) => {
         return positions[id];
     }
 }
 
-module.exports = Game;
+export default Game;

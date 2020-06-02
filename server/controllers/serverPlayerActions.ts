@@ -1,10 +1,11 @@
-const io = require('../../index').io;
+import { io } from '../../index';
+import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
+import { PlayerSocket, Position, ClientPosition } from '../types';
+import { Player, Enemy } from '../modules/serverPlayer';
 
-const { updateBoard, logProgress, logSound, isSeen } = require('./sharedFunctions');
+io.on('connection', (socket: PlayerSocket) => {
 
-io.on('connection', socket => {
-
-    socket.on('player selects pace', ({ pace }) => {
+    socket.on('player selects pace', ({ pace }: { pace: string }) => {
         socket.player.pace = pace;
         socket.player.stepsLeft = pace === 'stand' ? 0
             : pace === 'sneak' ? 1
@@ -26,9 +27,9 @@ io.on('connection', socket => {
         });
     }
 
-    socket.on('player takes step', ({ position }) => {
-        position = socket.game.getServerPosition(position.id)
-        socket.player.position = position;
+    socket.on('player takes step', ({ position }: { position: ClientPosition }) => {
+        const serverPosition = socket.game.getServerPosition(position.id);
+        socket.player.position = serverPosition;
         socket.player.stepsLeft--;
 
         const seenBy = isSeen(socket.player, socket.game);
@@ -41,7 +42,7 @@ io.on('connection', socket => {
             socket.game.removeCaughtPlayer(socket.player);
             logProgress(`You are out of sight and can move freely again`, { socket });
         }
-        socket.player.path.push({ position, visible: socket.player.visible, enemyID: seenBy });
+        socket.player.path.push({ position: socket.player.position, visible: socket.player.visible, enemyID: seenBy });
 
         playerStepOptions();
     });
@@ -59,7 +60,7 @@ io.on('connection', socket => {
     socket.on('player move completed', () => {
         socket.player.checkTarget(socket, socket.game.id);
 
-        if (socket.player.visible || socket.player.caught) { 
+        if (socket.player.visible || socket.player.caught) {
             endPlayerTurn();
         } else {
             socket.player.caught = false;
@@ -70,18 +71,18 @@ io.on('connection', socket => {
         }
     });
 
-    const leaveSight = player => {
+    const leaveSight = (player: Player) => {
         let path = player.path.reverse();
         for (let obj of path) {
             if (obj.visible && obj != path[0]) {
                 socket.game.addToken(obj.position.id, 'sight', obj.enemyID);
                 logProgress(`${player.username} has disappeared`, { room: socket.game.id });
-                return
+                return;
             }
         }
     }
 
-    const playerMakeSound = (player, sound) => {
+    const playerMakeSound = (player: Player, sound: number) => {
         if (socket.game.enemyListened === 0) {
             socket.game.enemyListened++;
             makeSound(player, sound, socket.game.enemies.e1);
@@ -94,7 +95,7 @@ io.on('connection', socket => {
         }
     }
 
-    const makeSound = (player, sound, enemy) => {
+    const makeSound = (player: Player, sound: number, enemy: Enemy) => {
         const heardTo = socket.game.board.isHeard(player.position, enemy.position, sound);
         if (heardTo) {
             if (heardTo.length > 1) {
@@ -107,7 +108,7 @@ io.on('connection', socket => {
         playerMakeSound(player, sound);
     }
 
-    socket.on('player placed token', ({ position, turn, enemyID, sound }) => { //TODO: check
+    socket.on('player placed token', ({ position, turn, enemyID, sound }: { position: Position, turn: string, enemyID: string, sound: number }) => {
         if (turn === 'player') {
             socket.game.addToken(position.id, 'sound', enemyID);
             playerMakeSound(socket.player, sound);

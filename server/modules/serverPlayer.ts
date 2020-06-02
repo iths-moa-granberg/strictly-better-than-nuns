@@ -1,8 +1,52 @@
-const enemyPaths = require('./enemyPaths.js');
-const { logProgress } = require('../controllers/sharedFunctions');
+import enemyPaths from './enemyPaths';
+import { logProgress } from '../controllers/sharedFunctions';
+import { Position } from '../types';
+
+interface Player {
+    id: string;
+    position: Position;
+    home: Position;
+    key: Position;
+    goal: Position;
+    visible: boolean;
+    isEvil: boolean;
+    pace: string;
+    stepsLeft: number;
+    path: PlayerPathPosition[];
+    hasKey: boolean;
+    hasGoal: boolean;
+    caught: boolean;
+    username: string;
+}
+
+interface Enemy {
+    id: string;
+    position: Position;
+    isEvil: boolean;
+    stepsLeft: number;
+    pace: string;
+
+    playersVisible: boolean;
+    path: Position[];
+    lastPosition: Position;
+}
+
+interface PlayerPathPosition {
+    position: Position;
+    visible: boolean;
+    enemyID: string[];
+}
+
+interface PlayerConstructor {
+    id: string;
+    home: Position;
+    key: Position;
+    goal: Position;
+    username: string;
+}
 
 class Player {
-    constructor({ id, home, key, goal, username }) {
+    constructor({ id, home, key, goal, username }: PlayerConstructor) {
         this.id = id;
         this.position = home;
 
@@ -30,7 +74,7 @@ class Player {
         this.hasGoal = false;
     }
 
-    checkTarget = (socket, room) => {
+    checkTarget = (socket: any, room: string) => {
         if (this.hasKey) {
             if (this.hasGoal) {
                 if (this.home.id === this.position.id) {
@@ -46,11 +90,11 @@ class Player {
         }
     }
 
-    resetPath = (enemyID) => {
+    resetPath = (enemyID: string[]) => {
         this.path = [{ position: this.position, visible: this.visible, enemyID }];
     }
 
-    updatePathVisibility = (position, enemyID) => {
+    updatePathVisibility = (position: Position, enemyID: string[]) => {
         this.path.forEach(obj => {
             if (obj.position.id === position.id) {
                 obj.visible = true;
@@ -60,9 +104,8 @@ class Player {
     }
 }
 
-class Enemy extends Player {
-    constructor(id) {
-        super({ id });
+class Enemy {
+    constructor(id: string) {
 
         if (id === 'e1') {
             this.path = enemyPaths[0];
@@ -70,22 +113,22 @@ class Enemy extends Player {
             this.path = enemyPaths[2];
         }
 
+        this.id = id;
         this.position = this.path[0];
         this.lastPosition = this.path[0];
 
-        this.visible = true;
         this.isEvil = true;
 
         this.playersVisible = false;
     }
 
-    move = (position) => {
+    move = (position: Position) => {
         this.stepsLeft--;
         this.lastPosition = this.position;
         this.position = position;
     }
 
-    checkTarget = (player) => {
+    checkTarget = (player: Player) => {
         return player.position.id === this.position.id;
     }
 
@@ -102,4 +145,4 @@ class Enemy extends Player {
     }
 }
 
-module.exports = { Good: Player, Evil: Enemy };
+export { Player, Enemy };

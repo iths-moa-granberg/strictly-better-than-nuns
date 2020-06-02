@@ -1,4 +1,10 @@
-const positions = {
+import { Position } from '../types';
+
+interface Positions {
+    [key: number]: Position;
+}
+
+const positions: Positions = {
     1: {
         id: 1,
         x: 5,
@@ -129,4 +135,4 @@ const positions = {
     },
 };
 
-module.exports = positions;
+export default positions;

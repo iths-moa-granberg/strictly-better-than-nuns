@@ -1,4 +1,4 @@
-const positions = require('./serverPositions.js');
+import positions from './serverPositions';
 
 const enemyPaths = [
     [positions[8], positions[7], positions[11], positions[10], positions[14], positions[15], positions[16], positions[12], positions[8]],
@@ -14,4 +14,4 @@ const enemyPaths = [
     [positions[6], positions[2], positions[1], positions[5], positions[9], positions[13]],
 ];
 
-module.exports = enemyPaths;
+export default enemyPaths;

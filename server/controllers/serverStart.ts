@@ -1,10 +1,30 @@
-const io = require('../../index').io;
+import { io } from '../../index';
+import Game from '../modules/serverGame';
+import { Player } from '../modules/serverPlayer';
+import { updateBoard, startNextTurn, logProgress } from './sharedFunctions';
+import { ExtendedSocket } from '../types';
 
-const Game = require('../modules/serverGame');
-const Player = require('../modules/serverPlayer');
-const { updateBoard, startNextTurn, logProgress } = require('./sharedFunctions');
+interface Games {
+    [key: string]: StartGame;
+}
 
-let games = {};
+interface StartGame {
+    game: Game;
+    name: string;
+    status: string;
+    users: Users;
+}
+
+interface Users {
+    [key: string]: User;
+}
+
+interface User {
+    username: string;
+    role: string;
+}
+
+let games: Games = {};
 
 const getOpenGames = () => {
     return Object.keys(games).map(id => {
@@ -14,11 +34,11 @@ const getOpenGames = () => {
     });
 }
 
-io.on('connection', socket => {
+io.on('connection', (socket: ExtendedSocket) => {
 
     socket.emit('start screen', { openGames: getOpenGames() });
 
-    socket.on('init new game', ({ user }) => {
+    socket.on('init new game', ({ user }: { user: { username: string, userID: string } }) => {
         socket.game = new Game();
 
         games[socket.game.id] = {
@@ -34,7 +54,7 @@ io.on('connection', socket => {
         logProgress(`${user.username} has joined`, { room: socket.game.id });
     });
 
-    socket.on('join game', ({ gameID, user }) => {
+    socket.on('join game', ({ gameID, user }: { gameID: string, user: { username: string, userID: string } }) => {
         games[gameID].users[user.userID] = { username: user.username, role: '' };
         socket.game = games[gameID].game;
 
@@ -46,12 +66,12 @@ io.on('connection', socket => {
         logProgress(`${user.username} has joined`, { room: socket.game.id });
     });
 
-    socket.on('player joined', ({ good, user }) => {
+    socket.on('player joined', ({ good, user }: { good: boolean, user: { username: string, userID: string } }) => {
         if (good) {
             games[socket.game.id].users[user.userID].role = 'good';
-            socket.player = new Player.Good(socket.game.generatePlayerInfo(user.username));
+            socket.player = new Player(socket.game.generatePlayerInfo(user.username));
 
-            socket.game.addPlayer(socket.player);
+            socket.game.addPlayer(socket.player as Player);
             socket.emit('set up player', {
                 id: socket.player.id,
                 home: socket.player.home,
@@ -93,7 +113,7 @@ io.on('connection', socket => {
     socket.on('start', () => {
         logProgress(`The game has started!`, { room: socket.game.id });
 
-        socket.game.status = 'closed';
+        games[socket.game.id].status = 'closed';
         io.emit('update open games', ({ openGames: getOpenGames() }));
         startNextTurn(socket.game);
         logProgress(`Players turn`, { room: socket.game.id });
