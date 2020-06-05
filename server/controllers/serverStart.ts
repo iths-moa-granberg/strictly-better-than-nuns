@@ -31,7 +31,7 @@ const getOpenGames = () => {
         if (games[id].status === 'open') {
             return { id, name: games[id].name, users: games[id].users }
         }
-    });
+    }).filter(game => game != null);
 }
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -107,7 +107,7 @@ io.on('connection', (socket: ExtendedSocket) => {
         if (Object.values(users).find(user => user.role === '')) {
             return false;
         }
-        return Object.values(users).filter(user => user.role === 'evil').length;
+        return Boolean(Object.values(users).filter(user => user.role === 'evil').length);
     }
 
     socket.on('start', () => {

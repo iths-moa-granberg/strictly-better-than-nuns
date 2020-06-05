@@ -82,7 +82,7 @@ const positions = {
         y: 187,
         neighbours: [8, 16],
     },
-    
+
     13: {
         id: 13,
         x: 5,
@@ -111,3 +111,5 @@ const positions = {
         neighbours: [15, 12],
     },
 };
+
+export default positions;

@@ -21,3 +21,5 @@ class Enemy {
         this.isEvil = true;
     }
 }
+
+export { Player, Enemy };
