@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../App';
 import { Player, Enemy } from '../modules/player';
 
-const Startscreen = ({ openGames, setOpenGames, setMyPlayer, myPlayer, setCurrentPlayer }) => {
+const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
+  const [openGames, setOpenGames] = useState([]);
   const [enemyJoined, setEnemyJoined] = useState(false);
   const [joinedGame, setJoinedGame] = useState(false);
   const [ready, setReady] = useState(false);
@@ -18,6 +19,10 @@ const Startscreen = ({ openGames, setOpenGames, setMyPlayer, myPlayer, setCurren
   }
 
   useEffect(() => {
+    socket.on('start screen', ({ openGames }) => {
+      setOpenGames(openGames);
+    });
+
     socket.on('update open games', ({ openGames }) => {
       setOpenGames(openGames);
     });
