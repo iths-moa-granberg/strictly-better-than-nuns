@@ -2,7 +2,7 @@ import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { updateBoard, startNextTurn, logProgress } from './sharedFunctions';
-import { ExtendedSocket } from '../types';
+import { ExtendedSocket, Users } from '../types';
 
 interface Games {
     [key: string]: StartGame;
@@ -13,15 +13,6 @@ interface StartGame {
     name: string;
     status: string;
     users: Users;
-}
-
-interface Users {
-    [key: string]: User;
-}
-
-interface User {
-    username: string;
-    role: string;
 }
 
 let games: Games = {};

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../App';
 import { Player, Enemy } from '../modules/player';
-import { createUser } from './startscreenUtils';
+import { createUser, getUsernames } from './startscreenUtils';
 
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   const [openGames, setOpenGames] = useState([]);
@@ -124,10 +124,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
       <Content />
     </div>
   );
-}
-
-const getUsernames = users => {
-  return Object.values(users).map(user => user.username).join(', ');
 }
 
 export default Startscreen;
