@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../App';
 import { Player, Enemy } from '../modules/player';
+import { createUser } from './startscreenUtils';
 
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   const [openGames, setOpenGames] = useState([]);
@@ -8,15 +9,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   const [joinedGame, setJoinedGame] = useState(false);
   const [ready, setReady] = useState(false);
   const [user, setUser] = useState(null);
-
-  const handleUsernameInput = e => {
-    if (e.key === 'Enter') {
-      setUser({
-        username: e.target.value,
-        userID: e.target.value + '_' + Math.random().toString(36).substr(2, 9),
-      });
-    }
-  }
 
   useEffect(() => {
     socket.on('start screen', ({ openGames }) => {
@@ -64,15 +56,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
     socket.emit('player joined', ({ good, user }));
   }
 
-  const NewGameButton = (user) => {
-    return (
-      <button onClick={() => {
-        setJoinedGame(true);
-        socket.emit('init new game', (user))
-      }}>New game</button>
-    );
-  }
-
   const Game = ({ game }) => {
     return (
       <div>
@@ -87,6 +70,12 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   }
 
   const InputUsername = () => {
+    const handleUsernameInput = e => {
+      if (e.key === 'Enter') {
+        setUser(createUser(e.target.value));
+      }
+    }
+
     return (
       <input type="text" placeholder="username"
         onKeyDown={e => handleUsernameInput(e)} />
@@ -107,24 +96,32 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
       </div>
     );
   }
+
   const GameList = () => {
+    const handleNewGame = () => {
+      setJoinedGame(true);
+      socket.emit('init new game', (user))
+    }
+
     return (
       <>
         {openGames.map(game => <Game key={game.id} game={game} />)}
-        <NewGameButton user={user} />
+        <button onClick={handleNewGame}>New game</button>
       </>
     );
   }
 
+  const Content = () => {
+    if (!user) return <InputUsername />
+    if (ready) return <StartButton />
+    if (myPlayer) return <p>wait for other players</p>
+    if (joinedGame) return <GoodOrEvilButtons />
+    return <GameList />
+  }
+
   return (
-    <div className="main-wrapper">
-      {!user ? <InputUsername />
-        : ready ? <StartButton />
-          : myPlayer ? <p>wait for other players</p>
-            : joinedGame ? <GoodOrEvilButtons />
-              : openGames ? <GameList />
-                : <NewGameButton user={user} />
-      }
+    <div className="start-wrapper">
+      <Content />
     </div>
   );
 }
