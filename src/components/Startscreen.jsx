@@ -51,7 +51,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
       setCurrentPlayer(enemy.e1);
     });
 
-    socket.on('waiting for players', ({ enemyJoined }) => {
+    socket.on('waiting for players', () => {
       setReady(false);
     });
 

@@ -61,7 +61,7 @@ io.on('connection', (socket: ExtendedSocket) => {
         io.emit('update open games', ({ openGames: getOpenGames() }));
         socket.join(socket.game.id);
         socket.emit('init', ({ enemyJoined: socket.game.enemyJoined }));
-        io.in(socket.game.id).emit('waiting for players', ({ enemyJoined: socket.game.enemyJoined }));
+        io.in(socket.game.id).emit('waiting for players');
 
         logProgress(`${user.username} has joined`, { room: socket.game.id });
     });
@@ -95,7 +95,7 @@ io.on('connection', (socket: ExtendedSocket) => {
         if (playersReady()) {
             io.in(socket.game.id).emit('players ready');
         } else {
-            io.in(socket.game.id).emit('waiting for players', ({ enemyJoined: socket.game.enemyJoined }));
+            io.in(socket.game.id).emit('waiting for players');
         }
     });
 
