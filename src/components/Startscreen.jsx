@@ -28,7 +28,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
     });
 
     socket.on('set up player', ({ id, home, key, goal, isEvil }) => {
-      const player = new Player(id, home, key, goal, isEvil)
+      const player = new Player(id, home, key, goal, isEvil);
       setMyPlayer(player);
       setCurrentPlayer(player);
     });
@@ -100,7 +100,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   const GameList = () => {
     const handleNewGame = () => {
       setJoinedGame(true);
-      socket.emit('init new game', (user))
+      socket.emit('init new game', { user });
     }
 
     return (
