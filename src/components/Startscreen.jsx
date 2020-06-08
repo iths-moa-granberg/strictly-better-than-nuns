@@ -52,10 +52,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
     });
   });
 
-  const join = good => {
-    socket.emit('player joined', ({ good, user }));
-  }
-
   const Game = ({ game }) => {
     return (
       <div>
@@ -89,6 +85,10 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   }
 
   const GoodOrEvilButtons = () => {
+    const join = good => {
+      socket.emit('player joined', ({ good, user }));
+    }
+
     return (
       <div>
         <button disabled={enemyJoined} onClick={() => join(false)}>Evil</button>
