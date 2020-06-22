@@ -12,14 +12,11 @@ const App = () => {
 
   return (
     <div>
-      {gameState === 'startscreen' &&
-        <Startscreen
-          myPlayer={myPlayer}
-          setMyPlayer={setMyPlayer}
-          setCurrentPlayer={setCurrentPlayer}
-        />}
+      {gameState === 'startscreen' && (
+        <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayer={setCurrentPlayer} />
+      )}
     </div>
   );
-}
+};
 
 export { App, socket };

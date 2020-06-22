@@ -6,5 +6,7 @@ export const createUser = (username: string) => ({
 });
 
 export const getUsernames = (users: Users) => {
-  return Object.values(users).map(user => user.username).join(', ');
-}
+  return Object.values(users)
+    .map((user) => user.username)
+    .join(', ');
+};
