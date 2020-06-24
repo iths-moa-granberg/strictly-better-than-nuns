@@ -3,7 +3,7 @@ import positions from '../modules/positions';
 import Position from './Position';
 import { socket } from '../App';
 
-const Board = ({ currentPlayer }) => {
+const Board = ({ currentPlayerId, myPlayer }) => {
   const [activePlayer, setActivePlayer] = useState(null);
   const [players, setPlayers] = useState(null);
   const [soundTokens, setSoundTokens] = useState(null);
@@ -16,7 +16,7 @@ const Board = ({ currentPlayer }) => {
 
   useEffect(() => {
     socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
-      setActivePlayer(currentPlayer);
+      setActivePlayer(myPlayer.isEvil ? myPlayer[currentPlayerId] : myPlayer);
       setPlayers(players);
       setSoundTokens(soundTokens);
       setSightTokens(sightTokens);

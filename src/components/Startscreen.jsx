@@ -3,7 +3,7 @@ import { socket } from '../App';
 import { Player, Enemy } from '../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 
-const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer, setGameState }) => {
+const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId, setGameState }) => {
   const [openGames, setOpenGames] = useState([]);
   const [enemyJoined, setEnemyJoined] = useState(false);
   const [joinedGame, setJoinedGame] = useState(false);
@@ -30,7 +30,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer, setGameState }) 
     socket.on('set up player', ({ id, home, key, goal, isEvil }) => {
       const player = new Player(id, home, key, goal, isEvil);
       setMyPlayer(player);
-      setCurrentPlayer(player);
     });
 
     socket.on('set up enemy', ({ startPositions }) => {
@@ -40,7 +39,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer, setGameState }) 
         isEvil: true,
       };
       setMyPlayer(enemy);
-      setCurrentPlayer(enemy.e1);
+      setCurrentPlayerId('e1');
     });
 
     socket.on('waiting for players', () => {
