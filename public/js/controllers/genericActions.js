@@ -1,16 +1,3 @@
-socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
-    if (myPlayer) {
-        board.activePlayer = currentPlayer;
-        board.players = players;
-        board.soundTokens = soundTokens;
-        board.sightTokens = sightTokens;
-        board.e1Path = enemyPaths[0];
-        board.e2Path = enemyPaths[1];
-        board.reachablePositions = reachablePositions;
-        board.renderBoard();
-    }
-});
-
 socket.on('players turn', ({ resetPosition, caughtPlayers }) => {
     if (myPlayer.isEvil) {
         userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Startscreen from './components/Startscreen';
+import Board from './components/Board';
 
 const socket = io('http://localhost:3002');
 
@@ -13,8 +14,14 @@ const App = () => {
   return (
     <div>
       {gameState === 'startscreen' && (
-        <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayer={setCurrentPlayer} />
+        <Startscreen
+          myPlayer={myPlayer}
+          setMyPlayer={setMyPlayer}
+          setCurrentPlayer={setCurrentPlayer}
+          setGameState={setGameState}
+        />
       )}
+      {gameState === 'started' && <Board currentPlayer={currentPlayer} />}
     </div>
   );
 };

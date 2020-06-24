@@ -65,21 +65,6 @@ class UserOptions {
         this.wrapper.removeChild(btn);
     }
 
-    renderChoosePlayer = (handler) => {
-        this.wrapper.innerHTML = this._renderBtn('Good');
-        this.wrapper.innerHTML += this._renderBtn('Evil');
-        const goodBtn = document.querySelector('button');
-        const evilBtn = document.querySelectorAll('button')[1];
-        goodBtn.addEventListener('click', e => handler(true));
-        evilBtn.addEventListener('click', e => handler(false));
-    }
-
-    renderStartGame = (handler) => {
-        this.wrapper.innerHTML = this._renderBtn('Start');
-        const start = document.querySelector('button');
-        start.addEventListener('click', e => handler());
-    }
-
     renderCaughtInstr = () => {
         this.wrapper.innerHTML = 'you are caught, walk straight to home until no longer in view'; //fillertext
     }
@@ -98,9 +83,5 @@ class UserOptions {
         this.wrapper.innerHTML += this._renderBtn('e1');
         this.wrapper.innerHTML += this._renderBtn('e2');
         this._addListeners(handler);
-    }
-
-    renderWaiting = text => {
-        this.wrapper.innerHTML = text;
     }
 }
