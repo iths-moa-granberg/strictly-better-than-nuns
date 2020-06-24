@@ -3,7 +3,7 @@ import { socket } from '../App';
 import { Player, Enemy } from '../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 
-const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
+const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer, setGameState }) => {
   const [openGames, setOpenGames] = useState([]);
   const [enemyJoined, setEnemyJoined] = useState(false);
   const [joinedGame, setJoinedGame] = useState(false);
@@ -79,7 +79,15 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayer }) => {
   };
 
   const StartButton = () => {
-    return <button onClick={() => socket.emit('start')}>Start</button>;
+    return (
+      <button
+        onClick={() => {
+          socket.emit('start');
+          setGameState('started');
+        }}>
+        Start
+      </button>
+    );
   };
 
   const GoodOrEvilButtons = () => {
