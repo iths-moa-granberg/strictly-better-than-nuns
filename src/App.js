@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
 import Startscreen from './components/Startscreen';
@@ -9,7 +9,14 @@ const socket = io('http://localhost:3002');
 const App = () => {
   const [gameState, setGameState] = useState('startscreen');
   const [myPlayer, setMyPlayer] = useState(null);
-  const [currentPlayer, setCurrentPlayer] = useState(null);
+  const [currentPlayerId, setCurrentPlayerId] = useState(null);
+
+  useEffect(() => {
+    socket.on('game started', () => {
+      setGameState('started');
+    });
+
+  }, []);
 
   return (
     <div>
@@ -18,7 +25,6 @@ const App = () => {
           myPlayer={myPlayer}
           setMyPlayer={setMyPlayer}
           setCurrentPlayerId={setCurrentPlayerId}
-          setGameState={setGameState}
         />
       )}
       {gameState === 'started' && <Board currentPlayerId={currentPlayerId} myPlayer={myPlayer} />}

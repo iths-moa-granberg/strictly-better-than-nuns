@@ -3,7 +3,7 @@ import { socket } from '../App';
 import { Player, Enemy } from '../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 
-const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId, setGameState }) => {
+const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   const [openGames, setOpenGames] = useState([]);
   const [enemyJoined, setEnemyJoined] = useState(false);
   const [joinedGame, setJoinedGame] = useState(false);
@@ -82,7 +82,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId, setGameState }
       <button
         onClick={() => {
           socket.emit('start');
-          setGameState('started');
         }}>
         Start
       </button>

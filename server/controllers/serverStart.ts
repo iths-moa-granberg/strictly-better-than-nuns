@@ -19,12 +19,12 @@ let games: Games = {};
 
 const getOpenGames = () => {
   return Object.keys(games)
-    .map((id) => {
+    .map(id => {
       if (games[id].status === 'open') {
         return { id, name: games[id].name, users: games[id].users };
       }
     })
-    .filter((game) => game != null);
+    .filter(game => game != null);
 };
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -96,17 +96,19 @@ io.on('connection', (socket: ExtendedSocket) => {
     if (Object.values(users).length < 2) {
       return false;
     }
-    if (Object.values(users).find((user) => user.role === '')) {
+    if (Object.values(users).find(user => user.role === '')) {
       return false;
     }
-    return Boolean(Object.values(users).filter((user) => user.role === 'evil').length);
+    return Boolean(Object.values(users).filter(user => user.role === 'evil').length);
   };
 
   socket.on('start', () => {
     logProgress(`The game has started!`, { room: socket.game.id });
+    io.in(socket.game.id).emit('game started');
 
     games[socket.game.id].status = 'closed';
     io.emit('update open games', { openGames: getOpenGames() });
+    updateBoard(socket.game);
     startNextTurn(socket.game);
     logProgress(`Players turn`, { room: socket.game.id });
   });
