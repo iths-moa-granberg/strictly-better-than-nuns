@@ -27,7 +27,11 @@ const App = () => {
           setCurrentPlayerId={setCurrentPlayerId}
         />
       )}
-      {gameState === 'started' && <Board currentPlayerId={currentPlayerId} myPlayer={myPlayer} />}
+      {gameState === 'started' && (
+        <>
+          <Board myPlayer={myPlayer} />
+        </>
+      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import positions from '../modules/positions';
 import Position from './Position';
 import { socket } from '../App';
 
-const Board = ({ currentPlayerId, myPlayer }) => {
+const Board = ({ myPlayer }) => {
   const [activePlayer, setActivePlayer] = useState(null);
   const [players, setPlayers] = useState(null);
   const [soundTokens, setSoundTokens] = useState(null);
@@ -16,7 +16,7 @@ const Board = ({ currentPlayerId, myPlayer }) => {
 
   useEffect(() => {
     socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
-      setActivePlayer(myPlayer.isEvil ? myPlayer[currentPlayerId] : myPlayer);
+      setActivePlayer(myPlayer);
       setPlayers(players);
       setSoundTokens(soundTokens);
       setSightTokens(sightTokens);
@@ -31,7 +31,7 @@ const Board = ({ currentPlayerId, myPlayer }) => {
   }
 
   return (
-    <section>
+    <section className="board-wrapper">
       {positionsArray.map(position => {
         const children = getChildren(position, activePlayer, players, soundTokens, sightTokens);
         const className = getClassName(position, e1Path, e2Path, reachablePositions);
@@ -52,8 +52,10 @@ const Token = ({ type }) => {
 const getChildren = (position, activePlayer, players, soundTokens, sightTokens) => {
   let children = [];
 
-  if (position.id === activePlayer.position.id) {
-    children = children.concat([<Player playerId={activePlayer.id} />]);
+  if (!activePlayer.isEvil) {
+    if (position.id === activePlayer.position.id) {
+      children = children.concat([<Player playerId={activePlayer.id} />]);
+    }
   }
   for (let player of players) {
     if (position.id === player.position.id) {
