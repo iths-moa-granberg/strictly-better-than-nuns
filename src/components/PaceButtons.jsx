@@ -17,7 +17,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
       setPlayerDisabled(true);
       socket.emit('player selects pace', { pace: 'walk' });
     }
-  }, [caught]);
+  }, [caught, myPlayer]);
 
   const handleSelectsPace = pace => {
     if (myPlayer.isEvil) {
