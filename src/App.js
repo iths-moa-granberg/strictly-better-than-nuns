@@ -36,7 +36,7 @@ const App = () => {
       )}
       {gameState === 'started' && (
         <>
-          <Board myPlayer={myPlayer} />
+          <Board myPlayer={myPlayer} setMyPlayer={setMyPlayer} currentPlayerId={currentPlayerId} />
         </>
       )}
     </div>

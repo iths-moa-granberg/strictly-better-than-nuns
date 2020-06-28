@@ -63,7 +63,7 @@ body {
     background-color: rgb(139, 157, 157);
 }
 
-.user-options-wrapper > button {
+.user-actions-wrapper > button {
     height: 2rem;
     margin: 2rem 1rem;
 }

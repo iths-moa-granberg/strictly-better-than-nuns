@@ -3,18 +3,6 @@ class UserOptions {
         this.wrapper = document.querySelector('.user-options-wrapper');
     }
 
-    renderPaceBtns = (handler, types, selected, className) => {
-        this.wrapper.innerHTML = '';
-        for (let type of types) {
-            if (selected && type.toLowerCase() != selected) {
-                this.wrapper.innerHTML += this._renderBtn(type, className);
-            } else {
-                this.wrapper.innerHTML += this._renderBtn(type, '');
-            }
-        }
-        this._addListeners(handler);
-    }
-
     _renderBtn = (type, className) => {
         return `
         <button class="${type.toLowerCase()} ${className}">${type}</button>
@@ -28,21 +16,6 @@ class UserOptions {
         }
     }
 
-    disableBtns = (className) => {
-        let btns;
-        if (className) {
-            btns = this.wrapper.querySelectorAll(className);
-        } else {
-            btns = this.wrapper.querySelectorAll('button');
-        }
-        btns.forEach(btn => btn.disabled = true);
-    }
-
-    enableBtns = () => {
-        const btns = this.wrapper.querySelectorAll('button');
-        btns.forEach(btn => btn.disabled = false);
-    }
-
     renderConfirmDestinationBtn = (handlerConfirm, handlerBack, paramBack, paramConfirm) => {
         this.wrapper.innerHTML = this._renderBtn('Confirm');
         this.wrapper.innerHTML += this._renderBtn('Back');
@@ -54,19 +27,6 @@ class UserOptions {
 
     renderTokenInstr = () => {
         this.wrapper.innerHTML = 'click on soundtoken to select sound-position'; //fillertext
-    }
-
-    clear = () => {
-        this.wrapper.innerHTML = '';
-    }
-
-    removeBtn = (className) => {
-        const btn = this.wrapper.querySelector(className);
-        this.wrapper.removeChild(btn);
-    }
-
-    renderCaughtInstr = () => {
-        this.wrapper.innerHTML = 'you are caught, walk straight to home until no longer in view'; //fillertext
     }
 
     renderChoosePath = (paths, handler) => {

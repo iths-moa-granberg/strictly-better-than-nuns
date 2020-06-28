@@ -1,29 +1,3 @@
-socket.on('players turn', ({ resetPosition, caughtPlayers }) => {
-    if (myPlayer.isEvil) {
-        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run']);
-        userOptions.disableBtns();
-    } else {
-        if (resetPosition) {
-            myPlayer.position = resetPosition;
-            board.renderBoard();
-        }
-        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run']);
-        if (caughtPlayers.includes(myPlayer.id)) {
-            userOptions.renderCaughtInstr();
-            socket.emit('player selects pace', ({ pace: 'walk' }));
-        }
-    }
-});
-
-const selectPace = (pace) => {
-    if (myPlayer.isEvil) {
-        socket.emit('enemy selects pace', ({ pace }));
-        userOptions.renderPaceBtns(selectPace, ['Walk', 'Run'], pace, 'disabled');
-    } else {
-        socket.emit('player selects pace', ({ pace }));
-        userOptions.renderPaceBtns(selectPace, ['Stand', 'Sneak', 'Walk', 'Run'], pace, 'disabled');
-    }
-}
 
 socket.on('possible steps', ({ possibleSteps, visible, stepsLeft }) => {
     //if player && visible, warning

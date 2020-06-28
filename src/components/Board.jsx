@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { socket } from '../App';
 import positions from '../modules/positions';
 import Position from './Position';
-import { socket } from '../App';
+import UserActions from './UserActions';
 
-const Board = ({ myPlayer }) => {
+const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
+  const [actionState, setActionState] = useState('pace');
+
   const [activePlayer, setActivePlayer] = useState(null);
   const [players, setPlayers] = useState(null);
   const [soundTokens, setSoundTokens] = useState(null);
@@ -37,13 +40,21 @@ const Board = ({ myPlayer }) => {
   }
 
   return (
-    <section className="board-wrapper">
-      {positionsArray.map(position => {
-        const children = getChildren(position, activePlayer, players, soundTokens, sightTokens);
-        const className = getClassName(position, e1Path, e2Path, reachablePositions);
-        return <Position key={position.id} position={position} className={className} children={children} />;
-      })}
-    </section>
+    <>
+      <section className="board-wrapper">
+        {positionsArray.map(position => {
+          const children = getChildren(position, activePlayer, players, soundTokens, sightTokens);
+          const className = getClassName(position, e1Path, e2Path, reachablePositions);
+          return <Position key={position.id} position={position} className={className} children={children} />;
+        })}
+      </section>
+      <UserActions
+        actionState={actionState}
+        currentPlayerId={currentPlayerId}
+        myPlayer={myPlayer}
+        setMyPlayer={setMyPlayer}
+      />
+    </>
   );
 };
 
