@@ -12,7 +12,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
   }, [playersTurn]);
 
   useEffect(() => {
-    if (!myPlayer.isEvil && caught) {
+    if (!myPlayer.isEvil && caught && !selectedPace) {
       setSelectedPace('walk');
       setPlayerDisabled(true);
       socket.emit('player selects pace', { pace: 'walk' });
