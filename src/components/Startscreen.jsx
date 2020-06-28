@@ -11,28 +11,28 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    socket.on('start screen', ({ openGames }) => {
+    const onStartScreen = ({ openGames }) => {
       setOpenGames(openGames);
-    });
+    };
 
-    socket.on('update open games', ({ openGames }) => {
+    const onUpdateOpenGames = ({ openGames }) => {
       setOpenGames(openGames);
-    });
+    };
 
-    socket.on('disable join as evil', () => {
+    const onDisableJoinAsEvil = () => {
       setEnemyJoined(true);
-    });
+    };
 
-    socket.on('init', ({ enemyJoined }) => {
+    const onInit = ({ enemyJoined }) => {
       setEnemyJoined(enemyJoined);
-    });
+    };
 
-    socket.on('set up player', ({ id, home, key, goal, isEvil }) => {
+    const onSetUpPlayer = ({ id, home, key, goal, isEvil }) => {
       const player = new Player(id, home, key, goal, isEvil);
       setMyPlayer(player);
-    });
+    };
 
-    socket.on('set up enemy', ({ startPositions }) => {
+    const onSetUpEnemy = ({ startPositions }) => {
       const enemy = {
         e1: new Enemy('e1', startPositions[0]),
         e2: new Enemy('e2', startPositions[1]),
@@ -40,16 +40,36 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
       };
       setMyPlayer(enemy);
       setCurrentPlayerId('e1');
-    });
+    };
 
-    socket.on('waiting for players', () => {
+    const onWaitingForPlayers = () => {
       setReady(false);
-    });
+    };
 
-    socket.on('players ready', () => {
+    const onPlayersReady = () => {
       setReady(true);
-    });
-  });
+    };
+
+    socket.on('start screen', onStartScreen);
+    socket.on('update open games', onUpdateOpenGames);
+    socket.on('disable join as evil', onDisableJoinAsEvil);
+    socket.on('init', onInit);
+    socket.on('set up player', onSetUpPlayer);
+    socket.on('set up enemy', onSetUpEnemy);
+    socket.on('waiting for players', onWaitingForPlayers);
+    socket.on('players ready', onPlayersReady);
+
+    return () => {
+      socket.off('start screen', onStartScreen);
+      socket.off('update open games', onUpdateOpenGames);
+      socket.off('disable join as evil', onDisableJoinAsEvil);
+      socket.off('init', onInit);
+      socket.off('set up player', onSetUpPlayer);
+      socket.off('set up enemy', onSetUpEnemy);
+      socket.off('waiting for players', onWaitingForPlayers);
+      socket.off('players ready', onPlayersReady);
+    };
+  }, [setCurrentPlayerId, setMyPlayer]);
 
   const Game = ({ game }) => {
     return (
