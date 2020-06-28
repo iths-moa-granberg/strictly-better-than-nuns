@@ -1,11 +1,4 @@
 
-socket.on('update player', ({ hasKey, hasGoal, visible }) => {
-    myPlayer.hasKey = hasKey;
-    myPlayer.hasGoal = hasGoal;
-    myPlayer.visible = visible;
-});
-
-
 const resetSteps = () => {
     board.reachablePositions = [];
     board.renderBoard();

@@ -16,7 +16,10 @@ const App = () => {
       setGameState('started');
     });
 
-  }, []);
+    socket.on('update player', ({ hasKey, hasGoal, visible }) => {
+      setMyPlayer({ ...myPlayer, hasKey, hasGoal, visible });
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
