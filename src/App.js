@@ -16,15 +16,21 @@ const App = () => {
       setGameState('started');
     };
 
+    socket.on('game started', onGameStarted);
+
+    return () => {
+      socket.off('game started', onGameStarted);
+    };
+  }, []);
+
+  useEffect(() => {
     const onUpdatePlayer = ({ hasKey, hasGoal, visible }) => {
       setMyPlayer({ ...myPlayer, hasKey, hasGoal, visible });
     };
 
-    socket.on('game started', onGameStarted);
     socket.on('update player', onUpdatePlayer);
 
     return () => {
-      socket.off('game started', onGameStarted);
       socket.off('update player', onUpdatePlayer);
     };
   }, [myPlayer, setMyPlayer]);
