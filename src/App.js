@@ -24,11 +24,7 @@ const App = () => {
   return (
     <div>
       {gameState === 'startscreen' && (
-        <Startscreen
-          myPlayer={myPlayer}
-          setMyPlayer={setMyPlayer}
-          setCurrentPlayerId={setCurrentPlayerId}
-        />
+        <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerId={setCurrentPlayerId} />
       )}
       {gameState === 'started' && (
         <>
