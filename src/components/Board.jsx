@@ -56,23 +56,23 @@ const Token = ({ type }) => {
 };
 
 const getChildren = (position, activePlayer, players, soundTokens, sightTokens) => {
-  let children = [];
+  const children = [];
 
   if (!activePlayer.isEvil) {
     if (position.id === activePlayer.position.id) {
-      children = children.concat([<Player playerId={activePlayer.id} />]);
+      children.push(<Player playerId={activePlayer.id} key={children.length} />);
     }
   }
   for (let player of players) {
     if (position.id === player.position.id) {
-      children = children.concat([<Player playerId={player.id} />]);
+      children.push(<Player playerId={player.id} key={children.length} />);
     }
   }
   if (soundTokens.find(token => token.id === position.id)) {
-    children = children.concat([<Token type={'sound'} />]);
+    children.push(<Token type={'sound'} key={children.length} />);
   }
   if (sightTokens.find(token => token.id === position.id)) {
-    children = children.concat([<Token type={'sight'} />]);
+    children.push(<Token type={'sight'} key={children.length} />);
   }
 
   return children;
