@@ -12,14 +12,22 @@ const App = () => {
   const [currentPlayerId, setCurrentPlayerId] = useState(null);
 
   useEffect(() => {
-    socket.on('game started', () => {
+    const onGameStarted = () => {
       setGameState('started');
-    });
+    };
 
-    socket.on('update player', ({ hasKey, hasGoal, visible }) => {
+    const onUpdatePlayer = ({ hasKey, hasGoal, visible }) => {
       setMyPlayer({ ...myPlayer, hasKey, hasGoal, visible });
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    };
+
+    socket.on('game started', onGameStarted);
+    socket.on('update player', onUpdatePlayer);
+
+    return () => {
+      socket.off('game started', onGameStarted);
+      socket.off('update player', onUpdatePlayer);
+    };
+  }, [myPlayer, setMyPlayer]);
 
   return (
     <div>
