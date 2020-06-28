@@ -15,7 +15,7 @@ const Board = ({ myPlayer }) => {
   const positionsArray = Object.values(positions);
 
   useEffect(() => {
-    socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
+    const updateBoard = ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
       setActivePlayer(myPlayer);
       setPlayers(players);
       setSoundTokens(soundTokens);
@@ -23,8 +23,14 @@ const Board = ({ myPlayer }) => {
       setE1Path(enemyPaths[0]);
       setE2Path(enemyPaths[1]);
       setReachablePositions(reachablePositions);
-    });
-  });
+    };
+
+    socket.on('update board', updateBoard);
+
+    return () => {
+      socket.off('update board', updateBoard);
+    };
+  }, [myPlayer]);
 
   if (!activePlayer || !players || !soundTokens || !sightTokens || !e1Path || !e2Path || !reachablePositions) {
     return <>loading</>;
