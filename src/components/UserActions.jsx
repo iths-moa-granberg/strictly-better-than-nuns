@@ -17,6 +17,18 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
   );
 
   useEffect(() => {
+    const onNextEnemyTurn = () => {
+      selectEnemyHandler(currentPlayerId === 'e1' ? 'e2' : 'e1');
+    };
+
+    socket.on('next enemy turn', onNextEnemyTurn);
+
+    return () => {
+      socket.off('next enemy turn', onNextEnemyTurn);
+    };
+  }, [currentPlayerId, selectEnemyHandler]);
+
+  useEffect(() => {
     const onPlayersTurn = ({ resetPosition, caughtPlayers }) => {
       setActionState('pace');
       if (resetPosition) {
@@ -30,20 +42,14 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
       setPaceProps({ playersTurn: false, caught: false });
     };
 
-    const onNextEnemyTurn = () => {
-      selectEnemyHandler(currentPlayerId === 'e1' ? 'e2' : 'e1');
-    };
-
     socket.on('players turn', onPlayersTurn);
     socket.on('enemy turn', onEnemyTurn);
-    socket.on('next enemy turn', onNextEnemyTurn);
 
     return () => {
       socket.off('players turn', onPlayersTurn);
       socket.off('enemy turn', onEnemyTurn);
-      socket.off('next enemy turn', onNextEnemyTurn);
     };
-  }, [myPlayer, setMyPlayer, setActionState, currentPlayerId, selectEnemyHandler]);
+  }, [myPlayer, setMyPlayer, setActionState]);
 
   return (
     <div className="user-actions-wrapper">
