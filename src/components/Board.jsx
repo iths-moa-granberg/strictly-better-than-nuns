@@ -4,7 +4,7 @@ import positions from '../modules/positions';
 import Position from './Position';
 import UserActions from './UserActions';
 
-const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
+const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) => {
   const [actionState, setActionState] = useState('pace');
   const [clickState, setClickState] = useState({ key: '', params: {} });
 
@@ -107,6 +107,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
         currentPlayerId={currentPlayerId}
         myPlayer={myPlayer}
         setMyPlayer={setMyPlayer}
+        setCurrentPlayerId={setCurrentPlayerId}
       />
     </>
   );

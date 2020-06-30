@@ -41,7 +41,12 @@ const App = () => {
         <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerId={setCurrentPlayerId} />
       )}
       {gameState === 'started' && (
-        <Board myPlayer={myPlayer} setMyPlayer={setMyPlayer} currentPlayerId={currentPlayerId} />
+        <Board
+          myPlayer={myPlayer}
+          setMyPlayer={setMyPlayer}
+          currentPlayerId={currentPlayerId}
+          setCurrentPlayerId={setCurrentPlayerId}
+        />
       )}
     </div>
   );
