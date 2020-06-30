@@ -88,13 +88,13 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   };
 
   const InputUsername = () => {
-    const handleUsernameInput = e => {
+    const handleUsernameInput = (e) => {
       if (e.key === 'Enter') {
         setUser(createUser(e.target.value));
       }
     };
 
-    return <input type="text" placeholder="username" onKeyDown={e => handleUsernameInput(e)} />;
+    return <input type="text" placeholder="username" onKeyDown={(e) => handleUsernameInput(e)} />;
   };
 
   const StartButton = () => {
@@ -109,7 +109,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   };
 
   const GoodOrEvilButtons = () => {
-    const join = good => {
+    const join = (good) => {
       socket.emit('player joined', { good, user });
     };
 
@@ -131,7 +131,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
 
     return (
       <>
-        {openGames.map(game => (
+        {openGames.map((game) => (
           <Game key={game.id} game={game} />
         ))}
         <button onClick={handleNewGame}>New game</button>

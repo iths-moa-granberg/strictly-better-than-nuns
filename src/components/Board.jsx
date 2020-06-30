@@ -44,8 +44,8 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
     };
   }, [myPlayer]);
 
-  const clickHandler = position => {
-    if (clickState === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
+  const clickHandler = (position) => {
+    if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
       if (myPlayer.isEvil) {
         socket.emit('enemy takes step', { position });
         //update position myPlayer[currentID];
@@ -65,7 +65,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
   return (
     <>
       <section className="board-wrapper">
-        {positionsArray.map(position => {
+        {positionsArray.map((position) => {
           const children = getChildren(position, myPlayer, players, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);
           return (
@@ -111,10 +111,10 @@ const getChildren = (position, myPlayer, players, soundTokens, sightTokens) => {
       children.push(<Player playerId={player.id} key={children.length} />);
     }
   }
-  if (soundTokens.find(token => token.id === position.id)) {
+  if (soundTokens.find((token) => token.id === position.id)) {
     children.push(<Token type={'sound'} key={children.length} />);
   }
-  if (sightTokens.find(token => token.id === position.id)) {
+  if (sightTokens.find((token) => token.id === position.id)) {
     children.push(<Token type={'sight'} key={children.length} />);
   }
 
@@ -124,13 +124,13 @@ const getChildren = (position, myPlayer, players, soundTokens, sightTokens) => {
 const getClassName = (position, e1Path, e2Path, reachablePositions) => {
   let className = 'position';
 
-  if (e1Path.find(enemyPos => enemyPos.id === position.id)) {
+  if (e1Path.find((enemyPos) => enemyPos.id === position.id)) {
     className = `${className} enemy1-path`;
   }
-  if (e2Path.find(enemyPos => enemyPos.id === position.id)) {
+  if (e2Path.find((enemyPos) => enemyPos.id === position.id)) {
     className = `${className} enemy2-path`;
   }
-  if (reachablePositions.find(pos => pos.id === position.id)) {
+  if (reachablePositions.find((pos) => pos.id === position.id)) {
     className = `${className} reachable`;
   }
 
@@ -141,10 +141,10 @@ const stepIsValid = (myPlayer, currentPlayerId, position, possibleSteps) => {
   if (myPlayer.isEvil) {
     return (
       myPlayer[currentPlayerId].position.neighbours.includes(position.id) &&
-      possibleSteps.find(pos => pos.id === position.id)
+      possibleSteps.find((pos) => pos.id === position.id)
     );
   }
-  return myPlayer.position.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id);
+  return myPlayer.position.neighbours.includes(position.id) && possibleSteps.find((pos) => pos.id === position.id);
 };
 
 export default Board;

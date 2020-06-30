@@ -19,7 +19,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
     }
   }, [caught, myPlayer, selectedPace]);
 
-  const handleSelectsPace = pace => {
+  const handleSelectsPace = (pace) => {
     if (myPlayer.isEvil) {
       socket.emit('enemy selects pace', { pace });
     } else {
@@ -33,7 +33,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
       <button
         disabled={disabled}
         className={selectedPace && selectedPace !== text.toLowerCase() ? 'disabled' : ''}
-        onClick={e => handleSelectsPace(e.target.innerHTML.toLowerCase())}>
+        onClick={(e) => handleSelectsPace(e.target.innerHTML.toLowerCase())}>
         {text}
       </button>
     );
