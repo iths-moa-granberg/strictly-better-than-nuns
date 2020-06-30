@@ -18,15 +18,17 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) =
   const positionsArray = Object.values(positions);
 
   useEffect(() => {
-    const onUpdateBoard = ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
+    socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
       setPlayers(players);
       setSoundTokens(soundTokens);
       setSightTokens(sightTokens);
       setE1Path(enemyPaths[0]);
       setE2Path(enemyPaths[1]);
       setReachablePositions(reachablePositions);
-    };
+    });
+  }, []);
 
+  useEffect(() => {
     const onPossibleSteps = ({ possibleSteps, stepsLeft }) => {
       if ((myPlayer.isEvil && stepsLeft <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
         setActionState('confirm');
@@ -43,12 +45,10 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) =
       }
     };
 
-    socket.on('update board', onUpdateBoard);
     socket.on('possible steps', onPossibleSteps);
     socket.on('player select token', onPlayerSelectToken);
 
     return () => {
-      socket.off('update board', onUpdateBoard);
       socket.off('possible steps', onPossibleSteps);
       socket.off('player select token', onPlayerSelectToken);
     };
