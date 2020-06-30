@@ -7,7 +7,6 @@ import UserActions from './UserActions';
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
   const [actionState, setActionState] = useState('pace');
 
-  const [activePlayer, setActivePlayer] = useState(null);
   const [players, setPlayers] = useState(null);
   const [soundTokens, setSoundTokens] = useState(null);
   const [sightTokens, setSightTokens] = useState(null);
@@ -19,7 +18,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
 
   useEffect(() => {
     const onUpdateBoard = ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
-      setActivePlayer(myPlayer);
       setPlayers(players);
       setSoundTokens(soundTokens);
       setSightTokens(sightTokens);
@@ -35,7 +33,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
     };
   }, [myPlayer]);
 
-  if (!activePlayer || !players || !soundTokens || !sightTokens || !e1Path || !e2Path || !reachablePositions) {
+  if (!myPlayer || !players || !soundTokens || !sightTokens || !e1Path || !e2Path || !reachablePositions) {
     return <>loading</>;
   }
 
@@ -43,7 +41,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
     <>
       <section className="board-wrapper">
         {positionsArray.map(position => {
-          const children = getChildren(position, activePlayer, players, soundTokens, sightTokens);
+          const children = getChildren(position, myPlayer, players, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);
           return <Position key={position.id} position={position} className={className} children={children} />;
         })}
@@ -66,12 +64,12 @@ const Token = ({ type }) => {
   return <div className={`${type}-token`} />;
 };
 
-const getChildren = (position, activePlayer, players, soundTokens, sightTokens) => {
+const getChildren = (position, myPlayer, players, soundTokens, sightTokens) => {
   const children = [];
 
-  if (!activePlayer.isEvil) {
-    if (position.id === activePlayer.position.id) {
-      children.push(<Player playerId={activePlayer.id} key={children.length} />);
+  if (!myPlayer.isEvil) {
+    if (position.id === myPlayer.position.id) {
+      children.push(<Player playerId={myPlayer.id} key={children.length} />);
     }
   }
   for (let player of players) {
