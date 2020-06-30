@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { socket } from '../App';
 import positions from '../modules/positions';
 import Position from './Position';
@@ -17,6 +17,17 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) =
 
   const positionsArray = Object.values(positions);
 
+  const showNewPathHandler = useCallback(
+    (path) => {
+      if (currentPlayerId === 'e1') {
+        setE1Path(path);
+      } else {
+        setE2Path(path);
+      }
+    },
+    [currentPlayerId]
+  );
+
   useEffect(() => {
     socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
       setPlayers(players);
@@ -27,6 +38,18 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) =
       setReachablePositions(reachablePositions);
     });
   }, []);
+
+  useEffect(() => {
+    const onChooseNewPath = ({ paths }) => {
+      setActionState({ key: 'select new path', params: { paths, showNewPathHandler } });
+    };
+
+    socket.on('choose new path', onChooseNewPath);
+
+    return () => {
+      socket.off('choose new path', onChooseNewPath);
+    };
+  }, [showNewPathHandler]);
 
   useEffect(() => {
     const onPossibleSteps = ({ possibleSteps, stepsLeft }) => {

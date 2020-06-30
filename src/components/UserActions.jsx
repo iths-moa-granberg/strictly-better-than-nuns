@@ -3,6 +3,7 @@ import { socket } from '../App';
 import PaceButtons from './PaceButtons';
 import ConfirmButtons from './ConfirmButtons';
 import SelectEnemyButtons from './SelectEnemyButtons';
+import SelectPathButtons from './SelectPathButtons';
 
 const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, setMyPlayer, setCurrentPlayerId }) => {
   const [paceProps, setPaceProps] = useState({});
@@ -62,6 +63,7 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
         ) : (
           <PaceButtons myPlayer={myPlayer} {...paceProps} />
         ))}
+      {actionState.key === 'select new path' && <SelectPathButtons {...actionState.params} />}
     </div>
   );
 };
