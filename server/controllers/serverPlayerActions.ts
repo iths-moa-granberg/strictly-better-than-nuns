@@ -25,10 +25,7 @@ io.on('connection', (socket: PlayerSocket) => {
         socket.player.hasKey
       );
     }
-    socket.emit('possible steps', {
-      possibleSteps,
-      visible: socket.player.visible,
-    });
+    socket.emit('possible steps', { possibleSteps });
   };
 
   socket.on('player takes step', ({ position }: { position: ClientPosition }) => {

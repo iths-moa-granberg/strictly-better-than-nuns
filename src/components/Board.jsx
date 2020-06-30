@@ -6,6 +6,7 @@ import UserActions from './UserActions';
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
   const [actionState, setActionState] = useState('pace');
+  const [clickState, setClickState] = useState('');
 
   const [players, setPlayers] = useState(null);
   const [soundTokens, setSoundTokens] = useState(null);
@@ -26,12 +27,36 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
       setReachablePositions(reachablePositions);
     };
 
+    const onPossibleSteps = ({ possibleSteps, stepsLeft }) => {
+      if ((myPlayer.isEvil && stepsLeft <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
+        setActionState('confirm');
+      }
+      setReachablePositions(possibleSteps);
+      setClickState('take step');
+    };
+
     socket.on('update board', onUpdateBoard);
+    socket.on('possible steps', onPossibleSteps);
 
     return () => {
       socket.off('update board', onUpdateBoard);
+      socket.off('possible steps', onPossibleSteps);
     };
   }, [myPlayer]);
+
+  const clickHandler = position => {
+    if (clickState === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
+      if (myPlayer.isEvil) {
+        socket.emit('enemy takes step', { position });
+        //update position myPlayer[currentID];
+        //disable buttons?
+      } else {
+        socket.emit('player takes step', { position });
+        setMyPlayer({ ...myPlayer, position });
+        setActionState('confirm');
+      }
+    }
+  };
 
   if (!myPlayer || !players || !soundTokens || !sightTokens || !e1Path || !e2Path || !reachablePositions) {
     return <>loading</>;
@@ -43,11 +68,20 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
         {positionsArray.map(position => {
           const children = getChildren(position, myPlayer, players, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);
-          return <Position key={position.id} position={position} className={className} children={children} />;
+          return (
+            <Position
+              key={position.id}
+              position={position}
+              className={className}
+              children={children}
+              clickHandler={clickHandler}
+            />
+          );
         })}
       </section>
       <UserActions
         actionState={actionState}
+        setActionState={setActionState}
         currentPlayerId={currentPlayerId}
         myPlayer={myPlayer}
         setMyPlayer={setMyPlayer}
@@ -101,6 +135,16 @@ const getClassName = (position, e1Path, e2Path, reachablePositions) => {
   }
 
   return className;
+};
+
+const stepIsValid = (myPlayer, currentPlayerId, position, possibleSteps) => {
+  if (myPlayer.isEvil) {
+    return (
+      myPlayer[currentPlayerId].position.neighbours.includes(position.id) &&
+      possibleSteps.find(pos => pos.id === position.id)
+    );
+  }
+  return myPlayer.position.neighbours.includes(position.id) && possibleSteps.find(pos => pos.id === position.id);
 };
 
 export default Board;

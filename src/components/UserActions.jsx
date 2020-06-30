@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../App';
 import PaceButtons from './PaceButtons';
+import ConfirmButtons from './ConfirmButtons';
 
-const UserActions = ({ actionState, myPlayer, currentPlayerId, setMyPlayer }) => {
+const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, setMyPlayer }) => {
   const [paceProps, setPaceProps] = useState({});
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const UserActions = ({ actionState, myPlayer, currentPlayerId, setMyPlayer }) =>
   return (
     <div className="user-actions-wrapper">
       {actionState === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
+      {actionState === 'confirm' && <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} />}
     </div>
   );
 };

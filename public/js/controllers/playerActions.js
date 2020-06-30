@@ -1,11 +1,4 @@
 
-const resetSteps = () => {
-    board.reachablePositions = [];
-    board.renderBoard();
-    socket.emit('player reset move');
-}
-
-
 socket.on('player select token', ({ heardTo, id, turn, enemyID, sound }) => {
     if (id === myPlayer.id) {
         board.soundTokens = heardTo;
