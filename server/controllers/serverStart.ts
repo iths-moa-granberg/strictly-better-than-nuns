@@ -1,7 +1,7 @@
 import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
-import { updateBoard, startNextTurn, logProgress } from './sharedFunctions';
+import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
 import { ExtendedSocket, Users } from '../types';
 
 interface Games {
@@ -102,12 +102,15 @@ io.on('connection', (socket: ExtendedSocket) => {
     return Boolean(Object.values(users).filter(user => user.role === 'evil').length);
   };
 
-  socket.on('start', () => {
+  socket.on('start', async () => {
     logProgress(`The game has started!`, { room: socket.game.id });
     io.in(socket.game.id).emit('game started');
 
     games[socket.game.id].status = 'closed';
     io.emit('update open games', { openGames: getOpenGames() });
+
+    await sleep(1000);
+
     updateBoard(socket.game);
     startNextTurn(socket.game);
     logProgress(`Players turn`, { room: socket.game.id });
