@@ -1,4 +1,4 @@
-import { Users } from '../../server/types';
+import { Users } from '../../../server/types';
 
 export const createUser = (username: string) => ({
   username,

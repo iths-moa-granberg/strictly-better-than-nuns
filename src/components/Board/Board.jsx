@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { socket } from '../App';
-import positions from '../modules/positions';
-import Position from './Position';
-import UserActions from './UserActions';
+import { socket } from '../../App';
+import positions from '../../modules/positions';
+import Position from './Position/Position';
+import UserActions from './UserActions/UserActions';
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) => {
   const [actionState, setActionState] = useState({ key: 'pace', params: {} });

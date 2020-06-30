@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { socket } from '../App';
+import { socket } from '../../../../App';
 
 const SelectPathButtons = ({ paths, showNewPathHandler }) => {
   const [selectedPath, setSelectedPath] = useState(null);

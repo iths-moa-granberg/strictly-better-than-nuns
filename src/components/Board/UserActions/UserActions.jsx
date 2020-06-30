@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { socket } from '../App';
-import PaceButtons from './PaceButtons';
-import ConfirmButtons from './ConfirmButtons';
-import SelectEnemyButtons from './SelectEnemyButtons';
-import SelectPathButtons from './SelectPathButtons';
+import { socket } from '../../../App';
+import PaceButtons from './PaceButtons/PaceButtons';
+import ConfirmButtons from './ConfirmButtons/ConfirmButtons';
+import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
+import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
 
 const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, setMyPlayer, setCurrentPlayerId }) => {
   const [paceProps, setPaceProps] = useState({});

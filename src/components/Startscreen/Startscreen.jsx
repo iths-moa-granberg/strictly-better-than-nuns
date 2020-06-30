@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { socket } from '../App';
-import { Player, Enemy } from '../modules/player';
+import { socket } from '../../App';
+import { Player, Enemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { socket } from '../App';
+import { socket } from '../../App';
 
 const ProgressLogger = () => {
   const [messages, setMessages] = useState([]);

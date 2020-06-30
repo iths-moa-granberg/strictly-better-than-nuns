@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import io from 'socket.io-client';
-import Startscreen from './components/Startscreen';
-import Board from './components/Board';
-import ProgressLogger from './components/ProgressLogger';
+import Startscreen from './components/Startscreen/Startscreen';
+import Board from './components/Board/Board';
+import ProgressLogger from './components/ProgressLogger/ProgressLogger';
 
 const socket = io('http://localhost:3002');
 

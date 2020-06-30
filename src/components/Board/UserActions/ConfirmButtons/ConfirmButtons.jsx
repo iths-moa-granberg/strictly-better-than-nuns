@@ -1,5 +1,5 @@
 import React from 'react';
-import { socket } from '../App';
+import { socket } from '../../../../App';
 
 const ConfirmButtons = ({ myPlayer, setActionState }) => {
   const handleConfirm = () => {

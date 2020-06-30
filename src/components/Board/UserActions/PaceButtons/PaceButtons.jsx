@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { socket } from '../App';
+import { socket } from '../../../../App';
 
 const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
   const [selectedPace, setSelectedPace] = useState('');
