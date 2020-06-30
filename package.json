@@ -16,6 +16,7 @@
     "@types/socket.io-client": "^1.4.33",
     "express": "^4.17.1",
     "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
@@ -28,6 +29,7 @@
     "start": "BROWSER=none PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "prettier":  "prettier --write \"**/*.{js,ts,tsx,jsx,scss}\"",
     "eject": "react-scripts eject",
     "server-start": "PORT=3002 nodemon server/index.ts"
   },
