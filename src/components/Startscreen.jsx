@@ -27,6 +27,32 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
       setEnemyJoined(enemyJoined);
     };
 
+    const onWaitingForPlayers = () => {
+      setReady(false);
+    };
+
+    const onPlayersReady = () => {
+      setReady(true);
+    };
+
+    socket.on('start screen', onStartScreen);
+    socket.on('update open games', onUpdateOpenGames);
+    socket.on('disable join as evil', onDisableJoinAsEvil);
+    socket.on('init', onInit);
+    socket.on('waiting for players', onWaitingForPlayers);
+    socket.on('players ready', onPlayersReady);
+
+    return () => {
+      socket.off('start screen', onStartScreen);
+      socket.off('update open games', onUpdateOpenGames);
+      socket.off('disable join as evil', onDisableJoinAsEvil);
+      socket.off('init', onInit);
+      socket.off('waiting for players', onWaitingForPlayers);
+      socket.off('players ready', onPlayersReady);
+    };
+  }, []);
+
+  useEffect(() => {
     const onSetUpPlayer = ({ id, home, key, goal, isEvil }) => {
       const player = new Player(id, home, key, goal, isEvil);
       setMyPlayer(player);
@@ -42,32 +68,12 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
       setCurrentPlayerId('e1');
     };
 
-    const onWaitingForPlayers = () => {
-      setReady(false);
-    };
-
-    const onPlayersReady = () => {
-      setReady(true);
-    };
-
-    socket.on('start screen', onStartScreen);
-    socket.on('update open games', onUpdateOpenGames);
-    socket.on('disable join as evil', onDisableJoinAsEvil);
-    socket.on('init', onInit);
     socket.on('set up player', onSetUpPlayer);
     socket.on('set up enemy', onSetUpEnemy);
-    socket.on('waiting for players', onWaitingForPlayers);
-    socket.on('players ready', onPlayersReady);
 
     return () => {
-      socket.off('start screen', onStartScreen);
-      socket.off('update open games', onUpdateOpenGames);
-      socket.off('disable join as evil', onDisableJoinAsEvil);
-      socket.off('init', onInit);
       socket.off('set up player', onSetUpPlayer);
       socket.off('set up enemy', onSetUpEnemy);
-      socket.off('waiting for players', onWaitingForPlayers);
-      socket.off('players ready', onPlayersReady);
     };
   }, [setCurrentPlayerId, setMyPlayer]);
 
