@@ -3,6 +3,7 @@ import './App.css';
 import io from 'socket.io-client';
 import Startscreen from './components/Startscreen';
 import Board from './components/Board';
+import ProgressLogger from './components/ProgressLogger';
 
 const socket = io('http://localhost:3002');
 
@@ -41,12 +42,15 @@ const App = () => {
         <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerId={setCurrentPlayerId} />
       )}
       {gameState === 'started' && (
-        <Board
-          myPlayer={myPlayer}
-          setMyPlayer={setMyPlayer}
-          currentPlayerId={currentPlayerId}
-          setCurrentPlayerId={setCurrentPlayerId}
-        />
+        <>
+          <Board
+            myPlayer={myPlayer}
+            setMyPlayer={setMyPlayer}
+            currentPlayerId={currentPlayerId}
+            setCurrentPlayerId={setCurrentPlayerId}
+          />
+          <ProgressLogger />
+        </>
       )}
     </div>
   );
