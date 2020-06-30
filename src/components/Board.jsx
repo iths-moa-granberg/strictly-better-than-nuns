@@ -58,8 +58,11 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
     if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
       if (myPlayer.isEvil) {
         socket.emit('enemy takes step', { position });
-        //update position myPlayer[currentID];
-        //disable buttons?
+        setMyPlayer((mp) => {
+          const newMyPlayer = { ...mp };
+          newMyPlayer[currentPlayerId] = { ...mp[currentPlayerId], position };
+          return newMyPlayer;
+        });
       } else {
         socket.emit('player takes step', { position });
         setMyPlayer({ ...myPlayer, position });
