@@ -6,7 +6,7 @@ import UserActions from './UserActions';
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
   const [actionState, setActionState] = useState('pace');
-  const [clickState, setClickState] = useState('');
+  const [clickState, setClickState] = useState({ key: '', params: {} });
 
   const [players, setPlayers] = useState(null);
   const [soundTokens, setSoundTokens] = useState(null);
@@ -32,15 +32,25 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
         setActionState('confirm');
       }
       setReachablePositions(possibleSteps);
-      setClickState('take step');
+      setClickState({ key: 'take step' });
+    };
+
+    const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }) => {
+      if (id === myPlayer.id) {
+        setSoundTokens(heardTo);
+        setClickState({ key: 'select token', params: { turn, heardTo, enemyID, sound } });
+        setActionState('select token');
+      }
     };
 
     socket.on('update board', onUpdateBoard);
     socket.on('possible steps', onPossibleSteps);
+    socket.on('player select token', onPlayerSelectToken);
 
     return () => {
       socket.off('update board', onUpdateBoard);
       socket.off('possible steps', onPossibleSteps);
+      socket.off('player select token', onPlayerSelectToken);
     };
   }, [myPlayer]);
 
@@ -54,6 +64,15 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId }) => {
         socket.emit('player takes step', { position });
         setMyPlayer({ ...myPlayer, position });
         setActionState('confirm');
+      }
+    }
+    if (clickState.key === 'select token') {
+      const { turn, enemyID, sound, heardTo } = clickState.params;
+
+      if (heardTo.find((pos) => pos.id === position.id)) {
+        setSoundTokens([position]);
+        setActionState('');
+        socket.emit('player placed token', { position, turn, enemyID, sound });
       }
     }
   };

@@ -16,10 +16,6 @@ class UserOptions {
         }
     }
 
-    renderTokenInstr = () => {
-        this.wrapper.innerHTML = 'click on soundtoken to select sound-position'; //fillertext
-    }
-
     renderChoosePath = (paths, handler) => {
         this.wrapper.innerHTML = 'choose next path'; //fillertext
         paths.forEach((path, index) => this.wrapper.innerHTML += `<button>${index}</button>`);

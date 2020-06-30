@@ -25,6 +25,7 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
     <div className="user-actions-wrapper">
       {actionState === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
       {actionState === 'confirm' && <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} />}
+      {actionState === 'select token' && <p>click on soundtoken to select sound-position</p>}
     </div>
   );
 };
