@@ -11,7 +11,7 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
     (enemyID) => {
       setCurrentPlayerId(enemyID);
       socket.emit('select enemy', { enemyID });
-      setActionState('pace');
+      setActionState({ key: 'pace' });
     },
     [setActionState, setCurrentPlayerId]
   );
@@ -30,7 +30,7 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
 
   useEffect(() => {
     const onPlayersTurn = ({ resetPosition, caughtPlayers }) => {
-      setActionState('pace');
+      setActionState({ key: 'pace' });
       if (resetPosition) {
         setMyPlayer({ ...myPlayer, position: resetPosition });
       }
@@ -38,7 +38,7 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
     };
 
     const onEnemyTurn = () => {
-      setActionState('select enemy');
+      setActionState({ key: 'select enemy' });
       setPaceProps({ playersTurn: false, caught: false });
     };
 
@@ -53,10 +53,10 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
 
   return (
     <div className="user-actions-wrapper">
-      {actionState === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
-      {actionState === 'confirm' && <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} />}
-      {actionState === 'select token' && <p>click on soundtoken to select sound-position</p>}
-      {actionState === 'select enemy' &&
+      {actionState.key === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
+      {actionState.key === 'confirm' && <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} />}
+      {actionState.key === 'select token' && <p>click on soundtoken to select sound-position</p>}
+      {actionState.key === 'select enemy' &&
         (myPlayer.isEvil ? (
           <SelectEnemyButtons selectEnemyHandler={selectEnemyHandler} />
         ) : (

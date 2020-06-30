@@ -11,7 +11,7 @@ const ConfirmButtons = ({ myPlayer, setActionState }) => {
   };
 
   const handleBack = () => {
-    setActionState('pace');
+    setActionState({ key: 'pace' });
     socket.emit('player reset move');
   };
 
