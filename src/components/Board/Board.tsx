@@ -38,14 +38,17 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   );
 
   useEffect(() => {
-    socket.on('update board', ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }) => {
-      setPlayers(players);
-      setSoundTokens(soundTokens);
-      setSightTokens(sightTokens);
-      setE1Path(enemyPaths[0]);
-      setE2Path(enemyPaths[1]);
-      setReachablePositions(reachablePositions);
-    });
+    socket.on(
+      'update board',
+      ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }: OnUpdateBoard) => {
+        setPlayers(players);
+        setSoundTokens(soundTokens);
+        setSightTokens(sightTokens);
+        setE1Path(enemyPaths[0]);
+        setE2Path(enemyPaths[1]);
+        setReachablePositions(reachablePositions);
+      }
+    );
   }, []);
 
   useEffect(() => {

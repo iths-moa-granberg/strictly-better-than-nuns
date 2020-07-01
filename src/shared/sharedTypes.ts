@@ -25,3 +25,13 @@ export interface SoundToken {
   id: number;
   enemyID: string;
 }
+
+export interface OnUpdateBoard {
+  players: { id: string; position: Position }[];
+  soundTokens: SoundToken[];
+  sightTokens: SightToken[];
+  enemyPaths: Position[][];
+  reachablePositions: Position[];
+}
+
+}

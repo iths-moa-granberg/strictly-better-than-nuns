@@ -1,13 +1,14 @@
 import { io } from '../index';
 import Game from '../modules/serverGame';
-import { Player, Enemy } from '../modules/serverPlayer';
+import { Player } from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
-import { Position } from '../../src/shared/sharedTypes';
+import { Position, OnUpdateBoard } from '../../src/shared/sharedTypes';
 
 export const updateBoard = (game: Game) => {
-  const players: (Enemy | { id: string; position: Position })[] = game
-    .getVisiblePlayers()
-    .concat([game.enemies.e1, game.enemies.e2]);
+  const players = game.getVisiblePlayers();
+  players.push({ id: 'e1', position: game.enemies.e1.position });
+  players.push({ id: 'e2', position: game.enemies.e2.position });
+
   const reachablePositions: Position[] = [];
 
   io.in(game.id).emit('update board', {
@@ -16,7 +17,7 @@ export const updateBoard = (game: Game) => {
     sightTokens: game.sightTokens,
     enemyPaths: [game.enemies.e1.path, game.enemies.e2.path],
     reachablePositions,
-  });
+  } as OnUpdateBoard);
 };
 
 export const startNextTurn = (game: Game) => {
