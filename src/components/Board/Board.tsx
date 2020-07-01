@@ -4,7 +4,14 @@ import positions from '../../shared/positions';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
 import { MyPlayer } from '../../clientTypes';
-import { Position, OnUpdateBoard, SightToken, SoundToken, OnPlayerSelectToken } from '../../shared/sharedTypes';
+import {
+  Position,
+  OnUpdateBoard,
+  SightToken,
+  SoundToken,
+  OnPlayerSelectToken,
+  Players,
+} from '../../shared/sharedTypes';
 
 interface BoardProps {
   myPlayer: MyPlayer;
@@ -17,7 +24,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   const [actionState, setActionState] = useState<{ key: string; params?: Object }>({ key: 'pace', params: {} });
   const [clickState, setClickState] = useState<{ key: string; params?: Object }>({ key: '', params: {} });
 
-  const [players, setPlayers] = useState<{ id: string; position: Position }[]>([]);
+  const [players, setPlayers] = useState<Players>([]);
   const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
   const [sightTokens, setSightTokens] = useState<SightToken[]>([]);
   const [e1Path, setE1Path] = useState<Position[]>([]);
