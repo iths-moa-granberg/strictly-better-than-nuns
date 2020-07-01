@@ -4,16 +4,8 @@ import positions from '../../shared/positions';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
 import { MyPlayer } from '../../clientTypes';
+import { Position, OnUpdateBoard, SightToken, SoundToken, OnPlayerSelectToken } from '../../shared/sharedTypes';
 
-  const [actionState, setActionState] = useState({ key: 'pace', params: {} });
-  const [clickState, setClickState] = useState({ key: '', params: {} });
-
-  const [players, setPlayers] = useState(null);
-  const [soundTokens, setSoundTokens] = useState(null);
-  const [sightTokens, setSightTokens] = useState(null);
-  const [e1Path, setE1Path] = useState(null);
-  const [e2Path, setE2Path] = useState(null);
-  const [reachablePositions, setReachablePositions] = useState(null);
 interface BoardProps {
   myPlayer: MyPlayer;
   setMyPlayer: Function;
@@ -22,6 +14,16 @@ interface BoardProps {
 }
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: BoardProps) => {
+  const [actionState, setActionState] = useState<{ key: string; params?: Object }>({ key: 'pace', params: {} });
+  const [clickState, setClickState] = useState<{ key: string; params?: Object }>({ key: '', params: {} });
+
+  const [players, setPlayers] = useState<{ id: string; position: Position }[]>([]);
+  const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
+  const [sightTokens, setSightTokens] = useState<SightToken[]>([]);
+  const [e1Path, setE1Path] = useState<Position[]>([]);
+  const [e2Path, setE2Path] = useState<Position[]>([]);
+  const [reachablePositions, setReachablePositions] = useState<Position[]>([]);
+
   const positionsArray = Object.values(positions);
 
   const showNewPathHandler = useCallback(
