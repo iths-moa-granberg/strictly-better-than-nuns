@@ -115,7 +115,7 @@ class Board {
     return queue.findIndex((place) => place.find((pos) => pos.id === position.id));
   };
 
-  isHeard = (playerPos: Position, enemyPos: Position, sound: number) => {
+  isHeard = (playerPos: Position, enemyPos: Position, sound: number, enemyID: string) => {
     const reaches = this.getReachable(playerPos, sound, true);
 
     if (reaches.find((pos) => pos.id === enemyPos.id)) {
@@ -127,7 +127,7 @@ class Board {
           tokenPositions.push(path[1]);
         }
       }
-      return tokenPositions;
+      return tokenPositions.map((pos) => ({ id: pos.id, enemyID }));
     } else {
       return;
     }

@@ -34,4 +34,10 @@ export interface OnUpdateBoard {
   reachablePositions: Position[];
 }
 
+export interface OnPlayerSelectToken {
+  heardTo: SoundToken[];
+  id: string;
+  turn: 'enemy' | 'player';
+  enemyID: string;
+  sound?: number;
 }

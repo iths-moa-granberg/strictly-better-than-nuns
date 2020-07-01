@@ -72,7 +72,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
       setClickState({ key: 'take step' });
     };
 
-    const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }) => {
+    const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }: OnPlayerSelectToken) => {
       if (id === myPlayer.id) {
         setSoundTokens(heardTo);
         setClickState({ key: 'select token', params: { turn, heardTo, enemyID, sound } });

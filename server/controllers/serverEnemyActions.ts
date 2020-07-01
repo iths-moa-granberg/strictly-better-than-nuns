@@ -1,7 +1,7 @@
 import { io } from '../index';
 import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
-import { Position } from '../../src/shared/sharedTypes';
+import { Position, OnPlayerSelectToken } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -106,7 +106,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     for (let player of socket.game.players) {
       if (!socket.game.isCaught(player) || player.visible) {
         const playerSound = socket.game.board.getSoundReach(player.pace, sound);
-        const heardTo = socket.game.board.isHeard(player.position, enemy.position, playerSound);
+        const heardTo = socket.game.board.isHeard(player.position, enemy.position, playerSound, enemy.id);
         if (heardTo) {
           if (heardTo.length > 1) {
             io.in(socket.game.id).emit('player select token', {
@@ -114,7 +114,7 @@ io.on('connection', (socket: ExtendedSocket) => {
               id: player.id,
               turn: 'enemy',
               enemyID: enemy.id,
-            });
+            } as OnPlayerSelectToken);
           } else {
             socket.game.addToken(heardTo[0].id, 'sound', enemy.id);
             waitForTokenPlacement();

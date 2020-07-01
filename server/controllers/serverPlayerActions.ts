@@ -1,7 +1,7 @@
 import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
 import { PlayerSocket } from '../serverTypes';
-import { Position } from '../../src/shared/sharedTypes';
+import { Position, OnPlayerSelectToken } from '../../src/shared/sharedTypes';
 import { Player, Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: PlayerSocket) => {
@@ -98,10 +98,16 @@ io.on('connection', (socket: PlayerSocket) => {
   };
 
   const makeSound = (player: Player, sound: number, enemy: Enemy) => {
-    const heardTo = socket.game.board.isHeard(player.position, enemy.position, sound);
+    const heardTo = socket.game.board.isHeard(player.position, enemy.position, sound, enemy.id);
     if (heardTo) {
       if (heardTo.length > 1) {
-        socket.emit('player select token', { heardTo, id: player.id, turn: 'player', enemyID: enemy.id, sound });
+        socket.emit('player select token', {
+          heardTo,
+          id: player.id,
+          turn: 'player',
+          enemyID: enemy.id,
+          sound,
+        } as OnPlayerSelectToken);
         return;
       } else {
         socket.game.addToken(heardTo[0].id, 'sound', enemy.id);
