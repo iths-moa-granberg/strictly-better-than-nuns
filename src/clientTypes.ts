@@ -1,4 +1,4 @@
-import { Users } from './shared/sharedTypes';
+import { Users, Position } from './shared/sharedTypes';
 import { ClientPlayer, ClientEnemy } from './modules/player';
 
 export interface ClientUser {
@@ -25,3 +25,8 @@ export interface ClientEnemies {
 }
 
 export type MyPlayer = ClientPlayer | ClientEnemies;
+
+export interface ActionStateParams {
+  paths: Position[];
+  showNewPathHandler: Function;
+}

@@ -3,7 +3,7 @@ import { socket } from '../../App';
 import positions from '../../shared/positions';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
-import { MyPlayer } from '../../clientTypes';
+import { MyPlayer, ActionStateParams, ClientEnemies } from '../../clientTypes';
 import {
   Position,
   OnUpdateBoard,
@@ -12,17 +12,13 @@ import {
   OnPlayerSelectToken,
   Players,
 } from '../../shared/sharedTypes';
+import { ClientPlayer } from '../../modules/player';
 
 interface BoardProps {
   myPlayer: MyPlayer;
   setMyPlayer: Function;
   currentPlayerId: 'e1' | 'e2' | null;
   setCurrentPlayerId: Function;
-}
-
-interface ActionStateParams {
-  paths?: Position[];
-  showNewPathHandler?: Function;
 }
 
 interface ClickStateParams {
@@ -33,9 +29,8 @@ interface ClickStateParams {
 }
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: BoardProps) => {
-  const [actionState, setActionState] = useState<{ key: string; params: ActionStateParams }>({
+  const [actionState, setActionState] = useState<{ key: string; params?: ActionStateParams }>({
     key: 'pace',
-    params: {},
   });
   const [clickState, setClickState] = useState<{ key: string; params: ClickStateParams }>({ key: '', params: {} });
 
@@ -88,17 +83,17 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   useEffect(() => {
     const onPossibleSteps = ({ possibleSteps, stepsLeft }: { possibleSteps: Position[]; stepsLeft: number }) => {
       if ((myPlayer.isEvil && stepsLeft <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
-        setActionState({ key: 'confirm', params: {} });
+        setActionState({ key: 'confirm' });
       }
       setReachablePositions(possibleSteps);
       setClickState({ key: 'take step', params: {} });
     };
 
     const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }: OnPlayerSelectToken) => {
-      if (id === myPlayer.id) {
+      if (id === (myPlayer as ClientPlayer).id) {
         setSoundTokens(heardTo);
         setClickState({ key: 'select token', params: { turn, heardTo, enemyID, sound } });
-        setActionState({ key: 'select token', params: {} });
+        setActionState({ key: 'select token' });
       }
     };
 
@@ -115,23 +110,21 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
     if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
       if (myPlayer.isEvil) {
         socket.emit('enemy takes step', { position });
-        setMyPlayer((mp: MyPlayer) => {
+        setMyPlayer((mp: ClientEnemies) => {
           const newMyPlayer = { ...mp };
-          newMyPlayer[currentPlayerId] = { ...mp[currentPlayerId], position };
+          newMyPlayer[currentPlayerId!] = { ...mp[currentPlayerId!], position };
           return newMyPlayer;
         });
       } else {
         socket.emit('player takes step', { position });
         setMyPlayer({ ...myPlayer, position });
-        setActionState({ key: 'confirm', params: {} });
+        setActionState({ key: 'confirm' });
       }
     }
     if (clickState.key === 'select token') {
       const { turn, enemyID, sound, heardTo } = clickState.params;
 
-      if (heardTo.find((pos) => pos.id === position.id)) {
-        setSoundTokens([position]);
-        setActionState({ key: '', params: {} });
+      if (heardTo!.find((pos) => pos.id === position.id)) {
         socket.emit('player placed token', { position, turn, enemyID, sound });
       }
     }
@@ -188,8 +181,9 @@ const getChildren = (
   const children = [];
 
   if (!myPlayer.isEvil) {
-    if (position.id === myPlayer.position.id) {
-      children.push(<Player playerId={myPlayer.id} key={children.length} />);
+    const goodPlayer = myPlayer as ClientPlayer;
+    if (position.id === goodPlayer.position.id) {
+      children.push(<Player playerId={goodPlayer.id} key={children.length} />);
     }
   }
   for (let player of players) {
@@ -231,11 +225,14 @@ const stepIsValid = (
 ) => {
   if (myPlayer.isEvil) {
     return (
-      myPlayer[currentPlayerId].position.neighbours.includes(position.id) &&
+      (myPlayer as ClientEnemies)[currentPlayerId!].position.neighbours.includes(position.id) &&
       possibleSteps.find((pos) => pos.id === position.id)
     );
   }
-  return myPlayer.position.neighbours.includes(position.id) && possibleSteps.find((pos) => pos.id === position.id);
+  return (
+    (myPlayer as ClientPlayer).position.neighbours.includes(position.id) &&
+    possibleSteps.find((pos) => pos.id === position.id)
+  );
 };
 
 export default Board;
