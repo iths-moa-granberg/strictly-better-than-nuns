@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { socket } from '../../App';
-import positions from '../../modules/positions';
+import positions from '../../shared/positions';
 import Position from './Position/Position';
 import UserActions from './UserActions/UserActions';
 

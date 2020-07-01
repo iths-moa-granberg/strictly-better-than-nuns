@@ -1,4 +1,4 @@
-import positions from './serverPositions';
+import positions from '../../src/shared/positions';
 
 const enemyPaths = [
   [

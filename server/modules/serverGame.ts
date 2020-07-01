@@ -1,8 +1,8 @@
-import positions from './serverPositions';
+import positions from '../../src/shared/positions';
 import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
 import { logProgress } from '../controllers/sharedFunctions';
-import { Enemies } from '../types';
+import { Enemies } from '../serverTypes';
 
 interface Game {
   id: string;

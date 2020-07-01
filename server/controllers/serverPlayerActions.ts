@@ -1,6 +1,7 @@
 import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
-import { PlayerSocket, Position, ClientPosition } from '../types';
+import { PlayerSocket } from '../serverTypes';
+import { Position } from '../../src/shared/sharedTypes';
 import { Player, Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: PlayerSocket) => {
@@ -28,7 +29,7 @@ io.on('connection', (socket: PlayerSocket) => {
     socket.emit('possible steps', { possibleSteps });
   };
 
-  socket.on('player takes step', ({ position }: { position: ClientPosition }) => {
+  socket.on('player takes step', ({ position }: { position: Position }) => {
     const serverPosition = socket.game.getServerPosition(position.id);
     socket.player.position = serverPosition;
     socket.player.stepsLeft--;

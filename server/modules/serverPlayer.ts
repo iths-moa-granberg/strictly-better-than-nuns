@@ -1,6 +1,6 @@
 import enemyPaths from './enemyPaths';
 import { logProgress } from '../controllers/sharedFunctions';
-import { Position } from '../types';
+import { Position } from '../../src/shared/sharedTypes';
 
 interface Player {
   id: string;

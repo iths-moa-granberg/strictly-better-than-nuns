@@ -1,5 +1,5 @@
-import positions from './serverPositions';
-import { Position } from '../types';
+import positions from '../../src/shared/positions';
+import { Position } from '../../src/shared/sharedTypes';
 
 class Board {
   constructor() {}

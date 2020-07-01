@@ -1,7 +1,8 @@
 import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player, Enemy } from '../modules/serverPlayer';
-import { Position, ExtendedSocket } from '../types';
+import { ExtendedSocket } from '../serverTypes';
+import { Position } from '../../src/shared/sharedTypes';
 
 export const updateBoard = (game: Game) => {
   const players: (Enemy | { id: string; position: Position })[] = game

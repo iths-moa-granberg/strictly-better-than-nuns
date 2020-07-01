@@ -2,20 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
 import { Player, Enemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
+import { OpenGame, ClientUser } from '../../clientTypes';
+import { Position } from '../../shared/sharedTypes';
 
-const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
-  const [openGames, setOpenGames] = useState([]);
+interface StartscreenProps {
+  setMyPlayer: Function;
+  myPlayer: Player | Enemy[];
+  setCurrentPlayerId: Function;
+}
+
+const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenProps) => {
+  const [openGames, setOpenGames] = useState<OpenGame[]>([]);
   const [enemyJoined, setEnemyJoined] = useState(false);
   const [joinedGame, setJoinedGame] = useState(false);
   const [ready, setReady] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<ClientUser | null>(null);
 
   useEffect(() => {
-    const onStartScreen = ({ openGames }) => {
+    const onStartScreen = ({ openGames }: { openGames: OpenGame[] }) => {
       setOpenGames(openGames);
     };
 
-    const onUpdateOpenGames = ({ openGames }) => {
+    const onUpdateOpenGames = ({ openGames }: { openGames: OpenGame[] }) => {
       setOpenGames(openGames);
     };
 
@@ -23,7 +31,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
       setEnemyJoined(true);
     };
 
-    const onInit = ({ enemyJoined }) => {
+    const onInit = ({ enemyJoined }: { enemyJoined: boolean }) => {
       setEnemyJoined(enemyJoined);
     };
 
@@ -53,12 +61,24 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   }, []);
 
   useEffect(() => {
-    const onSetUpPlayer = ({ id, home, key, goal, isEvil }) => {
+    const onSetUpPlayer = ({
+      id,
+      home,
+      key,
+      goal,
+      isEvil,
+    }: {
+      id: string;
+      home: Position;
+      key: Position;
+      goal: Position;
+      isEvil: boolean;
+    }) => {
       const player = new Player(id, home, key, goal, isEvil);
       setMyPlayer(player);
     };
 
-    const onSetUpEnemy = ({ startPositions }) => {
+    const onSetUpEnemy = ({ startPositions }: { startPositions: Position[] }) => {
       const enemy = {
         e1: new Enemy('e1', startPositions[0]),
         e2: new Enemy('e2', startPositions[1]),
@@ -77,7 +97,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
     };
   }, [setCurrentPlayerId, setMyPlayer]);
 
-  const Game = ({ game }) => {
+  const Game = ({ game }: { game: OpenGame }) => {
     return (
       <div>
         <h3>{game.name}</h3>
@@ -94,9 +114,9 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   };
 
   const InputUsername = () => {
-    const handleUsernameInput = (e) => {
+    const handleUsernameInput = (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
-        setUser(createUser(e.target.value));
+        setUser(createUser((e.target as HTMLInputElement).value));
       }
     };
 
@@ -115,7 +135,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }) => {
   };
 
   const GoodOrEvilButtons = () => {
-    const join = (good) => {
+    const join = (good: boolean) => {
       socket.emit('player joined', { good, user });
     };
 
