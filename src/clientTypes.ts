@@ -24,4 +24,4 @@ export interface ClientEnemies {
   isEvil: boolean;
 }
 
-export type MyPlayer = ClientPlayer | ClientEnemies | null;
+export type MyPlayer = ClientPlayer | ClientEnemies;

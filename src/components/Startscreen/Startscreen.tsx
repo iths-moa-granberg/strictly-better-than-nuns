@@ -7,7 +7,7 @@ import { Position } from '../../shared/sharedTypes';
 
 interface StartscreenProps {
   setMyPlayer: Function;
-  myPlayer: MyPlayer;
+  myPlayer: MyPlayer | null;
   setCurrentPlayerId: Function;
 }
 
