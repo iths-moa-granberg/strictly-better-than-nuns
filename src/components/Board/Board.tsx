@@ -74,7 +74,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   }, []);
 
   useEffect(() => {
-    const onChooseNewPath = ({ paths }) => {
+    const onChooseNewPath = ({ paths }: { paths: Position[] }) => {
       setActionState({ key: 'select new path', params: { paths, showNewPathHandler } });
     };
 
@@ -86,7 +86,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   }, [showNewPathHandler]);
 
   useEffect(() => {
-    const onPossibleSteps = ({ possibleSteps, stepsLeft }) => {
+    const onPossibleSteps = ({ possibleSteps, stepsLeft }: { possibleSteps: Position[]; stepsLeft: number }) => {
       if ((myPlayer.isEvil && stepsLeft <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
         setActionState({ key: 'confirm', params: {} });
       }
@@ -111,11 +111,11 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
     };
   }, [myPlayer]);
 
-  const clickHandler = (position) => {
+  const clickHandler = (position: Position) => {
     if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
       if (myPlayer.isEvil) {
         socket.emit('enemy takes step', { position });
-        setMyPlayer((mp) => {
+        setMyPlayer((mp: MyPlayer) => {
           const newMyPlayer = { ...mp };
           newMyPlayer[currentPlayerId] = { ...mp[currentPlayerId], position };
           return newMyPlayer;
@@ -170,15 +170,21 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   );
 };
 
-const Player = ({ playerId }) => {
+const Player = ({ playerId }: { playerId: number | string }) => {
   return <div className={`player player-${playerId.toString()}`} />;
 };
 
-const Token = ({ type }) => {
+const Token = ({ type }: { type: 'sight' | 'sound' }) => {
   return <div className={`${type}-token`} />;
 };
 
-const getChildren = (position, myPlayer, players, soundTokens, sightTokens) => {
+const getChildren = (
+  position: Position,
+  myPlayer: MyPlayer,
+  players: Players,
+  soundTokens: SoundToken[],
+  sightTokens: SightToken[]
+) => {
   const children = [];
 
   if (!myPlayer.isEvil) {
@@ -201,7 +207,7 @@ const getChildren = (position, myPlayer, players, soundTokens, sightTokens) => {
   return children;
 };
 
-const getClassName = (position, e1Path, e2Path, reachablePositions) => {
+const getClassName = (position: Position, e1Path: Position[], e2Path: Position[], reachablePositions: Position[]) => {
   let className = 'position';
 
   if (e1Path.find((enemyPos) => enemyPos.id === position.id)) {
@@ -217,7 +223,12 @@ const getClassName = (position, e1Path, e2Path, reachablePositions) => {
   return className;
 };
 
-const stepIsValid = (myPlayer, currentPlayerId, position, possibleSteps) => {
+const stepIsValid = (
+  myPlayer: MyPlayer,
+  currentPlayerId: 'e1' | 'e2' | null,
+  position: Position,
+  possibleSteps: Position[]
+) => {
   if (myPlayer.isEvil) {
     return (
       myPlayer[currentPlayerId].position.neighbours.includes(position.id) &&
