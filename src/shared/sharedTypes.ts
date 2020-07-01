@@ -15,3 +15,13 @@ interface User {
   username: string;
   role: string;
 }
+
+export interface SightToken {
+  id: number;
+  enemyID: string[];
+}
+
+export interface SoundToken {
+  id: number;
+  enemyID: string;
+}
