@@ -1,4 +1,4 @@
-import { Users } from '../../../server/serverTypes';
+import { Users } from '../../shared/sharedTypes';
 
 export const createUser = (username: string) => ({
   username,

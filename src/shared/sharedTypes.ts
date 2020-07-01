@@ -6,3 +6,12 @@ export interface Position {
   inSight: number[];
   requireKey?: boolean;
 }
+
+export interface Users {
+  [key: string]: User;
+}
+
+interface User {
+  username: string;
+  role: string;
+}

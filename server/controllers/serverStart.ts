@@ -2,7 +2,8 @@ import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
-import { ExtendedSocket, Users } from '../serverTypes';
+import { ExtendedSocket } from '../serverTypes';
+import { Users } from '../../src/shared/sharedTypes';
 
 interface Games {
   [key: string]: StartGame;

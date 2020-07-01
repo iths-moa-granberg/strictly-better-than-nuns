@@ -1,12 +1,4 @@
-//export?
-export interface Users {
-  [key: string]: User;
-}
-
-interface User {
-  username: string;
-  role: string;
-}
+import { Users } from './shared/sharedTypes';
 
 export interface ClientUser {
   username: string;
