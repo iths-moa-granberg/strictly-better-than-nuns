@@ -20,9 +20,16 @@ interface BoardProps {
   setCurrentPlayerId: Function;
 }
 
+interface ActionStateParams {
+  paths?: Position[];
+  showNewPathHandler?: Function;
+}
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: BoardProps) => {
-  const [actionState, setActionState] = useState<{ key: string; params?: Object }>({ key: 'pace', params: {} });
   const [clickState, setClickState] = useState<{ key: string; params?: Object }>({ key: '', params: {} });
+  const [actionState, setActionState] = useState<{ key: string; params: ActionStateParams }>({
+    key: 'pace',
+    params: {},
+  });
 
   const [players, setPlayers] = useState<Players>([]);
   const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
@@ -73,7 +80,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   useEffect(() => {
     const onPossibleSteps = ({ possibleSteps, stepsLeft }) => {
       if ((myPlayer.isEvil && stepsLeft <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
-        setActionState({ key: 'confirm' });
+        setActionState({ key: 'confirm', params: {} });
       }
       setReachablePositions(possibleSteps);
       setClickState({ key: 'take step' });
@@ -83,7 +90,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
       if (id === myPlayer.id) {
         setSoundTokens(heardTo);
         setClickState({ key: 'select token', params: { turn, heardTo, enemyID, sound } });
-        setActionState({ key: 'select token' });
+        setActionState({ key: 'select token', params: {} });
       }
     };
 
@@ -108,7 +115,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
       } else {
         socket.emit('player takes step', { position });
         setMyPlayer({ ...myPlayer, position });
-        setActionState({ key: 'confirm' });
+        setActionState({ key: 'confirm', params: {} });
       }
     }
     if (clickState.key === 'select token') {
@@ -116,7 +123,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
 
       if (heardTo.find((pos) => pos.id === position.id)) {
         setSoundTokens([position]);
-        setActionState({ key: '' });
+        setActionState({ key: '', params: {} });
         socket.emit('player placed token', { position, turn, enemyID, sound });
       }
     }
