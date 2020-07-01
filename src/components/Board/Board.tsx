@@ -115,7 +115,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
     }
   };
 
-  if (!myPlayer || !players || !soundTokens || !sightTokens || !e1Path || !e2Path || !reachablePositions) {
+  if (!myPlayer || !players.length || !e1Path.length || !e2Path.length) {
     return <>loading</>;
   }
 
