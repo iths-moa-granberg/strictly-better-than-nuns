@@ -4,9 +4,33 @@ import PaceButtons from './PaceButtons/PaceButtons';
 import ConfirmButtons from './ConfirmButtons/ConfirmButtons';
 import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
+import { Position } from '../../../shared/sharedTypes';
+import { ActionStateParams, MyPlayer } from '../../../clientTypes';
+import { ClientPlayer } from '../../../modules/player';
 
-const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, setMyPlayer, setCurrentPlayerId }) => {
-  const [paceProps, setPaceProps] = useState({});
+interface UserActionProps {
+  actionState: { key: string; params?: ActionStateParams };
+  setActionState: Function;
+  myPlayer: MyPlayer;
+  currentPlayerId: 'e1' | 'e2' | null;
+  setMyPlayer: Function;
+  setCurrentPlayerId: Function;
+}
+
+interface PaceProps {
+  playersTurn: boolean;
+  caught: boolean;
+}
+
+const UserActions = ({
+  actionState,
+  setActionState,
+  myPlayer,
+  currentPlayerId,
+  setMyPlayer,
+  setCurrentPlayerId,
+}: UserActionProps) => {
+  const [paceProps, setPaceProps] = useState<PaceProps>({ playersTurn: true, caught: false });
 
   const selectEnemyHandler = useCallback(
     (enemyID) => {
@@ -30,12 +54,22 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
   }, [currentPlayerId, selectEnemyHandler]);
 
   useEffect(() => {
-    const onPlayersTurn = ({ resetPosition, caughtPlayers }) => {
+    const onPlayersTurn = ({
+      resetPosition,
+      caughtPlayers,
+    }: {
+      resetPosition: Position[];
+      caughtPlayers: string[];
+    }) => {
       setActionState({ key: 'pace' });
       if (resetPosition) {
         setMyPlayer({ ...myPlayer, position: resetPosition });
       }
-      setPaceProps({ playersTurn: true, caught: caughtPlayers.includes(myPlayer.id) });
+      if (myPlayer.isEvil) {
+        setPaceProps({ playersTurn: true, caught: false });
+      } else {
+        setPaceProps({ playersTurn: true, caught: caughtPlayers.includes((myPlayer as ClientPlayer).id) });
+      }
     };
 
     const onEnemyTurn = () => {
@@ -63,7 +97,7 @@ const UserActions = ({ actionState, setActionState, myPlayer, currentPlayerId, s
         ) : (
           <PaceButtons myPlayer={myPlayer} {...paceProps} />
         ))}
-      {actionState.key === 'select new path' && <SelectPathButtons {...actionState.params} />}
+      {actionState.key === 'select new path' && <SelectPathButtons {...actionState.params!} />}
     </div>
   );
 };
