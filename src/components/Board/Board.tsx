@@ -24,12 +24,20 @@ interface ActionStateParams {
   paths?: Position[];
   showNewPathHandler?: Function;
 }
+
+interface ClickStateParams {
+  turn?: 'player' | 'enemy';
+  enemyID?: string;
+  sound?: number;
+  heardTo?: SoundToken[];
+}
+
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: BoardProps) => {
-  const [clickState, setClickState] = useState<{ key: string; params?: Object }>({ key: '', params: {} });
   const [actionState, setActionState] = useState<{ key: string; params: ActionStateParams }>({
     key: 'pace',
     params: {},
   });
+  const [clickState, setClickState] = useState<{ key: string; params: ClickStateParams }>({ key: '', params: {} });
 
   const [players, setPlayers] = useState<Players>([]);
   const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
@@ -83,7 +91,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
         setActionState({ key: 'confirm', params: {} });
       }
       setReachablePositions(possibleSteps);
-      setClickState({ key: 'take step' });
+      setClickState({ key: 'take step', params: {} });
     };
 
     const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }: OnPlayerSelectToken) => {
