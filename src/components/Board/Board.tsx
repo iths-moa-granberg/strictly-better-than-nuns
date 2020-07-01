@@ -3,8 +3,8 @@ import { socket } from '../../App';
 import positions from '../../shared/positions';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
+import { MyPlayer } from '../../clientTypes';
 
-const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) => {
   const [actionState, setActionState] = useState({ key: 'pace', params: {} });
   const [clickState, setClickState] = useState({ key: '', params: {} });
 
@@ -14,7 +14,14 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) =
   const [e1Path, setE1Path] = useState(null);
   const [e2Path, setE2Path] = useState(null);
   const [reachablePositions, setReachablePositions] = useState(null);
+interface BoardProps {
+  myPlayer: MyPlayer;
+  setMyPlayer: Function;
+  currentPlayerId: 'e1' | 'e2' | null;
+  setCurrentPlayerId: Function;
+}
 
+const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: BoardProps) => {
   const positionsArray = Object.values(positions);
 
   const showNewPathHandler = useCallback(
