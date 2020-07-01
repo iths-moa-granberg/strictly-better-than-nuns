@@ -1,6 +1,6 @@
 import { Position } from '../shared/sharedTypes';
 
-interface Player {
+interface ClientPlayer {
   id: string;
   isEvil: boolean;
   home: Position;
@@ -11,13 +11,13 @@ interface Player {
   hasGoal: boolean;
 }
 
-interface Enemy {
+interface ClientEnemy {
   id: string;
   position: Position;
   isEvil: boolean;
 }
 
-class Player {
+class ClientPlayer {
   constructor(id: string, home: Position, key: Position, goal: Position, isEvil: boolean) {
     this.id = id;
     this.isEvil = isEvil;
@@ -33,7 +33,7 @@ class Player {
   }
 }
 
-class Enemy {
+class ClientEnemy {
   constructor(id: string, position: Position) {
     this.id = id;
     this.position = position;
@@ -41,4 +41,4 @@ class Enemy {
   }
 }
 
-export { Player, Enemy };
+export { ClientPlayer, ClientEnemy };

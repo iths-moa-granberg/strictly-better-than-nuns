@@ -1,4 +1,5 @@
 import { Users } from './shared/sharedTypes';
+import { ClientPlayer, ClientEnemy } from './modules/player';
 
 export interface ClientUser {
   username: string;
@@ -16,3 +17,11 @@ export type OpenGames = {
   name: string;
   users: Users;
 }[];
+
+export interface ClientEnemies {
+  e1: ClientEnemy;
+  e2: ClientEnemy;
+  isEvil: boolean;
+}
+
+export type MyPlayer = ClientPlayer | ClientEnemies | null;
