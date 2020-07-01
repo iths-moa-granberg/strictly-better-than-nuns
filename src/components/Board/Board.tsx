@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { socket } from '../../App';
 import positions from '../../shared/positions';
-import Position from './Position/Position';
+import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) => {
@@ -114,7 +114,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }) =
           const children = getChildren(position, myPlayer, players, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);
           return (
-            <Position
+            <BoardPosition
               key={position.id}
               position={position}
               className={className}

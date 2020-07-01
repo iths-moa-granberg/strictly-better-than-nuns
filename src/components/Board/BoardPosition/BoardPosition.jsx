@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Position = ({ position, className, children, clickHandler }) => {
+const BoardPosition = ({ position, className, children, clickHandler }) => {
   return (
     <div
       className={className}
@@ -12,4 +12,4 @@ const Position = ({ position, className, children, clickHandler }) => {
   );
 };
 
-export default Position;
+export default BoardPosition;
