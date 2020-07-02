@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../../../App';
+import { MyPlayer } from '../../../../clientTypes';
 
-const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
+interface PaceButtonsProps {
+  myPlayer: MyPlayer;
+  playersTurn: boolean;
+  caught: boolean;
+}
+
+const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
   const [selectedPace, setSelectedPace] = useState('');
   const [enemyDisabled, setEnemyDisabled] = useState(true);
   const [playerDisabled, setPlayerDisabled] = useState(true);
@@ -19,7 +26,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
     }
   }, [caught, myPlayer, selectedPace]);
 
-  const handleSelectsPace = (pace) => {
+  const handleSelectsPace = (pace: string) => {
     if (myPlayer.isEvil) {
       socket.emit('enemy selects pace', { pace });
     } else {
@@ -28,12 +35,12 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }) => {
     setSelectedPace(pace);
   };
 
-  const Button = ({ disabled, text }) => {
+  const Button = ({ disabled, text }: { disabled: boolean; text: string }) => {
     return (
       <button
         disabled={disabled}
         className={selectedPace && selectedPace !== text.toLowerCase() ? 'disabled' : ''}
-        onClick={(e) => handleSelectsPace(e.target.innerHTML.toLowerCase())}>
+        onClick={(e) => handleSelectsPace((e.target as HTMLElement).innerHTML.toLowerCase())}>
         {text}
       </button>
     );
