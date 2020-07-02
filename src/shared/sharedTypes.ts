@@ -21,12 +21,12 @@ interface User {
 
 export interface SightToken {
   id: number;
-  enemyID: string[];
+  enemyID: ('e1' | 'e2')[];
 }
 
 export interface SoundToken {
   id: number;
-  enemyID: string;
+  enemyID: 'e1' | 'e2';
 }
 
 export type Players = { id: string; position: Position }[];
@@ -43,7 +43,7 @@ export interface OnPlayerSelectToken {
   heardTo: SoundToken[];
   id: string;
   turn: 'enemy' | 'player';
-  enemyID: string;
+  enemyID: 'e1' | 'e2';
   sound: number;
 }
 
@@ -67,7 +67,7 @@ export interface OnPlayerTakesStep {
 export interface OnPlayerPlacedToken {
   position: Position;
   turn: 'player' | 'enemy';
-  enemyID: string;
+  enemyID: 'e1' | 'e2';
   sound: number;
 }
 
@@ -78,7 +78,7 @@ export interface OnUpdatePlayer {
 }
 
 export interface OnSelectEnemy {
-  enemyID: string;
+  enemyID: 'e1' | 'e2';
 }
 
 export interface OnPlayersTurn {

@@ -115,7 +115,7 @@ class Board {
     return queue.findIndex((place) => place.find((pos) => pos.id === position.id));
   };
 
-  isHeard = (playerPos: Position, enemyPos: Position, sound: number, enemyID: string) => {
+  isHeard = (playerPos: Position, enemyPos: Position, sound: number, enemyID: 'e1' | 'e2') => {
     const reaches = this.getReachable(playerPos, sound, true);
 
     if (reaches.find((pos) => pos.id === enemyPos.id)) {

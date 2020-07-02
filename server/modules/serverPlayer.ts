@@ -20,7 +20,7 @@ interface Player {
 }
 
 interface Enemy {
-  id: string;
+  id: 'e1' | 'e2';
   position: Position;
   isEvil: boolean;
   stepsLeft: number;
@@ -105,7 +105,7 @@ class Player {
 }
 
 class Enemy {
-  constructor(id: string) {
+  constructor(id: 'e1' | 'e2') {
     if (id === 'e1') {
       this.path = enemyPaths[0];
     } else {
