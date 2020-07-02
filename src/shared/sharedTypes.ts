@@ -94,3 +94,7 @@ export interface OnEnemySelectsPace {
 export interface OnSelectPath {
   path: Position[];
 }
+
+export interface OnProgress {
+  msg: string;
+}

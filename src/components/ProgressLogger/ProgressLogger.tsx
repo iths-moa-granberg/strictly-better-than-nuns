@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
+import { OnProgress } from '../../shared/sharedTypes';
 
 const ProgressLogger = () => {
   const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
-    const onProgress = ({ msg }: { msg: string }) => {
+    const onProgress = ({ msg }: OnProgress) => {
       if (messages[messages.length - 1] !== msg) {
         setMessages((m) => [...m, msg]);
       }
