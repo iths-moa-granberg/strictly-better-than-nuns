@@ -4,7 +4,7 @@ import PaceButtons from './PaceButtons/PaceButtons';
 import ConfirmButtons from './ConfirmButtons/ConfirmButtons';
 import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
-import { Position } from '../../../shared/sharedTypes';
+import { Position, OnSelectEnemy } from '../../../shared/sharedTypes';
 import { ActionStateParams, MyPlayer } from '../../../clientTypes';
 import { ClientPlayer } from '../../../modules/player';
 
@@ -35,7 +35,8 @@ const UserActions = ({
   const selectEnemyHandler = useCallback(
     (enemyID) => {
       setCurrentPlayerId(enemyID);
-      socket.emit('select enemy', { enemyID });
+      const params: OnSelectEnemy = { enemyID };
+      socket.emit('select enemy', params);
       setActionState({ key: 'pace' });
     },
     [setActionState, setCurrentPlayerId]

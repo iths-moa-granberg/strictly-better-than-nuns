@@ -73,3 +73,7 @@ export interface OnUpdatePlayer {
   hasGoal: boolean;
   visible: boolean;
 }
+
+export interface OnSelectEnemy {
+  enemyID: string;
+}

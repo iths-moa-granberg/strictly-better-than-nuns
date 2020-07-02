@@ -7,13 +7,14 @@ import {
   OnChooseNewPath,
   OnPossibleSteps,
   OnEnemyTakesStep,
+  OnSelectEnemy,
 } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: ExtendedSocket) => {
   let currentEnemy: Enemy;
 
-  socket.on('select enemy', ({ enemyID }: { enemyID: string }) => {
+  socket.on('select enemy', ({ enemyID }: OnSelectEnemy) => {
     currentEnemy = socket.game.enemies[enemyID];
   });
 
