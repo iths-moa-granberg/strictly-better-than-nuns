@@ -90,3 +90,7 @@ export interface OnPlayerSelectsPace {
 export interface OnEnemySelectsPace {
   pace: string;
 }
+
+export interface OnSelectPath {
+  path: Position[];
+}

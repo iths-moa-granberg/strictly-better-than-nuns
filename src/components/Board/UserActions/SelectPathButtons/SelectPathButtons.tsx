@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { socket } from '../../../../App';
-import { Position } from '../../../../shared/sharedTypes';
+import { Position, OnSelectPath } from '../../../../shared/sharedTypes';
 
 interface SelectPathButtonsProps {
   paths: Position[][];
@@ -22,8 +22,11 @@ const SelectPathButtons = ({ paths, showNewPathHandler }: SelectPathButtonsProps
   };
 
   const handleSelect = () => {
-    socket.emit('select path', { path: selectedPath });
-    return <></>;
+    if (selectedPath) {
+      const params: OnSelectPath = { path: selectedPath };
+      socket.emit('select path', params);
+      return <></>;
+    }
   };
 
   return (

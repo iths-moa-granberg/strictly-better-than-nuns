@@ -9,6 +9,7 @@ import {
   OnEnemyTakesStep,
   OnSelectEnemy,
   OnEnemySelectsPace,
+  OnSelectPath,
 } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
@@ -80,7 +81,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     socket.emit('choose new path', params);
   };
 
-  socket.on('select path', ({ path }: { path: Position[] }) => {
+  socket.on('select path', ({ path }: OnSelectPath) => {
     currentEnemy.path = path;
     logProgress(`${currentEnemy.id} has selected a new path`, { room: socket.game.id });
 
