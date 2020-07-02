@@ -4,7 +4,7 @@ import PaceButtons from './PaceButtons/PaceButtons';
 import ConfirmButtons from './ConfirmButtons/ConfirmButtons';
 import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
-import { Position, OnSelectEnemy } from '../../../shared/sharedTypes';
+import { OnSelectEnemy, OnPlayersTurn } from '../../../shared/sharedTypes';
 import { ActionStateParams, MyPlayer } from '../../../clientTypes';
 import { ClientPlayer } from '../../../modules/player';
 
@@ -55,13 +55,7 @@ const UserActions = ({
   }, [currentPlayerID, selectEnemyHandler]);
 
   useEffect(() => {
-    const onPlayersTurn = ({
-      resetPosition,
-      caughtPlayers,
-    }: {
-      resetPosition: Position[];
-      caughtPlayers: string[];
-    }) => {
+    const onPlayersTurn = ({ resetPosition, caughtPlayers }: OnPlayersTurn) => {
       setActionState({ key: 'pace' });
       if (resetPosition) {
         setMyPlayer({ ...myPlayer, position: resetPosition });

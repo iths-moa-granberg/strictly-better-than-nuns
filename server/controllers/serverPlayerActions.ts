@@ -1,7 +1,13 @@
 import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
 import { PlayerSocket } from '../serverTypes';
-import { Position, OnPlayerSelectToken, OnPossibleSteps, OnUpdatePlayer } from '../../src/shared/sharedTypes';
+import {
+  Position,
+  OnPlayerSelectToken,
+  OnPossibleSteps,
+  OnUpdatePlayer,
+  OnPlayersTurn,
+} from '../../src/shared/sharedTypes';
 import { Player, Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: PlayerSocket) => {
@@ -57,7 +63,9 @@ io.on('connection', (socket: PlayerSocket) => {
     if (socket.player.caught) {
       socket.game.addCaughtPlayer(socket.player);
     }
-    socket.emit('players turn', { resetPosition: socket.player.position, caughtPlayers: socket.game.caughtPlayers });
+
+    const params: OnPlayersTurn = { resetPosition: socket.player.position, caughtPlayers: socket.game.caughtPlayers };
+    socket.emit('players turn', params);
   });
 
   socket.on('player move completed', () => {

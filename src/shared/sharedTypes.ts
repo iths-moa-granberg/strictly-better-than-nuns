@@ -77,3 +77,8 @@ export interface OnUpdatePlayer {
 export interface OnSelectEnemy {
   enemyID: string;
 }
+
+export interface OnPlayersTurn {
+  resetPosition?: Position;
+  caughtPlayers: string[];
+}

@@ -2,7 +2,7 @@ import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
-import { Position, OnUpdateBoard } from '../../src/shared/sharedTypes';
+import { Position, OnUpdateBoard, OnPlayersTurn } from '../../src/shared/sharedTypes';
 
 export const updateBoard = (game: Game) => {
   const players = game.getVisiblePlayers();
@@ -23,7 +23,9 @@ export const updateBoard = (game: Game) => {
 
 export const startNextTurn = (game: Game) => {
   game.startNextTurn();
-  io.in(game.id).emit('players turn', { caughtPlayers: game.caughtPlayers });
+
+  const params: OnPlayersTurn = { caughtPlayers: game.caughtPlayers };
+  io.in(game.id).emit('players turn', params);
 };
 
 export const logProgress = (msg: string, { socket, room }: { socket?: ExtendedSocket; room?: string }) => {
