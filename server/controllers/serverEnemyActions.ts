@@ -1,7 +1,7 @@
 import { io } from '../index';
 import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
-import { Position, OnPlayerSelectToken } from '../../src/shared/sharedTypes';
+import { Position, OnPlayerSelectToken, OnChooseNewPath } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -67,7 +67,7 @@ io.on('connection', (socket: ExtendedSocket) => {
   };
 
   const chooseNewPath = (paths: Position[][]) => {
-    socket.emit('choose new path', { paths });
+    socket.emit('choose new path', { paths } as OnChooseNewPath);
   };
 
   socket.on('select path', ({ path }: { path: Position[] }) => {

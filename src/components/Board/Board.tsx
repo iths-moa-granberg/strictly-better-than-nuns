@@ -11,6 +11,7 @@ import {
   SoundToken,
   OnPlayerSelectToken,
   Players,
+  OnChooseNewPath,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
 
@@ -69,7 +70,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   }, []);
 
   useEffect(() => {
-    const onChooseNewPath = ({ paths }: { paths: Position[] }) => {
+    const onChooseNewPath = ({ paths }: OnChooseNewPath) => {
       setActionState({ key: 'select new path', params: { paths, showNewPathHandler } });
     };
 

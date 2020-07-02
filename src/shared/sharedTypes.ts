@@ -43,3 +43,7 @@ export interface OnPlayerSelectToken {
   enemyID: string;
   sound?: number;
 }
+
+export interface OnChooseNewPath {
+  paths: Position[][];
+}
