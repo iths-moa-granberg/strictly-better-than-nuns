@@ -3,7 +3,16 @@ import { socket } from '../../App';
 import { ClientPlayer, ClientEnemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 import { OpenGame, ClientUser, MyPlayer } from '../../clientTypes';
-import { OnStartScreen, OnUpdateOpenGames, OnInit, OnSetUpPlayer, OnSetUpEnemy } from '../../shared/sharedTypes';
+import {
+  OnStartScreen,
+  OnUpdateOpenGames,
+  OnInit,
+  OnSetUpPlayer,
+  OnSetUpEnemy,
+  OnJoinGame,
+  OnPlayerJoined,
+  OnInitNewGame,
+} from '../../shared/sharedTypes';
 
 interface StartscreenProps {
   setMyPlayer: Function;
@@ -93,7 +102,10 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
         <button
           onClick={() => {
             setJoinedGame(true);
-            socket.emit('join game', { gameID: game.id, user });
+            if (user) {
+              const params: OnJoinGame = { gameID: game.id, user };
+              socket.emit('join game', params);
+            }
           }}>
           Join
         </button>
@@ -124,7 +136,10 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
 
   const GoodOrEvilButtons = () => {
     const join = (good: boolean) => {
-      socket.emit('player joined', { good, user });
+      if (user) {
+        const params: OnPlayerJoined = { good, user };
+        socket.emit('player joined', params);
+      }
     };
 
     return (
@@ -139,8 +154,11 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
 
   const GameList = () => {
     const handleNewGame = () => {
-      setJoinedGame(true);
-      socket.emit('init new game', { user });
+      if (user) {
+        setJoinedGame(true);
+        const params: OnInitNewGame = { user };
+        socket.emit('init new game', params);
+      }
     };
 
     return (

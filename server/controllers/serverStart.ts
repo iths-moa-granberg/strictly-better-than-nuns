@@ -10,6 +10,9 @@ import {
   OnInit,
   OnSetUpPlayer,
   OnSetUpEnemy,
+  OnJoinGame,
+  OnPlayerJoined,
+  OnInitNewGame,
 } from '../../src/shared/sharedTypes';
 
 interface Games {
@@ -39,7 +42,7 @@ io.on('connection', (socket: ExtendedSocket) => {
   const params: OnStartScreen = { openGames: getOpenGames() };
   socket.emit('start screen', params);
 
-  socket.on('init new game', ({ user }: { user: { username: string; userID: string } }) => {
+  socket.on('init new game', ({ user }: OnInitNewGame) => {
     socket.game = new Game();
 
     games[socket.game.id] = {
@@ -60,7 +63,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     logProgress(`${user.username} has joined`, { room: socket.game.id });
   });
 
-  socket.on('join game', ({ gameID, user }: { gameID: string; user: { username: string; userID: string } }) => {
+  socket.on('join game', ({ gameID, user }: OnJoinGame) => {
     games[gameID].users[user.userID] = { username: user.username, role: '' };
     socket.game = games[gameID].game;
 
@@ -76,7 +79,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     logProgress(`${user.username} has joined`, { room: socket.game.id });
   });
 
-  socket.on('player joined', ({ good, user }: { good: boolean; user: { username: string; userID: string } }) => {
+  socket.on('player joined', ({ good, user }: OnPlayerJoined) => {
     if (good) {
       games[socket.game.id].users[user.userID].role = 'good';
       socket.player = new Player(socket.game.generatePlayerInfo(user.username));

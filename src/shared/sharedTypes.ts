@@ -1,4 +1,5 @@
-import { OpenGame } from '../clientTypes';
+import { OpenGame, ClientUser } from '../clientTypes';
+import { Client } from 'socket.io';
 
 export interface Position {
   id: number;
@@ -123,4 +124,18 @@ export interface OnSetUpPlayer {
 
 export interface OnSetUpEnemy {
   startPositions: Position[];
+}
+
+export interface OnJoinGame {
+  gameID: string;
+  user: ClientUser;
+}
+
+export interface OnPlayerJoined {
+  good: boolean;
+  user: ClientUser;
+}
+
+export interface OnInitNewGame {
+  user: ClientUser;
 }
