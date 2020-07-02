@@ -27,6 +27,6 @@ export interface ClientEnemies {
 export type MyPlayer = ClientPlayer | ClientEnemies;
 
 export interface ActionStateParams {
-  paths: Position[];
+  paths: Position[][];
   showNewPathHandler: Function;
 }

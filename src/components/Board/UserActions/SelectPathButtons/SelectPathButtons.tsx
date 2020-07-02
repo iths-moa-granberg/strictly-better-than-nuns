@@ -3,12 +3,12 @@ import { socket } from '../../../../App';
 import { Position } from '../../../../shared/sharedTypes';
 
 interface SelectPathButtonsProps {
-  paths: Position[];
+  paths: Position[][];
   showNewPathHandler: Function;
 }
 
 const SelectPathButtons = ({ paths, showNewPathHandler }: SelectPathButtonsProps) => {
-  const [selectedPath, setSelectedPath] = useState<Position>();
+  const [selectedPath, setSelectedPath] = useState<Position[]>();
 
   const handlerPathButton = (text: string) => {
     const index = Number(

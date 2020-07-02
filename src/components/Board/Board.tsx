@@ -44,7 +44,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const positionsArray = Object.values(positions);
 
   const showNewPathHandler = useCallback(
-    (path) => {
+    (path: Position[]) => {
       if (currentPlayerID === 'e1') {
         setE1Path(path);
       } else {
