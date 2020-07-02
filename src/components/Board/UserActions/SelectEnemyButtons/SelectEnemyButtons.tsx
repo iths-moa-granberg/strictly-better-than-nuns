@@ -1,6 +1,10 @@
 import React from 'react';
 
-const SelectEnemyButtons = ({ selectEnemyHandler }) => {
+interface SelectEnemyButtonsProps {
+  selectEnemyHandler: Function;
+}
+
+const SelectEnemyButtons = ({ selectEnemyHandler }: SelectEnemyButtonsProps) => {
   return (
     <>
       <p>Choose which enemy to start with</p>
