@@ -1,3 +1,5 @@
+import { OpenGame } from '../clientTypes';
+
 export interface Position {
   id: number;
   x: number;
@@ -97,4 +99,16 @@ export interface OnSelectPath {
 
 export interface OnProgress {
   msg: string;
+}
+
+export interface OnStartScreen {
+  openGames: OpenGame[];
+}
+
+export interface OnUpdateOpenGames {
+  openGames: OpenGame[];
+}
+
+export interface OnInit {
+  enemyJoined: boolean;
 }

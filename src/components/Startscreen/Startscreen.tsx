@@ -3,7 +3,7 @@ import { socket } from '../../App';
 import { ClientPlayer, ClientEnemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 import { OpenGame, ClientUser, MyPlayer } from '../../clientTypes';
-import { Position } from '../../shared/sharedTypes';
+import { Position, OnStartScreen, OnUpdateOpenGames, OnInit } from '../../shared/sharedTypes';
 
 interface StartscreenProps {
   setMyPlayer: Function;
@@ -19,11 +19,11 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
   const [user, setUser] = useState<ClientUser | null>(null);
 
   useEffect(() => {
-    const onStartScreen = ({ openGames }: { openGames: OpenGame[] }) => {
+    const onStartScreen = ({ openGames }: OnStartScreen) => {
       setOpenGames(openGames);
     };
 
-    const onUpdateOpenGames = ({ openGames }: { openGames: OpenGame[] }) => {
+    const onUpdateOpenGames = ({ openGames }: OnUpdateOpenGames) => {
       setOpenGames(openGames);
     };
 
@@ -31,7 +31,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       setEnemyJoined(true);
     };
 
-    const onInit = ({ enemyJoined }: { enemyJoined: boolean }) => {
+    const onInit = ({ enemyJoined }: OnInit) => {
       setEnemyJoined(enemyJoined);
     };
 

@@ -3,7 +3,7 @@ import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
-import { Users } from '../../src/shared/sharedTypes';
+import { Users, OnStartScreen, OnUpdateOpenGames, OnInit } from '../../src/shared/sharedTypes';
 
 interface Games {
   [key: string]: StartGame;
@@ -29,7 +29,8 @@ const getOpenGames = () => {
 };
 
 io.on('connection', (socket: ExtendedSocket) => {
-  socket.emit('start screen', { openGames: getOpenGames() });
+  const params: OnStartScreen = { openGames: getOpenGames() };
+  socket.emit('start screen', params);
 
   socket.on('init new game', ({ user }: { user: { username: string; userID: string } }) => {
     socket.game = new Game();
@@ -40,9 +41,14 @@ io.on('connection', (socket: ExtendedSocket) => {
       status: 'open',
       users: { [user.userID]: { username: user.username, role: '' } },
     };
-    io.emit('update open games', { openGames: getOpenGames() });
+
+    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
+    io.emit('update open games', params);
+
     socket.join(socket.game.id);
-    socket.emit('init', { enemyJoined: socket.game.enemyJoined });
+
+    const paramsInit: OnInit = { enemyJoined: socket.game.enemyJoined };
+    socket.emit('init', paramsInit);
 
     logProgress(`${user.username} has joined`, { room: socket.game.id });
   });
@@ -51,9 +57,13 @@ io.on('connection', (socket: ExtendedSocket) => {
     games[gameID].users[user.userID] = { username: user.username, role: '' };
     socket.game = games[gameID].game;
 
-    io.emit('update open games', { openGames: getOpenGames() });
+    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
+    io.emit('update open games', params);
+
     socket.join(socket.game.id);
-    socket.emit('init', { enemyJoined: socket.game.enemyJoined });
+
+    const paramsInit: OnInit = { enemyJoined: socket.game.enemyJoined };
+    socket.emit('init', paramsInit);
     io.in(socket.game.id).emit('waiting for players');
 
     logProgress(`${user.username} has joined`, { room: socket.game.id });
@@ -108,7 +118,9 @@ io.on('connection', (socket: ExtendedSocket) => {
     io.in(socket.game.id).emit('game started');
 
     games[socket.game.id].status = 'closed';
-    io.emit('update open games', { openGames: getOpenGames() });
+
+    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
+    io.emit('update open games', params);
 
     await sleep(1000);
 
