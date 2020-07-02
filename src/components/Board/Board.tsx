@@ -17,7 +17,7 @@ import { ClientPlayer } from '../../modules/player';
 interface BoardProps {
   myPlayer: MyPlayer;
   setMyPlayer: Function;
-  currentPlayerId: 'e1' | 'e2' | null;
+  currentPlayerID: 'e1' | 'e2' | null;
   setCurrentPlayerId: Function;
 }
 
@@ -28,7 +28,7 @@ interface ClickStateParams {
   heardTo?: SoundToken[];
 }
 
-const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: BoardProps) => {
+const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: BoardProps) => {
   const [actionState, setActionState] = useState<{ key: string; params?: ActionStateParams }>({
     key: 'pace',
   });
@@ -45,13 +45,13 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
 
   const showNewPathHandler = useCallback(
     (path) => {
-      if (currentPlayerId === 'e1') {
+      if (currentPlayerID === 'e1') {
         setE1Path(path);
       } else {
         setE2Path(path);
       }
     },
-    [currentPlayerId]
+    [currentPlayerID]
   );
 
   useEffect(() => {
@@ -107,12 +107,12 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
   }, [myPlayer]);
 
   const clickHandler = (position: Position) => {
-    if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerId, position, reachablePositions)) {
+    if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerID, position, reachablePositions)) {
       if (myPlayer.isEvil) {
         socket.emit('enemy takes step', { position });
         setMyPlayer((mp: ClientEnemies) => {
           const newMyPlayer = { ...mp };
-          newMyPlayer[currentPlayerId!] = { ...mp[currentPlayerId!], position };
+          newMyPlayer[currentPlayerID!] = { ...mp[currentPlayerID!], position };
           return newMyPlayer;
         });
       } else {
@@ -154,7 +154,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerId, setCurrentPlayerId }: B
       <UserActions
         actionState={actionState}
         setActionState={setActionState}
-        currentPlayerId={currentPlayerId}
+        currentPlayerID={currentPlayerID}
         myPlayer={myPlayer}
         setMyPlayer={setMyPlayer}
         setCurrentPlayerId={setCurrentPlayerId}
@@ -219,13 +219,13 @@ const getClassName = (position: Position, e1Path: Position[], e2Path: Position[]
 
 const stepIsValid = (
   myPlayer: MyPlayer,
-  currentPlayerId: 'e1' | 'e2' | null,
+  currentPlayerID: 'e1' | 'e2' | null,
   position: Position,
   possibleSteps: Position[]
 ) => {
   if (myPlayer.isEvil) {
     return (
-      (myPlayer as ClientEnemies)[currentPlayerId!].position.neighbours.includes(position.id) &&
+      (myPlayer as ClientEnemies)[currentPlayerID!].position.neighbours.includes(position.id) &&
       possibleSteps.find((pos) => pos.id === position.id)
     );
   }

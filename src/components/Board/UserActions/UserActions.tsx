@@ -12,7 +12,7 @@ interface UserActionProps {
   actionState: { key: string; params?: ActionStateParams };
   setActionState: Function;
   myPlayer: MyPlayer;
-  currentPlayerId: 'e1' | 'e2' | null;
+  currentPlayerID: 'e1' | 'e2' | null;
   setMyPlayer: Function;
   setCurrentPlayerId: Function;
 }
@@ -26,7 +26,7 @@ const UserActions = ({
   actionState,
   setActionState,
   myPlayer,
-  currentPlayerId,
+  currentPlayerID,
   setMyPlayer,
   setCurrentPlayerId,
 }: UserActionProps) => {
@@ -43,7 +43,7 @@ const UserActions = ({
 
   useEffect(() => {
     const onNextEnemyTurn = () => {
-      selectEnemyHandler(currentPlayerId === 'e1' ? 'e2' : 'e1');
+      selectEnemyHandler(currentPlayerID === 'e1' ? 'e2' : 'e1');
     };
 
     socket.on('next enemy turn', onNextEnemyTurn);
@@ -51,7 +51,7 @@ const UserActions = ({
     return () => {
       socket.off('next enemy turn', onNextEnemyTurn);
     };
-  }, [currentPlayerId, selectEnemyHandler]);
+  }, [currentPlayerID, selectEnemyHandler]);
 
   useEffect(() => {
     const onPlayersTurn = ({

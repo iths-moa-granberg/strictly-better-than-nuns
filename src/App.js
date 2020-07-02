@@ -10,7 +10,7 @@ const socket = io('http://localhost:3002');
 const App = () => {
   const [gameState, setGameState] = useState('startscreen');
   const [myPlayer, setMyPlayer] = useState(null);
-  const [currentPlayerId, setCurrentPlayerId] = useState(null);
+  const [currentPlayerID, setCurrentPlayerId] = useState(null);
 
   useEffect(() => {
     const onGameStarted = () => {
@@ -46,7 +46,7 @@ const App = () => {
           <Board
             myPlayer={myPlayer}
             setMyPlayer={setMyPlayer}
-            currentPlayerId={currentPlayerId}
+            currentPlayerID={currentPlayerID}
             setCurrentPlayerId={setCurrentPlayerId}
           />
           <ProgressLogger />
