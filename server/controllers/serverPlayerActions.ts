@@ -102,13 +102,14 @@ io.on('connection', (socket: PlayerSocket) => {
     const heardTo = socket.game.board.isHeard(player.position, enemy.position, sound, enemy.id);
     if (heardTo) {
       if (heardTo.length > 1) {
-        socket.emit('player select token', {
+        const params: OnPlayerSelectToken = {
           heardTo,
           id: player.id,
           turn: 'player',
           enemyID: enemy.id,
           sound,
-        } as OnPlayerSelectToken);
+        };
+        socket.emit('player select token', params);
         return;
       } else {
         socket.game.addToken(heardTo[0].id, 'sound', enemy.id);

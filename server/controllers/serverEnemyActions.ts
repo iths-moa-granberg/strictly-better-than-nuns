@@ -68,7 +68,8 @@ io.on('connection', (socket: ExtendedSocket) => {
   };
 
   const chooseNewPath = (paths: Position[][]) => {
-    socket.emit('choose new path', { paths } as OnChooseNewPath);
+    const params: OnChooseNewPath = { paths };
+    socket.emit('choose new path', params);
   };
 
   socket.on('select path', ({ path }: { path: Position[] }) => {
@@ -110,12 +111,13 @@ io.on('connection', (socket: ExtendedSocket) => {
         const heardTo = socket.game.board.isHeard(player.position, enemy.position, playerSound, enemy.id);
         if (heardTo) {
           if (heardTo.length > 1) {
-            io.in(socket.game.id).emit('player select token', {
+            const params: OnPlayerSelectToken = {
               heardTo,
               id: player.id,
               turn: 'enemy',
               enemyID: enemy.id,
-            } as OnPlayerSelectToken);
+            };
+            io.in(socket.game.id).emit('player select token', params);
           } else {
             socket.game.addToken(heardTo[0].id, 'sound', enemy.id);
             waitForTokenPlacement();

@@ -11,13 +11,14 @@ export const updateBoard = (game: Game) => {
 
   const reachablePositions: Position[] = [];
 
-  io.in(game.id).emit('update board', {
+  const params: OnUpdateBoard = {
     players,
     soundTokens: game.soundTokens,
     sightTokens: game.sightTokens,
     enemyPaths: [game.enemies.e1.path, game.enemies.e2.path],
     reachablePositions,
-  } as OnUpdateBoard);
+  };
+  io.in(game.id).emit('update board', params);
 };
 
 export const startNextTurn = (game: Game) => {
