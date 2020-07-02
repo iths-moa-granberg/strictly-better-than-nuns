@@ -1,7 +1,13 @@
 import React from 'react';
 import { socket } from '../../../../App';
+import { MyPlayer } from '../../../../clientTypes';
 
-const ConfirmButtons = ({ myPlayer, setActionState }) => {
+interface ConfirmButtonsProps {
+  myPlayer: MyPlayer;
+  setActionState: Function;
+}
+
+const ConfirmButtons = ({ myPlayer, setActionState }: ConfirmButtonsProps) => {
   const handleConfirm = () => {
     if (myPlayer.isEvil) {
       socket.emit('enemy move completed');
