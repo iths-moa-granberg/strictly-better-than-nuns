@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../../../App';
 import { MyPlayer } from '../../../../clientTypes';
+import { OnPlayerSelectsPace, OnEnemySelectsPace } from '../../../../shared/sharedTypes';
 
 interface PaceButtonsProps {
   myPlayer: MyPlayer;
@@ -22,15 +23,19 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
     if (!myPlayer.isEvil && caught && !selectedPace) {
       setSelectedPace('walk');
       setPlayerDisabled(true);
-      socket.emit('player selects pace', { pace: 'walk' });
+
+      const params: OnPlayerSelectsPace = { pace: 'walk' };
+      socket.emit('player selects pace', params);
     }
   }, [caught, myPlayer, selectedPace]);
 
   const handleSelectsPace = (pace: string) => {
     if (myPlayer.isEvil) {
-      socket.emit('enemy selects pace', { pace });
+      const params: OnEnemySelectsPace = { pace };
+      socket.emit('enemy selects pace', params);
     } else {
-      socket.emit('player selects pace', { pace });
+      const params: OnPlayerSelectsPace = { pace };
+      socket.emit('player selects pace', params);
     }
     setSelectedPace(pace);
   };

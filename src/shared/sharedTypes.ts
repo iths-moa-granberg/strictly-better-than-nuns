@@ -82,3 +82,11 @@ export interface OnPlayersTurn {
   resetPosition?: Position;
   caughtPlayers: string[];
 }
+
+export interface OnPlayerSelectsPace {
+  pace: string;
+}
+
+export interface OnEnemySelectsPace {
+  pace: string;
+}

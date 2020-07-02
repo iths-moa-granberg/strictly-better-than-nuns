@@ -8,6 +8,7 @@ import {
   OnPossibleSteps,
   OnEnemyTakesStep,
   OnSelectEnemy,
+  OnEnemySelectsPace,
 } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
@@ -18,7 +19,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     currentEnemy = socket.game.enemies[enemyID];
   });
 
-  socket.on('enemy selects pace', ({ pace }: { pace: string }) => {
+  socket.on('enemy selects pace', ({ pace }: OnEnemySelectsPace) => {
     currentEnemy.pace = pace;
     currentEnemy.stepsLeft = pace === 'walk' ? 4 : 6;
     enemyStepOptions();
