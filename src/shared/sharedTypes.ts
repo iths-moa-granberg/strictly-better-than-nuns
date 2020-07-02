@@ -41,7 +41,7 @@ export interface OnPlayerSelectToken {
   id: string;
   turn: 'enemy' | 'player';
   enemyID: string;
-  sound?: number;
+  sound: number;
 }
 
 export interface OnChooseNewPath {
@@ -61,3 +61,9 @@ export interface OnPlayerTakesStep {
   position: Position;
 }
 
+export interface OnPlayerPlacedToken {
+  position: Position;
+  turn: 'player' | 'enemy';
+  enemyID: string;
+  sound: number;
+}

@@ -15,6 +15,7 @@ import {
   OnPossibleSteps,
   OnEnemyTakesStep,
   OnPlayerTakesStep,
+  OnPlayerPlacedToken,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
 
@@ -26,17 +27,17 @@ interface BoardProps {
 }
 
 interface ClickStateParams {
-  turn?: 'player' | 'enemy';
-  enemyID?: string;
-  sound?: number;
-  heardTo?: SoundToken[];
+  turn: 'player' | 'enemy';
+  enemyID: string;
+  sound: number;
+  heardTo: SoundToken[];
 }
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: BoardProps) => {
   const [actionState, setActionState] = useState<{ key: string; params?: ActionStateParams }>({
     key: 'pace',
   });
-  const [clickState, setClickState] = useState<{ key: string; params: ClickStateParams }>({ key: '', params: {} });
+  const [clickState, setClickState] = useState<{ key: string; params?: ClickStateParams }>({ key: '' });
 
   const [players, setPlayers] = useState<Players>([]);
   const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
@@ -90,7 +91,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
         setActionState({ key: 'confirm' });
       }
       setReachablePositions(possibleSteps);
-      setClickState({ key: 'take step', params: {} });
+      setClickState({ key: 'take step' });
     };
 
     const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }: OnPlayerSelectToken) => {
@@ -128,10 +129,11 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       }
     }
     if (clickState.key === 'select token') {
-      const { turn, enemyID, sound, heardTo } = clickState.params;
+      const { turn, enemyID, sound, heardTo } = clickState.params!;
 
       if (heardTo!.find((pos) => pos.id === position.id)) {
-        socket.emit('player placed token', { position, turn, enemyID, sound });
+        const params: OnPlayerPlacedToken = { position, turn, enemyID, sound };
+        socket.emit('player placed token', params);
       }
     }
   };

@@ -122,6 +122,7 @@ io.on('connection', (socket: ExtendedSocket) => {
               id: player.id,
               turn: 'enemy',
               enemyID: enemy.id,
+              sound,
             };
             io.in(socket.game.id).emit('player select token', params);
           } else {
