@@ -10,6 +10,7 @@ import {
   OnSelectEnemy,
   OnEnemySelectsPace,
   OnSelectPath,
+  OnPlayerPlacedToken,
 } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
@@ -141,15 +142,12 @@ io.on('connection', (socket: ExtendedSocket) => {
     }
   };
 
-  socket.on(
-    'player placed token',
-    ({ position, turn, enemyID }: { position: Position; turn: string; enemyID: string }) => {
-      if (turn === 'enemy') {
-        socket.game.addToken(position.id, 'sound', enemyID);
-        waitForTokenPlacement();
-      }
+  socket.on('player placed token', ({ position, turn, enemyID }: OnPlayerPlacedToken) => {
+    if (turn === 'enemy') {
+      socket.game.addToken(position.id, 'sound', enemyID);
+      waitForTokenPlacement();
     }
-  );
+  });
 
   const waitForTokenPlacement = (run?: boolean) => {
     socket.game.placedSoundCounter++;

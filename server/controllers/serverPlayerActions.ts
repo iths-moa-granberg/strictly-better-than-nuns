@@ -8,6 +8,8 @@ import {
   OnUpdatePlayer,
   OnPlayersTurn,
   OnPlayerSelectsPace,
+  OnPlayerPlacedToken,
+  OnPlayerTakesStep,
 } from '../../src/shared/sharedTypes';
 import { Player, Enemy } from '../modules/serverPlayer';
 
@@ -37,7 +39,7 @@ io.on('connection', (socket: PlayerSocket) => {
     socket.emit('possible steps', params);
   };
 
-  socket.on('player takes step', ({ position }: { position: Position }) => {
+  socket.on('player takes step', ({ position }: OnPlayerTakesStep) => {
     const serverPosition = socket.game.getServerPosition(position.id);
     socket.player.position = serverPosition;
     socket.player.stepsLeft--;
@@ -127,15 +129,12 @@ io.on('connection', (socket: PlayerSocket) => {
     playerMakeSound(player, sound);
   };
 
-  socket.on(
-    'player placed token',
-    ({ position, turn, enemyID, sound }: { position: Position; turn: string; enemyID: string; sound: number }) => {
-      if (turn === 'player') {
-        socket.game.addToken(position.id, 'sound', enemyID);
-        playerMakeSound(socket.player, sound);
-      }
+  socket.on('player placed token', ({ position, turn, enemyID, sound }: OnPlayerPlacedToken) => {
+    if (turn === 'player') {
+      socket.game.addToken(position.id, 'sound', enemyID);
+      playerMakeSound(socket.player, sound);
     }
-  );
+  });
 
   const endPlayerTurn = () => {
     socket.player.resetPath(socket.player.path[0].enemyID);
