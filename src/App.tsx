@@ -4,13 +4,15 @@ import io from 'socket.io-client';
 import Startscreen from './components/Startscreen/Startscreen';
 import Board from './components/Board/Board';
 import ProgressLogger from './components/ProgressLogger/ProgressLogger';
+import { MyPlayer } from './clientTypes';
+import { ClientPlayer } from './modules/player';
 
 const socket = io('http://localhost:3002');
 
 const App = () => {
-  const [gameState, setGameState] = useState('startscreen');
-  const [myPlayer, setMyPlayer] = useState(null);
-  const [currentPlayerID, setCurrentPlayerId] = useState(null);
+  const [gameState, setGameState] = useState<string>('startscreen');
+  const [myPlayer, setMyPlayer] = useState<MyPlayer | null>(null);
+  const [currentPlayerID, setCurrentPlayerId] = useState<'e1' | 'e2' | null>(null);
 
   useEffect(() => {
     const onGameStarted = () => {
@@ -25,8 +27,8 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const onUpdatePlayer = ({ hasKey, hasGoal, visible }) => {
-      setMyPlayer({ ...myPlayer, hasKey, hasGoal, visible });
+    const onUpdatePlayer = ({ hasKey, hasGoal, visible }: {hasKey: boolean, hasGoal: boolean, visible: boolean}) => {
+      setMyPlayer({ ...(myPlayer as ClientPlayer), hasKey, hasGoal, visible });
     };
 
     socket.on('update player', onUpdatePlayer);
@@ -44,7 +46,7 @@ const App = () => {
       {gameState === 'started' && (
         <>
           <Board
-            myPlayer={myPlayer}
+            myPlayer={myPlayer!}
             setMyPlayer={setMyPlayer}
             currentPlayerID={currentPlayerID}
             setCurrentPlayerId={setCurrentPlayerId}

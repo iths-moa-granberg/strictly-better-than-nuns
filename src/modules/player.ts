@@ -9,6 +9,7 @@ interface ClientPlayer {
   position: Position;
   hasKey: boolean;
   hasGoal: boolean;
+  visible: boolean;
 }
 
 interface ClientEnemy {
@@ -30,6 +31,7 @@ class ClientPlayer {
 
     this.hasKey = false;
     this.hasGoal = false;
+    this.visible = false;
   }
 }
 
