@@ -48,7 +48,16 @@ export interface OnChooseNewPath {
   paths: Position[][];
 }
 
-export type OnPossibleSteps = {
+export interface OnPossibleSteps {
   possibleSteps: Position[];
   stepsLeft?: number;
 }
+
+export interface OnEnemyTakesStep {
+  position: Position;
+}
+
+export interface OnPlayerTakesStep {
+  position: Position;
+}
+

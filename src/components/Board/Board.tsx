@@ -13,6 +13,8 @@ import {
   Players,
   OnChooseNewPath,
   OnPossibleSteps,
+  OnEnemyTakesStep,
+  OnPlayerTakesStep,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
 
@@ -111,14 +113,16 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const clickHandler = (position: Position) => {
     if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerID, position, reachablePositions)) {
       if (myPlayer.isEvil) {
-        socket.emit('enemy takes step', { position });
+        const params: OnEnemyTakesStep = { position };
+        socket.emit('enemy takes step', params);
         setMyPlayer((mp: ClientEnemies) => {
           const newMyPlayer = { ...mp };
           newMyPlayer[currentPlayerID!] = { ...mp[currentPlayerID!], position };
           return newMyPlayer;
         });
       } else {
-        socket.emit('player takes step', { position });
+        const params: OnPlayerTakesStep = { position };
+        socket.emit('player takes step', params);
         setMyPlayer({ ...myPlayer, position });
         setActionState({ key: 'confirm' });
       }
