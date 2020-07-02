@@ -47,3 +47,8 @@ export interface OnPlayerSelectToken {
 export interface OnChooseNewPath {
   paths: Position[][];
 }
+
+export type OnPossibleSteps = {
+  possibleSteps: Position[];
+  stepsLeft?: number;
+}

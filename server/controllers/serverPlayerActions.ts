@@ -1,7 +1,7 @@
 import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
 import { PlayerSocket } from '../serverTypes';
-import { Position, OnPlayerSelectToken } from '../../src/shared/sharedTypes';
+import { Position, OnPlayerSelectToken, OnPossibleSteps } from '../../src/shared/sharedTypes';
 import { Player, Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: PlayerSocket) => {
@@ -26,7 +26,8 @@ io.on('connection', (socket: PlayerSocket) => {
         socket.player.hasKey
       );
     }
-    socket.emit('possible steps', { possibleSteps });
+    const params: OnPossibleSteps = { possibleSteps };
+    socket.emit('possible steps', params);
   };
 
   socket.on('player takes step', ({ position }: { position: Position }) => {

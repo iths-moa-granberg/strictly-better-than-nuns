@@ -12,6 +12,7 @@ import {
   OnPlayerSelectToken,
   Players,
   OnChooseNewPath,
+  OnPossibleSteps,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
 
@@ -82,8 +83,8 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   }, [showNewPathHandler]);
 
   useEffect(() => {
-    const onPossibleSteps = ({ possibleSteps, stepsLeft }: { possibleSteps: Position[]; stepsLeft: number }) => {
-      if ((myPlayer.isEvil && stepsLeft <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
+    const onPossibleSteps = ({ possibleSteps, stepsLeft }: OnPossibleSteps) => {
+      if ((myPlayer.isEvil && stepsLeft! <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
         setActionState({ key: 'confirm' });
       }
       setReachablePositions(possibleSteps);

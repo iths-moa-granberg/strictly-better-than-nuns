@@ -1,7 +1,7 @@
 import { io } from '../index';
 import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
-import { Position, OnPlayerSelectToken, OnChooseNewPath } from '../../src/shared/sharedTypes';
+import { Position, OnPlayerSelectToken, OnChooseNewPath, OnPossibleSteps } from '../../src/shared/sharedTypes';
 import { Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -36,7 +36,8 @@ io.on('connection', (socket: ExtendedSocket) => {
     } else {
       possibleSteps = socket.game.board.getClosestWayToPath(currentEnemy.position, currentEnemy.path);
     }
-    socket.emit('possible steps', { possibleSteps, stepsLeft: currentEnemy.stepsLeft });
+    const params: OnPossibleSteps = { possibleSteps, stepsLeft: currentEnemy.stepsLeft };
+    socket.emit('possible steps', params);
   };
 
   socket.on('enemy takes step', ({ position }: { position: Position }) => {
