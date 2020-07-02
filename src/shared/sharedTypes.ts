@@ -112,3 +112,15 @@ export interface OnUpdateOpenGames {
 export interface OnInit {
   enemyJoined: boolean;
 }
+
+export interface OnSetUpPlayer {
+  id: string;
+  home: Position;
+  key: Position;
+  goal: Position;
+  isEvil: boolean;
+}
+
+export interface OnSetUpEnemy {
+  startPositions: Position[];
+}

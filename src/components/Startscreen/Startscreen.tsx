@@ -3,7 +3,7 @@ import { socket } from '../../App';
 import { ClientPlayer, ClientEnemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
 import { OpenGame, ClientUser, MyPlayer } from '../../clientTypes';
-import { Position, OnStartScreen, OnUpdateOpenGames, OnInit } from '../../shared/sharedTypes';
+import { OnStartScreen, OnUpdateOpenGames, OnInit, OnSetUpPlayer, OnSetUpEnemy } from '../../shared/sharedTypes';
 
 interface StartscreenProps {
   setMyPlayer: Function;
@@ -61,24 +61,12 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
   }, []);
 
   useEffect(() => {
-    const onSetUpPlayer = ({
-      id,
-      home,
-      key,
-      goal,
-      isEvil,
-    }: {
-      id: string;
-      home: Position;
-      key: Position;
-      goal: Position;
-      isEvil: boolean;
-    }) => {
+    const onSetUpPlayer = ({ id, home, key, goal, isEvil }: OnSetUpPlayer) => {
       const player = new ClientPlayer(id, home, key, goal, isEvil);
       setMyPlayer(player);
     };
 
-    const onSetUpEnemy = ({ startPositions }: { startPositions: Position[] }) => {
+    const onSetUpEnemy = ({ startPositions }: OnSetUpEnemy) => {
       const enemy = {
         e1: new ClientEnemy('e1', startPositions[0]),
         e2: new ClientEnemy('e2', startPositions[1]),

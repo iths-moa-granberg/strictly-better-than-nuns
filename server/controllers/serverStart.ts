@@ -3,7 +3,14 @@ import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
-import { Users, OnStartScreen, OnUpdateOpenGames, OnInit } from '../../src/shared/sharedTypes';
+import {
+  Users,
+  OnStartScreen,
+  OnUpdateOpenGames,
+  OnInit,
+  OnSetUpPlayer,
+  OnSetUpEnemy,
+} from '../../src/shared/sharedTypes';
 
 interface Games {
   [key: string]: StartGame;
@@ -75,20 +82,23 @@ io.on('connection', (socket: ExtendedSocket) => {
       socket.player = new Player(socket.game.generatePlayerInfo(user.username));
 
       socket.game.addPlayer(socket.player as Player);
-      socket.emit('set up player', {
+
+      const params: OnSetUpPlayer = {
         id: socket.player.id,
         home: socket.player.home,
         key: socket.player.key,
         goal: socket.player.goal,
         isEvil: socket.player.isEvil,
-      });
+      };
+      socket.emit('set up player', params);
     } else {
       games[socket.game.id].users[user.userID].role = 'evil';
       socket.player = socket.game.enemies;
       socket.game.enemyJoined = true;
-      socket.emit('set up enemy', {
+      const params: OnSetUpEnemy = {
         startPositions: [socket.player.e1.position, socket.player.e2.position],
-      });
+      };
+      socket.emit('set up enemy', params);
       io.in(socket.game.id).emit('disable join as evil');
     }
 
