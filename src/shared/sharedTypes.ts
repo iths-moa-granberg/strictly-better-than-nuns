@@ -67,3 +67,9 @@ export interface OnPlayerPlacedToken {
   enemyID: string;
   sound: number;
 }
+
+export interface OnUpdatePlayer {
+  hasKey: boolean;
+  hasGoal: boolean;
+  visible: boolean;
+}

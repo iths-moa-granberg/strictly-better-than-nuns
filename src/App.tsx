@@ -6,6 +6,7 @@ import Board from './components/Board/Board';
 import ProgressLogger from './components/ProgressLogger/ProgressLogger';
 import { MyPlayer } from './clientTypes';
 import { ClientPlayer } from './modules/player';
+import { OnUpdatePlayer } from './shared/sharedTypes';
 
 const socket = io('http://localhost:3002');
 
@@ -27,7 +28,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const onUpdatePlayer = ({ hasKey, hasGoal, visible }: {hasKey: boolean, hasGoal: boolean, visible: boolean}) => {
+    const onUpdatePlayer = ({ hasKey, hasGoal, visible }: OnUpdatePlayer) => {
       setMyPlayer({ ...(myPlayer as ClientPlayer), hasKey, hasGoal, visible });
     };
 
