@@ -1,5 +1,4 @@
 import { OpenGame, ClientUser } from '../clientTypes';
-import { Client } from 'socket.io';
 
 export interface Position {
   id: number;

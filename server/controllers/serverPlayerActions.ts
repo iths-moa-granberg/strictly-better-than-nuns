@@ -2,7 +2,6 @@ import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
 import { PlayerSocket } from '../serverTypes';
 import {
-  Position,
   OnPlayerSelectToken,
   OnPossibleSteps,
   OnUpdatePlayer,
