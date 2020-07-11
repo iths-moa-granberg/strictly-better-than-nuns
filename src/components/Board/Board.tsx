@@ -28,7 +28,7 @@ interface BoardProps {
 
 interface ClickStateParams {
   turn: 'player' | 'enemy';
-  enemyID: string;
+  enemyID: 'e1' | 'e2';
   sound: number;
   heardTo: SoundToken[];
 }
