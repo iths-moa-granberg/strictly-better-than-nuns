@@ -2,21 +2,24 @@
   "compilerOptions": {
     "target": "es6",
     "lib": [
-      "es2019"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "module": "commonjs",
-    "rootDir": ".",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "allowJs": true,
-    "watch": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react"
   },
   "include": [
-    "./server/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules" /* exclude everything in node_modules */
+    "src"
   ]
 }

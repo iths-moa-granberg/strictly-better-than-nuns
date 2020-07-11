@@ -1,25 +1,51 @@
 {
   "name": "strictly-better-than-nuns",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon -x ts-node index.ts",
-    "start-prod": "ts-node index.ts"
-  },
   "author": "Moa Granberg",
-  "license": "ISC",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/express": "^4.17.6",
+    "@types/jest": "^25.2.3",
+    "@types/node": "^14.0.9",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "@types/socket.io": "^2.1.8",
+    "@types/socket.io-client": "^1.4.33",
     "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
     "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.3"
   },
-  "devDependencies": {
-    "@types/node": "^14.0.5",
-    "@types/express": "^4.17.6",
-    "@types/socket.io": "^2.1.8",
-    "nodemon": "^2.0.2"
+  "scripts": {
+    "start": "BROWSER=none PORT=3001 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "prettier":  "prettier --write \"**/*.{js,ts,tsx,jsx,scss}\"",
+    "eject": "react-scripts eject",
+    "server-start": "PORT=3002 nodemon server/index.ts"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
