@@ -58,19 +58,19 @@ class Game {
     }
   };
 
-  addToken = (positionID: number, type: string, enemyID: string[] | string) => {
+  addToken = (positionID: number, type: string, enemyID: ('e1' | 'e2')[] | 'e1' | 'e2') => {
     if (type === 'sound') {
-      this.soundTokens.push({ id: positionID, enemyID: enemyID as string });
+      this.soundTokens.push({ id: positionID, enemyID: enemyID as 'e1' | 'e2' });
     } else if (type === 'sight') {
-      this.sightTokens.push({ id: positionID, enemyID: enemyID as string[] });
+      this.sightTokens.push({ id: positionID, enemyID: enemyID as ('e1' | 'e2')[] });
     }
   };
 
-  seenSomeone = (enemyID: string) => {
+  seenSomeone = (enemyID: 'e1' | 'e2') => {
     return Boolean(this.sightTokens.find((token) => token.enemyID.includes(enemyID)));
   };
 
-  heardSomeone = (enemyID: string) => {
+  heardSomeone = (enemyID: 'e1' | 'e2') => {
     return Boolean(this.soundTokens.find((token) => token.enemyID === enemyID));
   };
 

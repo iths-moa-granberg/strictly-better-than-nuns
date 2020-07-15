@@ -54,7 +54,7 @@ export const logSound = (game: Game) => {
 };
 
 export const isSeen = (player: Player, game: Game) => {
-  let seenBy = [];
+  let seenBy: ('e1' | 'e2')[] = [];
   if (
     game.board.isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition) ||
     game.enemies.e1.position.id === player.position.id
