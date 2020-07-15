@@ -34,7 +34,7 @@ interface Enemy {
 interface PlayerPathPosition {
   position: Position;
   visible: boolean;
-  enemyID: string[];
+  enemyID: ('e1' | 'e2')[];
 }
 
 interface PlayerConstructor {
@@ -90,11 +90,11 @@ class Player {
     }
   };
 
-  resetPath = (enemyID: string[]) => {
+  resetPath = (enemyID: ('e1' | 'e2')[]) => {
     this.path = [{ position: this.position, visible: this.visible, enemyID }];
   };
 
-  updatePathVisibility = (position: Position, enemyID: string[]) => {
+  updatePathVisibility = (position: Position, enemyID: ('e1' | 'e2')[]) => {
     this.path.forEach((obj) => {
       if (obj.position.id === position.id) {
         obj.visible = true;

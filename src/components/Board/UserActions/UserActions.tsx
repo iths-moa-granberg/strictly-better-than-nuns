@@ -33,7 +33,7 @@ const UserActions = ({
   const [paceProps, setPaceProps] = useState<PaceProps>({ playersTurn: true, caught: false });
 
   const selectEnemyHandler = useCallback(
-    (enemyID) => {
+    (enemyID: 'e1' | 'e2') => {
       setCurrentPlayerId(enemyID);
       const params: OnSelectEnemy = { enemyID };
       socket.emit('select enemy', params);
