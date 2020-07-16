@@ -1,4 +1,4 @@
-import { OpenGame, ClientUser } from '../clientTypes';
+import { ClientUser } from '../clientTypes';
 
 export interface Position {
   id: number;
@@ -101,12 +101,18 @@ export interface OnProgress {
   msg: string;
 }
 
+export interface OpenGame {
+  id: string;
+  name: string;
+  users: Users;
+}
+
 export interface OnStartScreen {
-  openGames: (OpenGame | undefined)[];
+  openGames: OpenGame[];
 }
 
 export interface OnUpdateOpenGames {
-  openGames: (OpenGame | undefined)[];
+  openGames: OpenGame[];
 }
 
 export interface OnInit {

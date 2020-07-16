@@ -13,6 +13,7 @@ import {
   OnJoinGame,
   OnPlayerJoined,
   OnInitNewGame,
+  OpenGame,
 } from '../../src/shared/sharedTypes';
 
 interface Games {
@@ -35,7 +36,7 @@ const getOpenGames = () => {
         return { id, name: games[id].name, users: games[id].users };
       }
     })
-    .filter((game) => game != null);
+    .filter((game) => game != null) as OpenGame[];
 };
 
 io.on('connection', (socket: ExtendedSocket) => {

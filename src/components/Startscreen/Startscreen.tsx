@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
 import { ClientPlayer, ClientEnemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
-import { OpenGame, ClientUser, MyPlayer } from '../../clientTypes';
+import { ClientUser, MyPlayer } from '../../clientTypes';
 import {
   OnStartScreen,
   OnUpdateOpenGames,
@@ -12,6 +12,7 @@ import {
   OnJoinGame,
   OnPlayerJoined,
   OnInitNewGame,
+  OpenGame,
 } from '../../shared/sharedTypes';
 
 interface StartscreenProps {
