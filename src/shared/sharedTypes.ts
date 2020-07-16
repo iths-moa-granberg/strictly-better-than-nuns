@@ -102,11 +102,11 @@ export interface OnProgress {
 }
 
 export interface OnStartScreen {
-  openGames: OpenGame[];
+  openGames: (OpenGame | undefined)[];
 }
 
 export interface OnUpdateOpenGames {
-  openGames: OpenGame[];
+  openGames: (OpenGame | undefined)[];
 }
 
 export interface OnInit {
