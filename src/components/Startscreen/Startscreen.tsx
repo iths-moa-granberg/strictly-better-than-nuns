@@ -23,9 +23,9 @@ interface StartscreenProps {
 
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenProps) => {
   const [openGames, setOpenGames] = useState<OpenGame[]>([]);
-  const [enemyJoined, setEnemyJoined] = useState(false);
-  const [joinedGame, setJoinedGame] = useState(false);
-  const [ready, setReady] = useState(false);
+  const [enemyJoined, setEnemyJoined] = useState<boolean>(false);
+  const [joinedGame, setJoinedGame] = useState<boolean>(false);
+  const [ready, setReady] = useState<boolean>(false);
   const [user, setUser] = useState<ClientUser | null>(null);
 
   useEffect(() => {

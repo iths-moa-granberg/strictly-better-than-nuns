@@ -31,12 +31,12 @@ class Board {
   getClosestWayHome = (start: Position, end: Position, hasKey: boolean) => {
     return this._getClosestPaths(start, end, hasKey)
       .flat()
-      .filter((pos) => pos.id != start.id);
+      .filter((pos) => pos.id != start.id) as Position[];
   };
 
   _getClosestPaths = (start: Position, end: Position, hasKey: boolean) => {
-    let queue = this._getQueue(start, end, hasKey);
-    let paths = [[end]];
+    let queue: Position[][] = this._getQueue(start, end, hasKey);
+    let paths: Position[][] = [[end]];
 
     for (let path of paths) {
       for (let pos of path) {
@@ -85,12 +85,12 @@ class Board {
     return allPaths
       .filter((path) => path.length === shortestPathLength)
       .flat()
-      .filter((pos) => pos.id != start.id);
+      .filter((pos) => pos.id != start.id) as Position[];
   };
 
   _getQueue = (start: Position, end: Position, hasKey: boolean) => {
-    let tested = [start];
-    let queue = [[start]];
+    let tested: Position[] = [start];
+    let queue: Position[][] = [[start]];
 
     for (let stepArr of queue) {
       let nextStep: Position[] = [];
@@ -116,10 +116,10 @@ class Board {
   };
 
   isHeard = (playerPos: Position, enemyPos: Position, sound: number, enemyID: 'e1' | 'e2') => {
-    const reaches = this.getReachable(playerPos, sound, true);
+    const reaches: Position[] = this.getReachable(playerPos, sound, true);
 
     if (reaches.find((pos) => pos.id === enemyPos.id)) {
-      const soundPaths = this._getClosestPaths(playerPos, enemyPos, true);
+      const soundPaths: Position[][] = this._getClosestPaths(playerPos, enemyPos, true);
 
       let tokenPositions: Position[] = [];
       for (let path of soundPaths) {

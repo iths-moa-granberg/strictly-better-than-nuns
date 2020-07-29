@@ -46,7 +46,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const [e2Path, setE2Path] = useState<Position[]>([]);
   const [reachablePositions, setReachablePositions] = useState<Position[]>([]);
 
-  const positionsArray = Object.values(positions);
+  const positionsArray: Position[] = Object.values(positions);
 
   const showNewPathHandler = useCallback(
     (path: Position[]) => {
@@ -186,7 +186,7 @@ const getChildren = (
   soundTokens: SoundToken[],
   sightTokens: SightToken[]
 ) => {
-  const children = [];
+  const children: JSX.Element[] = [];
 
   if (!myPlayer.isEvil) {
     const goodPlayer = myPlayer as ClientPlayer;

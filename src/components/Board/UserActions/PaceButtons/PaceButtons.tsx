@@ -10,9 +10,9 @@ interface PaceButtonsProps {
 }
 
 const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
-  const [selectedPace, setSelectedPace] = useState('');
-  const [enemyDisabled, setEnemyDisabled] = useState(true);
-  const [playerDisabled, setPlayerDisabled] = useState(true);
+  const [selectedPace, setSelectedPace] = useState<string>('');
+  const [enemyDisabled, setEnemyDisabled] = useState<boolean>(true);
+  const [playerDisabled, setPlayerDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     setEnemyDisabled(playersTurn);

@@ -2,6 +2,7 @@ import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
 import { PlayerSocket } from '../serverTypes';
 import {
+  Position,
   OnPlayerSelectToken,
   OnPossibleSteps,
   OnUpdatePlayer,
@@ -20,7 +21,7 @@ io.on('connection', (socket: PlayerSocket) => {
   });
 
   const playerStepOptions = () => {
-    let possibleSteps = [];
+    let possibleSteps: Position[] = [];
     if (socket.game.isCaught(socket.player)) {
       possibleSteps = socket.game.board.getClosestWayHome(
         socket.player.position,
