@@ -77,9 +77,7 @@ class Game {
   getVisiblePlayers = () => {
     return this.players
       .filter((player) => player.visible)
-      .map((player) => {
-        return { id: player.id, position: player.position };
-      });
+      .map((player) => ({ id: player.id, position: player.position }));
   };
 
   checkEnemyTarget = (enemy: Enemy) => {
