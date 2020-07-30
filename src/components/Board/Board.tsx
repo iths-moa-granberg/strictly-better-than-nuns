@@ -10,7 +10,7 @@ import {
   SightToken,
   SoundToken,
   OnPlayerSelectToken,
-  Players,
+  VisiblePlayers,
   OnChooseNewPath,
   OnPossibleSteps,
   OnEnemyTakesStep,
@@ -39,7 +39,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   });
   const [clickState, setClickState] = useState<{ key: string; params?: ClickStateParams }>({ key: '' });
 
-  const [players, setPlayers] = useState<Players>([]);
+  const [visiblePlayers, setVisiblePlayers] = useState<VisiblePlayers>([]);
   const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
   const [sightTokens, setSightTokens] = useState<SightToken[]>([]);
   const [e1Path, setE1Path] = useState<Position[]>([]);
@@ -62,8 +62,8 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   useEffect(() => {
     socket.on(
       'update board',
-      ({ players, soundTokens, sightTokens, enemyPaths, reachablePositions }: OnUpdateBoard) => {
-        setPlayers(players);
+      ({ visiblePlayers, soundTokens, sightTokens, enemyPaths, reachablePositions }: OnUpdateBoard) => {
+        setVisiblePlayers(visiblePlayers);
         setSoundTokens(soundTokens);
         setSightTokens(sightTokens);
         setE1Path(enemyPaths[0]);
@@ -138,7 +138,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     }
   };
 
-  if (!myPlayer || !players.length || !e1Path.length || !e2Path.length) {
+  if (!myPlayer || !visiblePlayers.length || !e1Path.length || !e2Path.length) {
     return <>loading</>;
   }
 
@@ -146,7 +146,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     <>
       <section className="board-wrapper">
         {positionsArray.map((position) => {
-          const children = getChildren(position, myPlayer, players, soundTokens, sightTokens);
+          const children = getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);
           return (
             <BoardPosition
@@ -182,7 +182,7 @@ const Token = ({ type }: { type: 'sight' | 'sound' }) => {
 const getChildren = (
   position: Position,
   myPlayer: MyPlayer,
-  players: Players,
+  visiblePlayers: VisiblePlayers,
   soundTokens: SoundToken[],
   sightTokens: SightToken[]
 ) => {
@@ -193,9 +193,9 @@ const getChildren = (
     if (position.id === goodPlayer.position.id) {
       children.push(<Player playerId={goodPlayer.id} key={children.length} />);
     }
-    players = players.filter((player) => player.id !== goodPlayer.id);
+    visiblePlayers = visiblePlayers.filter((player) => player.id !== goodPlayer.id);
   }
-  for (let player of players) {
+  for (let player of visiblePlayers) {
     if (position.id === player.position.id) {
       children.push(<Player playerId={player.id} key={children.length} />);
     }

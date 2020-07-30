@@ -5,14 +5,14 @@ import { ExtendedSocket } from '../serverTypes';
 import { Position, OnUpdateBoard, OnPlayersTurn, OnProgress } from '../../src/shared/sharedTypes';
 
 export const updateBoard = (game: Game) => {
-  const players = game.getVisiblePlayers();
-  players.push({ id: 'e1', position: game.enemies.e1.position });
-  players.push({ id: 'e2', position: game.enemies.e2.position });
+  const visiblePlayers = game.getVisiblePlayers();
+  visiblePlayers.push({ id: 'e1', position: game.enemies.e1.position });
+  visiblePlayers.push({ id: 'e2', position: game.enemies.e2.position });
 
   const reachablePositions: Position[] = [];
 
   const params: OnUpdateBoard = {
-    players,
+    visiblePlayers,
     soundTokens: game.soundTokens,
     sightTokens: game.sightTokens,
     enemyPaths: [game.enemies.e1.path, game.enemies.e2.path],

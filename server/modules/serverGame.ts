@@ -3,7 +3,7 @@ import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
 import { logProgress } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';
-import { SoundToken, SightToken } from '../../src/shared/sharedTypes';
+import { SoundToken, SightToken, VisiblePlayers } from '../../src/shared/sharedTypes';
 
 interface Game {
   id: string;
@@ -77,7 +77,7 @@ class Game {
   getVisiblePlayers = () => {
     return this.players
       .filter((player) => player.visible)
-      .map((player) => ({ id: player.id, position: player.position }));
+      .map((player) => ({ id: player.id, position: player.position })) as VisiblePlayers;
   };
 
   checkEnemyTarget = (enemy: Enemy) => {

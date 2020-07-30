@@ -28,10 +28,10 @@ export interface SoundToken {
   enemyID: 'e1' | 'e2';
 }
 
-export type Players = { id: string; position: Position }[];
+export type VisiblePlayers = { id: string; position: Position }[];
 
 export interface OnUpdateBoard {
-  players: Players;
+  visiblePlayers: VisiblePlayers;
   soundTokens: SoundToken[];
   sightTokens: SightToken[];
   enemyPaths: Position[][];
