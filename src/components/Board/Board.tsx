@@ -193,6 +193,7 @@ const getChildren = (
     if (position.id === goodPlayer.position.id) {
       children.push(<Player playerId={goodPlayer.id} key={children.length} />);
     }
+    players = players.filter((player) => player.id !== goodPlayer.id);
   }
   for (let player of players) {
     if (position.id === player.position.id) {
