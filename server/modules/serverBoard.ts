@@ -1,16 +1,21 @@
 import positions from '../../src/shared/positions';
 import { Position } from '../../src/shared/sharedTypes';
+import { Enemies } from '../serverTypes';
 
 class Board {
   constructor() {}
 
-  getReachable = (startPosition: Position, totalSteps: number, hasKey: boolean) => {
+  getReachable = (startPosition: Position, totalSteps: number, hasKey: boolean, isEvil: boolean, enemies: Enemies) => {
     let possiblePos = [startPosition];
     for (let steps = 0; steps < totalSteps; steps++) {
       for (let pos of possiblePos) {
         possiblePos = possiblePos.concat(
           this._getNeighbours(pos).filter((neighbour) => !possiblePos.includes(neighbour))
         );
+        if (!isEvil) {
+          const enemiesPositionsIDn: number[] = [enemies.e1.position.id, enemies.e2.position.id];
+          possiblePos = possiblePos.filter((pos) => !enemiesPositionsIDn.includes(pos.id));
+        }
         if (!hasKey) {
           possiblePos = possiblePos.filter((pos) => !pos.requireKey);
         }
@@ -115,8 +120,9 @@ class Board {
     return queue.findIndex((place) => place.find((pos) => pos.id === position.id));
   };
 
-  isHeard = (playerPos: Position, enemyPos: Position, sound: number, enemyID: 'e1' | 'e2') => {
-    const reaches: Position[] = this.getReachable(playerPos, sound, true);
+  isHeard = (playerPos: Position, enemies: Enemies, sound: number, enemyID: 'e1' | 'e2') => {
+    const enemyPos = enemies[enemyID].position;
+    const reaches: Position[] = this.getReachable(playerPos, sound, true, false, enemies); //false??
 
     if (reaches.find((pos) => pos.id === enemyPos.id)) {
       const soundPaths: Position[][] = this._getClosestPaths(playerPos, enemyPos, true);

@@ -1,6 +1,6 @@
 import { io } from '../index';
 import { updateBoard, logProgress, logSound, isSeen } from './sharedFunctions';
-import { PlayerSocket } from '../serverTypes';
+import { PlayerSocket, Enemies } from '../serverTypes';
 import {
   Position,
   OnPlayerSelectToken,
@@ -32,7 +32,9 @@ io.on('connection', (socket: PlayerSocket) => {
       possibleSteps = socket.game.board.getReachable(
         socket.player.position,
         socket.player.stepsLeft,
-        socket.player.hasKey
+        socket.player.hasKey,
+        socket.player.isEvil,
+        socket.game.enemies
       );
     }
     const params: OnPossibleSteps = { possibleSteps };
@@ -99,18 +101,18 @@ io.on('connection', (socket: PlayerSocket) => {
   const playerMakeSound = (player: Player, sound: number) => {
     if (socket.game.enemyListened === 0) {
       socket.game.enemyListened++;
-      makeSound(player, sound, socket.game.enemies.e1);
+      makeSound(player, sound, socket.game.enemies.e1, socket.game.enemies);
     } else if (socket.game.enemyListened === 1) {
       socket.game.enemyListened++;
-      makeSound(player, sound, socket.game.enemies.e2);
+      makeSound(player, sound, socket.game.enemies.e2, socket.game.enemies);
     } else {
       socket.game.enemyListened = 0;
       endPlayerTurn();
     }
   };
 
-  const makeSound = (player: Player, sound: number, enemy: Enemy) => {
-    const heardTo = socket.game.board.isHeard(player.position, enemy.position, sound, enemy.id);
+  const makeSound = (player: Player, sound: number, enemy: Enemy, enemies: Enemies) => {
+    const heardTo = socket.game.board.isHeard(player.position, enemies, sound, enemy.id);
     if (heardTo) {
       if (heardTo.length > 1) {
         const params: OnPlayerSelectToken = {
