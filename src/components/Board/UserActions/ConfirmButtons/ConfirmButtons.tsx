@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { socket } from '../../../../App';
 import { MyPlayer } from '../../../../clientTypes';
 
@@ -8,10 +8,13 @@ interface ConfirmButtonsProps {
 }
 
 const ConfirmButtons = ({ myPlayer, setActionState }: ConfirmButtonsProps) => {
+  const [disabled, setDisabled] = useState(false);
+
   const handleConfirm = () => {
     if (myPlayer.isEvil) {
       socket.emit('enemy move completed');
     } else {
+      setDisabled(true);
       socket.emit('player move completed');
     }
   };
@@ -23,8 +26,14 @@ const ConfirmButtons = ({ myPlayer, setActionState }: ConfirmButtonsProps) => {
 
   return (
     <>
-      <button onClick={handleConfirm}>Confirm</button>
-      {!myPlayer.isEvil && <button onClick={handleBack}>Back</button>}
+      <button disabled={disabled} onClick={handleConfirm}>
+        Confirm
+      </button>
+      {!myPlayer.isEvil && (
+        <button disabled={disabled} onClick={handleBack}>
+          Back
+        </button>
+      )}
     </>
   );
 };
