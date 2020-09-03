@@ -114,6 +114,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const clickHandler = (position: Position) => {
     if (clickState.key === 'take step' && stepIsValid(myPlayer, currentPlayerID, position, reachablePositions)) {
       if (myPlayer.isEvil) {
+        setActionState({ key: 'disabled enemy confirm' });
         const params: OnEnemyTakesStep = { position };
         socket.emit('enemy takes step', params);
         setMyPlayer((mp: ClientEnemies) => {
