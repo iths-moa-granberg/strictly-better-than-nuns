@@ -93,7 +93,9 @@ const UserActions = ({
         ) : (
           <PaceButtons myPlayer={myPlayer} {...paceProps} />
         ))}
-      {actionState.key === 'select new path' && <SelectPathButtons {...actionState.params!} />}
+      {actionState.key === 'select new path' && (
+        <SelectPathButtons {...actionState.params!} setActionState={setActionState} />
+      )}
     </div>
   );
 };

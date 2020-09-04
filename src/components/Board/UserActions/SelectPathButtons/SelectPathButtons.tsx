@@ -5,9 +5,10 @@ import { Position, OnSelectPath } from '../../../../shared/sharedTypes';
 interface SelectPathButtonsProps {
   paths: Position[][];
   showNewPathHandler: Function;
+  setActionState: Function;
 }
 
-const SelectPathButtons = ({ paths, showNewPathHandler }: SelectPathButtonsProps) => {
+const SelectPathButtons = ({ paths, showNewPathHandler, setActionState }: SelectPathButtonsProps) => {
   const [selectedPath, setSelectedPath] = useState<Position[]>();
 
   const handlerPathButton = (text: string) => {
@@ -25,6 +26,7 @@ const SelectPathButtons = ({ paths, showNewPathHandler }: SelectPathButtonsProps
     if (selectedPath) {
       const params: OnSelectPath = { path: selectedPath };
       socket.emit('select path', params);
+      setActionState({ key: 'disabled enemy confirm' });
       return <></>;
     }
   };
