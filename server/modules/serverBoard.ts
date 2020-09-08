@@ -122,7 +122,7 @@ class Board {
 
   isHeard = (playerPos: Position, enemies: Enemies, sound: number, enemyID: 'e1' | 'e2') => {
     const enemyPos = enemies[enemyID].position;
-    const reaches: Position[] = this.getReachable(playerPos, sound, true, false, enemies); //false??
+    const reaches: Position[] = this.getReachable(playerPos, sound, true, true, enemies);
 
     if (reaches.find((pos) => pos.id === enemyPos.id)) {
       const soundPaths: Position[][] = this._getClosestPaths(playerPos, enemyPos, true);

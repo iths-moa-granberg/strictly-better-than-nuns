@@ -150,7 +150,7 @@ io.on('connection', (socket: PlayerSocket) => {
 
     socket.game.playerTurnCompleted++;
     logProgress(`${socket.player.username} is ${socket.player.pace}ing`, { room: socket.game.id });
-    
+
     if (socket.game.playerTurnCompleted === socket.game.players.length) {
       socket.game.playerTurnCompleted = 0;
       logSound(socket.game);
