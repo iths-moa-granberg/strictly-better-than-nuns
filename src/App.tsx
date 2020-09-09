@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import './App.scss';
 import io from 'socket.io-client';
 import Startscreen from './components/Startscreen/Startscreen';
 import Board from './components/Board/Board';
