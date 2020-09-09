@@ -7,6 +7,7 @@ import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
 import { OnSelectEnemy, OnPlayersTurn } from '../../../shared/sharedTypes';
 import { ActionStateParams, MyPlayer } from '../../../clientTypes';
 import { ClientPlayer } from '../../../modules/player';
+import styles from './UserActions.module.scss';
 
 interface UserActionProps {
   actionState: { key: string; params?: ActionStateParams };
@@ -82,7 +83,7 @@ const UserActions = ({
   }, [myPlayer, setMyPlayer, setActionState]);
 
   return (
-    <div className="user-actions-wrapper">
+    <section className={styles.userActionsWrapper}>
       {actionState.key === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
       {actionState.key === 'confirm' && <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} />}
       {actionState.key === 'disabled enemy confirm' && <button disabled={true}>Confirm</button>}
@@ -96,7 +97,7 @@ const UserActions = ({
       {actionState.key === 'select new path' && (
         <SelectPathButtons {...actionState.params!} setActionState={setActionState} />
       )}
-    </div>
+    </section>
   );
 };
 

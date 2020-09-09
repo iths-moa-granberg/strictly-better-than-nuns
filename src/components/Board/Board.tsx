@@ -18,6 +18,7 @@ import {
   OnPlayerPlacedToken,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
+import styles from './Board.module.scss';
 
 interface BoardProps {
   myPlayer: MyPlayer;
@@ -145,7 +146,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 
   return (
     <>
-      <section className="board-wrapper">
+      <section className={styles.boardWrapper}>
         {positionsArray.map((position) => {
           const children = getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);

@@ -1,4 +1,15 @@
+@import './utils';
+
 body {
   margin: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: $standard-font;
+  max-height: 90vh;
+}
+
+#root > div {
+  display: grid;
+  grid: 1fr 1.4fr / 1fr 1fr;
+  grid-template-areas:
+    'board userActions'
+    'board progressLog';
 }

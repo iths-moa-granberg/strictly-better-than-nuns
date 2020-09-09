@@ -1,0 +1,22 @@
+@import '../../../utils';
+
+.userActionsWrapper {
+  grid-area: userActions;
+
+  background-color: $user-actions-background-color;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    font-family: $standard-font;
+    width: 100px;
+    height: 28px;
+    border: none;
+    border-radius: 2px;
+    margin: 8px;
+    color: $button-font-color;
+    background-color: $primary-button-color;
+  }
+}

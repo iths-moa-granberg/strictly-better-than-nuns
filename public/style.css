@@ -1,11 +1,4 @@
 
-.board-wrapper {
-    width: 424px;
-    height:313px;
-    position: relative;
-    background-image: url(images/test-board2.png);
-}
-
 .player {
     width: 25px;
     height: 25px;

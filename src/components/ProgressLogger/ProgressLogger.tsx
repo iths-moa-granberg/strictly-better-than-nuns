@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
 import { OnProgress } from '../../shared/sharedTypes';
+import styles from './ProgressLogger.module.scss';
 
 const ProgressLogger = () => {
   const [messages, setMessages] = useState<string[]>([]);
@@ -20,7 +21,7 @@ const ProgressLogger = () => {
   }, [messages]);
 
   return (
-    <section className="progress-log-wrapper">
+    <section className={styles.progressLogWrapper}>
       {messages.length > 0 && messages.map((msg, index) => <p key={index}>{msg}</p>)}
     </section>
   );

@@ -1,0 +1,8 @@
+@import '../../utils';
+
+.progressLogWrapper {
+  grid-area: progressLog;
+
+  background-color: $progress-log-background-color;
+  color: $white;
+}
