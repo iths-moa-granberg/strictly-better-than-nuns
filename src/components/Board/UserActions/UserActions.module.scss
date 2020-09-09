@@ -6,17 +6,9 @@
   background-color: $user-actions-background-color;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  button {
-    font-family: $standard-font;
-    width: 100px;
-    height: 28px;
-    border: none;
-    border-radius: 2px;
-    margin: 8px;
-    color: $button-font-color;
-    background-color: $primary-button-color;
-  }
+  
+  color: $white;
 }

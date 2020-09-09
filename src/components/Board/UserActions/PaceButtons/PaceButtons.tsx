@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../../../../App';
 import { MyPlayer } from '../../../../clientTypes';
 import { OnPlayerSelectsPace, OnEnemySelectsPace } from '../../../../shared/sharedTypes';
+import styles from '../Buttons.module.scss';
 
 interface PaceButtonsProps {
   myPlayer: MyPlayer;
@@ -44,7 +45,9 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
     return (
       <button
         disabled={disabled}
-        className={selectedPace && selectedPace !== text.toLowerCase() ? 'disabled' : ''}
+        className={
+          selectedPace && selectedPace === text.toLowerCase() ? `${styles.button} ${styles.active}` : styles.button
+        }
         onClick={(e) => handleSelectsPace((e.target as HTMLElement).innerHTML.toLowerCase())}>
         {text}
       </button>
@@ -62,11 +65,14 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
 
   return (
     <>
+      <h1>Choose your pace</h1>
+      <div>
+        <Button disabled={playerDisabled} text="Stand" />
+        <Button disabled={playerDisabled} text="Sneak" />
+        <Button disabled={playerDisabled} text="Walk" />
+        <Button disabled={playerDisabled} text="Run" />
+      </div>
       {caught && <p>you are caught, walk straight to home until no longer in view</p>}
-      <Button disabled={playerDisabled} text="Stand" />
-      <Button disabled={playerDisabled} text="Sneak" />
-      <Button disabled={playerDisabled} text="Walk" />
-      <Button disabled={playerDisabled} text="Run" />
     </>
   );
 };
