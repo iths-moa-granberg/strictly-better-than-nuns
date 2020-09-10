@@ -4,11 +4,20 @@
   grid-area: userActions;
 
   background-color: $user-actions-background-color;
+  min-height: 300px;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  
+
   color: $white;
+
+  h1 {
+    padding: 5rem 0 0 0;
+  }
+
+  p {
+    max-width: 400px;
+    text-align: center;
+  }
 }

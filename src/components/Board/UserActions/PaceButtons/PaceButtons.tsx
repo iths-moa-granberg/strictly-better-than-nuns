@@ -14,6 +14,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
   const [selectedPace, setSelectedPace] = useState<string>('');
   const [enemyDisabled, setEnemyDisabled] = useState<boolean>(true);
   const [playerDisabled, setPlayerDisabled] = useState<boolean>(true);
+  const [hover, setHover] = useState<string>('');
 
   useEffect(() => {
     setEnemyDisabled(playersTurn);
@@ -48,7 +49,9 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
         className={
           selectedPace && selectedPace === text.toLowerCase() ? `${styles.button} ${styles.active}` : styles.button
         }
-        onClick={(e) => handleSelectsPace((e.target as HTMLElement).innerHTML.toLowerCase())}>
+        onClick={(e) => handleSelectsPace((e.target as HTMLElement).innerHTML.toLowerCase())}
+        onMouseOver={(e) => setHover((e.target as HTMLElement).innerHTML.toLowerCase())}
+        onMouseLeave={() => setHover('')}>
         {text}
       </button>
     );
@@ -63,6 +66,15 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
     );
   }
 
+  if (caught) {
+    return (
+      <>
+        <h1>You are caught!</h1>
+        <p>Walk straight home until no longer in view</p>
+      </>
+    );
+  }
+
   return (
     <>
       <h1>Choose your pace</h1>
@@ -72,7 +84,17 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
         <Button disabled={playerDisabled} text="Walk" />
         <Button disabled={playerDisabled} text="Run" />
       </div>
-      {caught && <p>you are caught, walk straight to home until no longer in view</p>}
+      {hover === 'stand' && <p>When standing, you can move 0 steps and makes noise up to 3 spaces away</p>}
+      {hover === 'sneak' && <p>When sneaking, you can move 2 steps and makes noise up to 4 spaces away</p>}
+      {hover === 'walk' && <p>When walking, you can move 3 steps and makes noise up to 5 spaces away</p>}
+      {hover === 'run' && <p>When running, you can move 5 steps and makes noise up to 6 spaces away</p>}
+      {hover === '' && (
+        <p>
+          <br></br>
+          <br></br>
+        </p>
+      )}
+      {selectedPace && <p>Click on position next to your player to take a step</p>}
     </>
   );
 };
