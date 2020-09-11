@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { socket } from '../../../../App';
 import { Position, OnSelectPath } from '../../../../shared/sharedTypes';
+import styles from '../Buttons.module.scss';
 
 interface SelectPathButtonsProps {
   paths: Position[][];
@@ -11,13 +12,7 @@ interface SelectPathButtonsProps {
 const SelectPathButtons = ({ paths, showNewPathHandler, setActionState }: SelectPathButtonsProps) => {
   const [selectedPath, setSelectedPath] = useState<Position[]>();
 
-  const handlerPathButton = (text: string) => {
-    const index = Number(
-      text
-        .split('')
-        .filter((char) => char.match(/[0-9]/))
-        .join('')
-    );
+  const handlerPathButton = (index: number) => {
     showNewPathHandler(paths[index]);
     setSelectedPath(paths[index]);
   };
@@ -27,24 +22,35 @@ const SelectPathButtons = ({ paths, showNewPathHandler, setActionState }: Select
       const params: OnSelectPath = { path: selectedPath };
       socket.emit('select path', params);
       setActionState({ key: 'disabled enemy confirm' });
-      return <></>;
     }
   };
 
   return (
     <>
-      <p>Choose next path</p>
-      {paths.map((path, index) => (
-        <button
-          key={index}
-          onClick={(e) => handlerPathButton((e.target as HTMLElement).innerHTML)}
-          className={!selectedPath || selectedPath === paths[index] ? '' : 'disabled'}>
-          Path {index}
+      <h1>Choose next path</h1>
+
+      <div>
+        {paths.map((path, index) => (
+          <button
+            key={index}
+            onClick={() => handlerPathButton(index)}
+            className={selectedPath === paths[index] ? `${styles.button} ${styles.active}` : `${styles.button}`}>
+            {getLetter(index)}
+          </button>
+        ))}
+      </div>
+
+      {selectedPath && (
+        <button className={`${styles.button} ${styles.confirm}`} onClick={handleSelect}>
+          Confirm
         </button>
-      ))}
-      {selectedPath && <button onClick={handleSelect}>Confirm</button>}
+      )}
     </>
   );
+};
+
+const getLetter = (num: number) => {
+  return String.fromCharCode(num + 65);
 };
 
 export default SelectPathButtons;
