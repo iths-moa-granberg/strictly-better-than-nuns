@@ -85,8 +85,12 @@ const UserActions = ({
   return (
     <section className={styles.userActionsWrapper}>
       {actionState.key === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
-      {actionState.key === 'confirm' && <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} />}
-      {actionState.key === 'disabled enemy confirm' && <button disabled={true}>Confirm</button>}
+      {actionState.key === 'confirm' && (
+        <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} disabled={false} />
+      )}
+      {actionState.key === 'disabled enemy confirm' && (
+        <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} disabled={true} />
+      )}
       {actionState.key === 'select token' && <p>click on soundtoken to select sound-position</p>}
       {actionState.key === 'select enemy' &&
         (myPlayer.isEvil ? (

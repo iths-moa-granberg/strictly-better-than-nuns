@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { socket } from '../../../../App';
 import { MyPlayer } from '../../../../clientTypes';
+import styles from '../Buttons.module.scss';
 
 interface ConfirmButtonsProps {
   myPlayer: MyPlayer;
   setActionState: Function;
+  disabled: boolean;
 }
 
-const ConfirmButtons = ({ myPlayer, setActionState }: ConfirmButtonsProps) => {
-  const [disabled, setDisabled] = useState(false);
-
+const ConfirmButtons = ({ myPlayer, setActionState, disabled }: ConfirmButtonsProps) => {
   const handleConfirm = () => {
     if (myPlayer.isEvil) {
       socket.emit('enemy move completed');
     } else {
-      setDisabled(true);
       socket.emit('player move completed');
     }
   };
@@ -26,13 +25,27 @@ const ConfirmButtons = ({ myPlayer, setActionState }: ConfirmButtonsProps) => {
 
   return (
     <>
-      <button disabled={disabled} onClick={handleConfirm}>
-        Confirm
-      </button>
-      {!myPlayer.isEvil && (
-        <button disabled={disabled} onClick={handleBack}>
-          Back
+      {disabled ? <h1>Take step</h1> : <h1>Confirm or take step</h1>}
+
+      <div>
+        <button className={`${styles.button} ${styles.confirm}`} disabled={disabled} onClick={handleConfirm}>
+          Confirm
         </button>
+        {!myPlayer.isEvil && (
+          <button className={`${styles.button} ${styles.back}`} disabled={disabled} onClick={handleBack}>
+            Back
+          </button>
+        )}
+      </div>
+
+      {!myPlayer.isEvil && <p>Confirm destination or click back and re-do your turn</p>}
+
+      {disabled ? (
+        <p>Click on position next to your player to take a step</p>
+      ) : (
+        <>
+          <p>Confirm destination or click on a position next to your player to take a step</p>
+        </>
       )}
     </>
   );

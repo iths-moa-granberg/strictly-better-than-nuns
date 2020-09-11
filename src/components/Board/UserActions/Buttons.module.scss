@@ -21,6 +21,14 @@
     background-color: $active-button-color;
   }
 
+  &.confirm {
+    background-color: $confirm-button-color;
+  }
+
+  &.back {
+    background-color: $back-button-color;
+  }
+
   &:disabled {
     opacity: 0.5;
     box-shadow: none;
