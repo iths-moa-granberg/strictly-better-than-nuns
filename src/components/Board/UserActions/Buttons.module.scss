@@ -29,6 +29,14 @@
     background-color: $back-button-color;
   }
 
+  &.enemy1 {
+    background-color: $enemy1-color;
+  }
+
+  &.enemy2 {
+    background-color: $enemy2-color;
+  }
+
   &:disabled {
     opacity: 0.5;
     box-shadow: none;
