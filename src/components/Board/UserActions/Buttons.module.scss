@@ -9,12 +9,20 @@
   margin: 8px;
   color: $button-font-color;
   background-color: $primary-button-color;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  opacity: 0.9;
 
-  &:hover {
-    background-color: $active-button-color;
+  &:hover:enabled {
+    opacity: 1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
 
   &.active {
     background-color: $active-button-color;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    box-shadow: none;
   }
 }
