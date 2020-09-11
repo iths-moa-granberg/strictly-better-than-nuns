@@ -4,5 +4,17 @@
   grid-area: progressLog;
 
   background-color: $progress-log-background-color;
+  padding: 0 42px;
+
   color: $white;
+  font-size: 14px;
+  height: 60vh;
+  overflow-y: scroll;
+
+  display: flex;
+  flex-direction: column-reverse;
+
+  p {
+    margin: 2px 0;
+  }
 }

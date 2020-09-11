@@ -9,7 +9,7 @@ const ProgressLogger = () => {
   useEffect(() => {
     const onProgress = ({ msg }: OnProgress) => {
       if (messages[messages.length - 1] !== msg) {
-        setMessages((m) => [...m, msg]);
+        setMessages((m) => [msg, ...m]);
       }
     };
 
