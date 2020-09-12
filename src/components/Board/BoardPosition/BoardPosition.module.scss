@@ -1,0 +1,25 @@
+@import '../../../utils';
+
+.position {
+  width: 0.8vh * $board-resolution;
+  height: 0.8vh * $board-resolution;
+
+  background-color: $position-background-color;
+  border: 0.3vh * $board-resolution solid $position-border-color;
+  border-radius: 100%;
+
+  position: absolute;
+  z-index: 0;
+}
+
+.enemy1-end-of-path {
+  background-color: $enemy1-color;
+}
+
+.enemy2-end-of-path {
+  background-color: $enemy2-color;
+}
+
+.reachable {
+  background-color: red;
+}

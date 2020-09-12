@@ -213,16 +213,17 @@ const getChildren = (
 };
 
 const getClassName = (position: Position, e1Path: Position[], e2Path: Position[], reachablePositions: Position[]) => {
-  let className = 'position';
+  const className = ['position'];
 
-  if (e1Path.find((enemyPos) => enemyPos.id === position.id)) {
-    className = `${className} enemy1-path`;
+  if (e1Path[e1Path.length - 1].id === position.id) {
+    className.push('enemy1-end-of-path');
   }
-  if (e2Path.find((enemyPos) => enemyPos.id === position.id)) {
-    className = `${className} enemy2-path`;
+  if (e2Path[e2Path.length - 1].id === position.id) {
+    className.push('enemy2-end-of-path');
   }
+
   if (reachablePositions.find((pos) => pos.id === position.id)) {
-    className = `${className} reachable`;
+    className.push('reachable');
   }
 
   return className;
