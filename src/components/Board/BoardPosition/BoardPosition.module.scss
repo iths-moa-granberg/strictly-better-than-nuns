@@ -16,14 +16,36 @@
   align-items: center;
 }
 
-.enemy1-end-of-path {
+.enemy1-end-of-path,
+.reachable-e1 {
   background-color: $enemy1-color;
 }
 
-.enemy2-end-of-path {
+.enemy2-end-of-path,
+.reachable-e2 {
   background-color: $enemy2-color;
 }
 
-.reachable {
-  background-color: red;
+.reachable-0 {
+  background-color: $player0-main-color;
+}
+
+.reachable-1 {
+  background-color: $player1-main-color;
+}
+
+.reachable-2 {
+  background-color: $player2-main-color;
+}
+
+.reachable-3 {
+  background-color: $player3-main-color;
+}
+
+.reachable-4 {
+  background-color: $player4-main-color;
+}
+
+.reachable-5 {
+  background-color: $player5-main-color;
 }

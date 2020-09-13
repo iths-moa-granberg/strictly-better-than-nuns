@@ -155,7 +155,11 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       <section className={`${styles.boardWrapper} ${styles[viewLock]}`}>
         {positionsArray.map((position) => {
           const children = getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens);
-          const className = getClassName(position, e1Path, e2Path, reachablePositions);
+
+          const className = myPlayer.isEvil
+            ? getClassName(position, e1Path, e2Path, reachablePositions, currentPlayerID as 'e1' | 'e2')
+            : getClassName(position, e1Path, e2Path, reachablePositions, (myPlayer as ClientPlayer).id);
+
           return (
             <BoardPosition
               key={position.id}
@@ -218,7 +222,13 @@ const getChildren = (
   return children;
 };
 
-const getClassName = (position: Position, e1Path: Position[], e2Path: Position[], reachablePositions: Position[]) => {
+const getClassName = (
+  position: Position,
+  e1Path: Position[],
+  e2Path: Position[],
+  reachablePositions: Position[],
+  id: string
+) => {
   const className = ['position'];
 
   if (e1Path[e1Path.length - 1].id === position.id) {
@@ -229,7 +239,7 @@ const getClassName = (position: Position, e1Path: Position[], e2Path: Position[]
   }
 
   if (reachablePositions.find((pos) => pos.id === position.id)) {
-    className.push('reachable');
+    className.push(`reachable-${id}`);
   }
 
   return className;
