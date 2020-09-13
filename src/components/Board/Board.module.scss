@@ -7,8 +7,17 @@
   width: 100vh * $board-resolution;
 
   position: relative;
+
   background-image: url(../../assets/Board.svg);
   background-color: $board-background-color;
   background-repeat: no-repeat;
   background-size: cover;
+
+  &.locked {
+    background-image: url(../../assets/Locked.svg), url(../../assets/Board.svg);
+  }
+
+  &.unlocked {
+    background-image: url(../../assets/Unlocked.svg), url(../../assets/Board.svg);
+  }
 }

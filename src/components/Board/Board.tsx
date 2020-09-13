@@ -49,6 +49,8 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 
   const positionsArray: Position[] = Object.values(positions);
 
+  const [viewLock, setViewLock] = useState<'locked' | 'unlocked'>(myPlayer.isEvil ? 'unlocked' : 'locked');
+
   const showNewPathHandler = useCallback(
     (path: Position[]) => {
       if (currentPlayerID === 'e1') {
@@ -87,6 +89,10 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   }, [showNewPathHandler]);
 
   useEffect(() => {
+    if ((myPlayer as ClientPlayer).hasKey) {
+      setViewLock('unlocked');
+    }
+
     const onPossibleSteps = ({ possibleSteps, stepsLeft }: OnPossibleSteps) => {
       if ((myPlayer.isEvil && stepsLeft! <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
         setActionState({ key: 'confirm' });
@@ -146,7 +152,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 
   return (
     <>
-      <section className={styles.boardWrapper}>
+      <section className={`${styles.boardWrapper} ${styles[viewLock]}`}>
         {positionsArray.map((position) => {
           const children = getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens);
           const className = getClassName(position, e1Path, e2Path, reachablePositions);
