@@ -30,11 +30,11 @@
   }
 
   &.enemy1 {
-    background-color: $enemy1-color;
+    background-color: $enemy1-main-color;
   }
 
   &.enemy2 {
-    background-color: $enemy2-color;
+    background-color: $enemy2-main-color;
   }
 
   &:disabled {

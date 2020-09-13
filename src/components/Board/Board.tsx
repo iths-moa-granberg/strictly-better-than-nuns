@@ -184,7 +184,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 };
 
 const Player = ({ playerId }: { playerId: string }) => {
-  return <div className={`${styles.player} ${styles[`player-${playerId.toString()}`]}`} />;
+  return <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />;
 };
 
 const Token = ({ type }: { type: 'sight' | 'sound' }) => {
