@@ -17,7 +17,6 @@ const BoardPosition = ({ position, className, children, clickHandler }: BoardPos
       className={newClassName}
       style={{ top: `${position.y * (856 / 900)}vh`, left: `${position.x * (856 / 900)}vh` }}
       onClick={() => clickHandler(position)}>
-      <p></p>
       {children}
     </div>
   );

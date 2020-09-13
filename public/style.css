@@ -1,24 +1,4 @@
 
-.player {
-    width: 25px;
-    height: 25px;
-    border-radius: 100%;
-    position: absolute;
-    z-index: 1;
-}
-
-.player-0 {
-    background-color: green;
-}
-
-.player-1 {
-    background-color: darkblue;
-}
-
-.player-2 {
-    background-color: purple;
-}
-
 .player-e1, .e1 {
     background-color: rgb(97, 80, 80);
     color: white;
@@ -27,35 +7,6 @@
 .player-e2, .e2 {
     background-color: rgb(40, 104, 104);
     color: white;
-}
-
-.position {
-    width: 30px;
-    height: 30px;
-    background-color: #C4C4C4;
-    border-radius: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    z-index: 0;
-}
-
-.reachable {
-    border: 1px solid green;
-}
-
-.enemy1-path {
-    background-color: rgb(128, 120, 120);
-}
-
-.enemy2-path {
-    background-color: rgb(139, 157, 157);
-}
-
-.user-actions-wrapper > button {
-    height: 2rem;
-    margin: 2rem 1rem;
 }
 
 .key {
@@ -68,10 +19,6 @@
 
 .home {
     background-color: yellow;
-}
-
-.disabled {
-    opacity: 0.5;
 }
 
 .sound-token {

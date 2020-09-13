@@ -21,3 +21,41 @@
     background-image: url(../../assets/Unlocked.svg), url(../../assets/Board.svg);
   }
 }
+
+.player {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  position: absolute;
+  z-index: 1;
+}
+
+.player-0 {
+  background-color: $player0-main-color;
+  border: 1px solid $player0-secondary-color;
+}
+
+.player-1 {
+  background-color: $player1-main-color;
+  border: 1px solid $player1-secondary-color;
+}
+
+.player-2 {
+  background-color: $player2-main-color;
+  border: 1px solid $player2-secondary-color;
+}
+
+.player-3 {
+  background-color: $player3-main-color;
+  border: 1px solid $player3-secondary-color;
+}
+
+.player-4 {
+  background-color: $player4-main-color;
+  border: 1px solid $player4-secondary-color;
+}
+
+.player-5 {
+  background-color: $player5-main-color;
+  border: 1px solid $player5-secondary-color;
+}
