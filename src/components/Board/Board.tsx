@@ -183,7 +183,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   );
 };
 
-const Player = ({ playerId }: { playerId: number | string }) => {
+const Player = ({ playerId }: { playerId: string }) => {
   return <div className={`${styles.player} ${styles[`player-${playerId.toString()}`]}`} />;
 };
 
