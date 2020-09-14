@@ -33,7 +33,7 @@
     background-color: $enemy1-main-color;
     border: 1px solid $enemy1-secondary-color;
   }
-  
+
   &.e2 {
     background-color: $enemy2-main-color;
     border: 1px solid $enemy2-secondary-color;
@@ -67,5 +67,74 @@
   &.5 {
     background-color: $player5-main-color;
     border: 1px solid $player5-secondary-color;
+  }
+}
+
+.enemyPlayerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .triangle {
+    position: absolute;
+    z-index: 1;
+
+    width: 0;
+    height: 0;
+
+    $triangle-width: 4px;
+    $triangle-height: $triangle-width * 2 * 0.866;
+
+    &.up {
+      margin-top: -30px;
+      border-left: $triangle-width solid transparent;
+      border-right: $triangle-width solid transparent;
+
+      &.e1 {
+        border-bottom: $triangle-height solid $enemy1-secondary-color;
+      }
+      &.e2 {
+        border-bottom: $triangle-height solid $enemy2-main-color;
+      }
+    }
+
+    &.down {
+      margin-bottom: -30px;
+      border-left: $triangle-width solid transparent;
+      border-right: $triangle-width solid transparent;
+
+      &.e1 {
+        border-top: $triangle-height solid $enemy1-secondary-color;
+      }
+      &.e2 {
+        border-top: $triangle-height solid $enemy2-main-color;
+      }
+    }
+
+    &.right {
+      margin-right: -32px;
+      border-top: $triangle-width solid transparent;
+      border-bottom: $triangle-width solid transparent;
+
+      &.e1 {
+        border-left: $triangle-height solid $enemy1-secondary-color;
+      }
+      &.e2 {
+        border-left: $triangle-height solid $enemy2-main-color;
+      }
+    }
+
+    &.left {
+      margin-left: -30px;
+      border-top: $triangle-width solid transparent;
+      border-bottom: $triangle-width solid transparent;
+
+      &.e1 {
+        border-right: $triangle-height solid $enemy1-secondary-color;
+      }
+      &.e2 {
+        border-right: $triangle-height solid $enemy2-main-color;
+      }
+    }
   }
 }

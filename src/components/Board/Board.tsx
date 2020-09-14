@@ -183,7 +183,15 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   );
 };
 
-const Player = ({ playerId }: { playerId: string }) => {
+const Player = ({ playerId, direction }: { playerId: string; direction?: string }) => {
+  if (isNaN(Number(playerId)) && direction) {
+    return (
+      <div className={styles.enemyPlayerWrapper}>
+        <div className={`${styles.triangle} ${styles[direction]} ${styles[`${playerId.toString()}`]}`} />
+        <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />
+      </div>
+    );
+  }
   return <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />;
 };
 
@@ -209,7 +217,9 @@ const getChildren = (
   }
   for (let player of visiblePlayers) {
     if (position.id === player.position.id) {
-      children.push(<Player playerId={player.id} key={children.length} />);
+      children.push(
+        <Player playerId={player.id} key={children.length} direction={player.direction ? player.direction : ''} />
+      );
     }
   }
   if (soundTokens.find((token) => token.id === position.id)) {

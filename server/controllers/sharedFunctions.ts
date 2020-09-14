@@ -6,8 +6,16 @@ import { Position, OnUpdateBoard, OnPlayersTurn, OnProgress } from '../../src/sh
 
 export const updateBoard = (game: Game) => {
   const visiblePlayers = game.getVisiblePlayers();
-  visiblePlayers.push({ id: 'e1', position: game.enemies.e1.position });
-  visiblePlayers.push({ id: 'e2', position: game.enemies.e2.position });
+  visiblePlayers.push({
+    id: 'e1',
+    position: game.enemies.e1.position,
+    direction: getDirection(game.enemies.e1.position, game.enemies.e1.lastPosition),
+  });
+  visiblePlayers.push({
+    id: 'e2',
+    position: game.enemies.e2.position,
+    direction: getDirection(game.enemies.e2.position, game.enemies.e2.lastPosition),
+  });
 
   const reachablePositions: Position[] = [];
 
@@ -19,6 +27,20 @@ export const updateBoard = (game: Game) => {
     reachablePositions,
   };
   io.in(game.id).emit('update board', params);
+};
+
+const getDirection = (position: Position, lastPosition: Position) => {
+  if (position.x !== lastPosition.x && position.y !== lastPosition.y) {
+    if (Math.abs(position.x - lastPosition.x) > Math.abs(position.y - lastPosition.y)) {
+      return position.x > lastPosition.x ? 'right' : 'left';
+    }
+    return position.y > lastPosition.y ? 'down' : 'up';
+  } else if (position.x === lastPosition.x) {
+    return position.y > lastPosition.y ? 'down' : 'up';
+  } else if (position.y === lastPosition.y) {
+    return position.x > lastPosition.x ? 'right' : 'left';
+  }
+  return 'up';
 };
 
 export const startNextTurn = (game: Game) => {

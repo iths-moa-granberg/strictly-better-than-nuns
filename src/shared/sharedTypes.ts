@@ -28,7 +28,7 @@ export interface SoundToken {
   enemyID: 'e1' | 'e2';
 }
 
-export type VisiblePlayers = { id: string; position: Position }[];
+export type VisiblePlayers = { id: string; position: Position; direction?: string }[];
 
 export interface OnUpdateBoard {
   visiblePlayers: VisiblePlayers;
