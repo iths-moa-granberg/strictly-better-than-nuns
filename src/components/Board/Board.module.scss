@@ -1,17 +1,21 @@
 @import '../../utils';
 
+@mixin bg-image-layout {
+  height: 100vh;
+  width: 100vh * $board-resolution;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}
+
 .boardWrapper {
   grid-area: board;
 
-  height: 100vh;
-  width: 100vh * $board-resolution;
+  @include bg-image-layout;
+  background-color: $board-background-color;
+  background-image: url(../../assets/Board.svg);
 
   position: relative;
-
-  background-image: url(../../assets/Board.svg);
-  background-color: $board-background-color;
-  background-repeat: no-repeat;
-  background-size: cover;
 
   &.locked {
     background-image: url(../../assets/Locked.svg), url(../../assets/Board.svg);
@@ -20,6 +24,24 @@
   &.unlocked {
     background-image: url(../../assets/Unlocked.svg), url(../../assets/Board.svg);
   }
+}
+
+.enemy1Path {
+  @include bg-image-layout;
+  path {
+    stroke: $enemy1-main-color;
+  }
+}
+
+.enemy2Path {
+  @include bg-image-layout;
+  path {
+    stroke: $enemy2-main-color;
+  }
+}
+
+.path {
+  @include bg-image-layout();
 }
 
 .player {

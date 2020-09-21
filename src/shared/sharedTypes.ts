@@ -34,7 +34,7 @@ export interface OnUpdateBoard {
   visiblePlayers: VisiblePlayers;
   soundTokens: SoundToken[];
   sightTokens: SightToken[];
-  enemyPaths: Position[][];
+  enemyPaths: string[];
   reachablePositions: Position[];
 }
 
@@ -47,7 +47,7 @@ export interface OnPlayerSelectToken {
 }
 
 export interface OnChooseNewPath {
-  paths: Position[][];
+  pathNames: string[];
 }
 
 export interface OnPossibleSteps {
@@ -94,7 +94,7 @@ export interface OnEnemySelectsPace {
 }
 
 export interface OnSelectPath {
-  path: Position[];
+  pathName: string;
 }
 
 export interface OnProgress {

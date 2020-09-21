@@ -23,7 +23,7 @@ export const updateBoard = (game: Game) => {
     visiblePlayers,
     soundTokens: game.soundTokens,
     sightTokens: game.sightTokens,
-    enemyPaths: [game.enemies.e1.path, game.enemies.e2.path],
+    enemyPaths: [game.enemies.e1.pathName, game.enemies.e2.pathName],
     reachablePositions,
   };
   io.in(game.id).emit('update board', params);

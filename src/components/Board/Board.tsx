@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
 import positions from '../../shared/positions';
 import BoardPosition from './BoardPosition/BoardPosition';
@@ -18,6 +18,7 @@ import {
   OnPlayerPlacedToken,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
+import paths from './paths/pathIndex';
 import styles from './Board.module.scss';
 
 interface BoardProps {
@@ -43,24 +44,15 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const [visiblePlayers, setVisiblePlayers] = useState<VisiblePlayers>([]);
   const [soundTokens, setSoundTokens] = useState<SoundToken[]>([]);
   const [sightTokens, setSightTokens] = useState<SightToken[]>([]);
-  const [e1Path, setE1Path] = useState<Position[]>([]);
-  const [e2Path, setE2Path] = useState<Position[]>([]);
+  const [e1Path, setE1Path] = useState<string>('');
+  const [e2Path, setE2Path] = useState<string>('');
   const [reachablePositions, setReachablePositions] = useState<Position[]>([]);
+
+  const [possiblePaths, setPossiblePaths] = useState<string[]>([]);
 
   const positionsArray: Position[] = Object.values(positions);
 
   const [viewLock, setViewLock] = useState<'locked' | 'unlocked'>(myPlayer.isEvil ? 'unlocked' : 'locked');
-
-  const showNewPathHandler = useCallback(
-    (path: Position[]) => {
-      if (currentPlayerID === 'e1') {
-        setE1Path(path);
-      } else {
-        setE2Path(path);
-      }
-    },
-    [currentPlayerID]
-  );
 
   useEffect(() => {
     socket.on(
@@ -74,19 +66,12 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
         setReachablePositions(reachablePositions);
       }
     );
+
+    socket.on('choose new path', ({ pathNames }: OnChooseNewPath) => {
+      setActionState({ key: 'select new path', params: { pathNames } });
+      setPossiblePaths(pathNames);
+    });
   }, []);
-
-  useEffect(() => {
-    const onChooseNewPath = ({ paths }: OnChooseNewPath) => {
-      setActionState({ key: 'select new path', params: { paths, showNewPathHandler } });
-    };
-
-    socket.on('choose new path', onChooseNewPath);
-
-    return () => {
-      socket.off('choose new path', onChooseNewPath);
-    };
-  }, [showNewPathHandler]);
 
   useEffect(() => {
     if ((myPlayer as ClientPlayer).hasKey) {
@@ -147,18 +132,34 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   };
 
   if (!myPlayer || !visiblePlayers.length || !e1Path.length || !e2Path.length) {
+  if (!myPlayer || !visiblePlayers.length || !e1Path || !e2Path) {
     return <>loading</>;
   }
+
+  const Enemy1PathComp = paths[getPathComponentName(e1Path)];
+  const Enemy2PathComp = paths[getPathComponentName(e2Path)];
 
   return (
     <>
       <section className={`${styles.boardWrapper} ${styles[viewLock]}`}>
+        {actionState.key === 'select new path' ? (
+          possiblePaths.map((pathName) => {
+            const Comp = paths[getPathComponentName(pathName)];
+            return <Comp className={styles.path} key={pathName} />;
+          })
+        ) : (
+          <>
+            <Enemy1PathComp className={styles.enemy1Path} />
+            <Enemy2PathComp className={styles.enemy2Path} />
+          </>
+        )}
+
         {positionsArray.map((position) => {
           const children = getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens);
 
           const className = myPlayer.isEvil
-            ? getClassName(position, e1Path, e2Path, reachablePositions, currentPlayerID as 'e1' | 'e2')
-            : getClassName(position, e1Path, e2Path, reachablePositions, (myPlayer as ClientPlayer).id);
+            ? getClassName(position, reachablePositions, currentPlayerID as 'e1' | 'e2')
+            : getClassName(position, reachablePositions, (myPlayer as ClientPlayer).id);
 
           return (
             <BoardPosition
@@ -232,21 +233,8 @@ const getChildren = (
   return children;
 };
 
-const getClassName = (
-  position: Position,
-  e1Path: Position[],
-  e2Path: Position[],
-  reachablePositions: Position[],
-  id: string
-) => {
+const getClassName = (position: Position, reachablePositions: Position[], id: string) => {
   const className = ['position'];
-
-  if (e1Path[e1Path.length - 1].id === position.id) {
-    className.push('enemy1-end-of-path');
-  }
-  if (e2Path[e2Path.length - 1].id === position.id) {
-    className.push('enemy2-end-of-path');
-  }
 
   if (reachablePositions.find((pos) => pos.id === position.id)) {
     className.push(`reachable-${id}`);
@@ -271,6 +259,10 @@ const stepIsValid = (
     (myPlayer as ClientPlayer).position.neighbours.includes(position.id) &&
     possibleSteps.find((pos) => pos.id === position.id)
   );
+};
+
+const getPathComponentName = (str: string) => {
+  return `${str.charAt(0).toUpperCase() + str.slice(1)}`.substring(0, str.length - 1);
 };
 
 export default Board;

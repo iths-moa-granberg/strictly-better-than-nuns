@@ -41,4 +41,74 @@
     opacity: 0.5;
     box-shadow: none;
   }
+
+  &.lightRedA,
+  &.lightRedB {
+    background-color: $light-red-path-color;
+  }
+
+  &.greenA,
+  &.greenB {
+    background-color: $green-path-color;
+  }
+
+  &.blueA,
+  &.blueB {
+    background-color: $blue-path-color;
+  }
+
+  &.bluePurpleA,
+  &.bluePurpleB {
+    background-color: $blue-purple-path-color;
+  }
+
+  &.lightPurpleA,
+  &.lightPurpleB {
+    background-color: $light-purple-path-color;
+  }
+
+  &.mossA,
+  &.mossB {
+    background-color: $moss-path-color;
+  }
+
+  &.mustardA,
+  &.mustardB {
+    background-color: $mustard-path-color;
+  }
+
+  &.orangeA,
+  &.orangeB {
+    background-color: $orange-path-color;
+  }
+
+  &.peaA,
+  &.peaB {
+    background-color: $pea-path-color;
+  }
+
+  &.pinkA,
+  &.pinkB {
+    background-color: $pink-path-color;
+  }
+
+  &.purpleA,
+  &.purpleB {
+    background-color: $purple-path-color;
+  }
+
+  &.redA,
+  &.redB {
+    background-color: $red-path-color;
+  }
+
+  &.tealA,
+  &.tealB {
+    background-color: $teal-path-color;
+  }
+
+  &.yellowA,
+  &.yellowB {
+    background-color: $yellow-path-color;
+  }
 }

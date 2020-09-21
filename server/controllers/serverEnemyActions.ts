@@ -83,13 +83,13 @@ io.on('connection', (socket: ExtendedSocket) => {
     enemyStepOptions();
   };
 
-  const chooseNewPath = (paths: Position[][]) => {
-    const params: OnChooseNewPath = { paths };
+  const chooseNewPath = (pathNames: string[]) => {
+    const params: OnChooseNewPath = { pathNames };
     socket.emit('choose new path', params);
   };
 
-  socket.on('select path', ({ path }: OnSelectPath) => {
-    currentEnemy.path = path;
+  socket.on('select path', ({ pathName }: OnSelectPath) => {
+    currentEnemy.setNewPath(pathName);
     logProgress(`${currentEnemy.id} has selected a new path`, { room: socket.game.id });
 
     actOnEnemyStep();
