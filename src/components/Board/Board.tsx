@@ -155,21 +155,15 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
           </>
         )}
 
-        {positionsArray.map((position) => {
-          const className = myPlayer.isEvil
-            ? getClassName(position, reachablePositions, currentPlayerID as 'e1' | 'e2')
-            : getClassName(position, reachablePositions, (myPlayer as ClientPlayer).id);
-
-          return (
-            <BoardPosition
-              key={position.id}
-              position={position}
-              className={className}
-              children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens)}
-              clickHandler={clickHandler}
-            />
-          );
-        })}
+        {positionsArray.map((position) => (
+          <BoardPosition
+            key={position.id}
+            position={position}
+            className={getClassName(myPlayer, currentPlayerID, position, reachablePositions)}
+            children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens)}
+            clickHandler={clickHandler}
+          />
+        ))}
       </section>
       <UserActions
         actionState={actionState}
@@ -183,14 +177,14 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   );
 };
 
-const getClassName = (position: Position, reachablePositions: Position[], id: string) => {
-  const className = ['position'];
-
-  if (reachablePositions.find((pos) => pos.id === position.id)) {
-    className.push(`reachable-${id}`);
-  }
-
-  return className;
+const getClassName = (
+  myPlayer: MyPlayer,
+  currentPlayerID: 'e1' | 'e2' | null,
+  position: Position,
+  reachablePositions: Position[]
+) => {
+  const id = myPlayer.isEvil ? currentPlayerID : (myPlayer as ClientPlayer).id;
+  return reachablePositions.find((pos) => pos.id === position.id) ? `reachable-${id}` : '';
 };
 
 const stepIsValid = (
