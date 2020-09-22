@@ -1,0 +1,51 @@
+@import '../../../utils';
+
+.position {
+  width: 8px;
+  height: 8px;
+
+  background-color: $position-background-color;
+  border: 2px solid $position-border-color;
+  border-radius: 100%;
+
+  position: absolute;
+  z-index: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.enemy1-end-of-path,
+.reachable-e1 {
+  background-color: $enemy1-main-color;
+}
+
+.enemy2-end-of-path,
+.reachable-e2 {
+  background-color: $enemy2-main-color;
+}
+
+.reachable-0 {
+  background-color: $player0-main-color;
+}
+
+.reachable-1 {
+  background-color: $player1-main-color;
+}
+
+.reachable-2 {
+  background-color: $player2-main-color;
+}
+
+.reachable-3 {
+  background-color: $player3-main-color;
+}
+
+.reachable-4 {
+  background-color: $player4-main-color;
+}
+
+.reachable-5 {
+  background-color: $player5-main-color;
+}

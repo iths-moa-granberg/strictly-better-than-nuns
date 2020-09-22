@@ -1,0 +1,15 @@
+@import './utils';
+
+body {
+  margin: 0;
+  font-family: $standard-font;
+  max-height: 90vh;
+}
+
+#root > div {
+  display: grid;
+  grid: 40% 60% / 1fr 1fr;
+  grid-template-areas:
+    'board userActions'
+    'board progressLog';
+}

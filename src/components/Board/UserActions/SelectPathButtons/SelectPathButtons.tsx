@@ -1,50 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { socket } from '../../../../App';
-import { Position, OnSelectPath } from '../../../../shared/sharedTypes';
+import { OnSelectPath } from '../../../../shared/sharedTypes';
+import styles from '../Buttons.module.scss';
 
 interface SelectPathButtonsProps {
-  paths: Position[][];
-  showNewPathHandler: Function;
+  pathNames: string[];
   setActionState: Function;
 }
 
-const SelectPathButtons = ({ paths, showNewPathHandler, setActionState }: SelectPathButtonsProps) => {
-  const [selectedPath, setSelectedPath] = useState<Position[]>();
-
-  const handlerPathButton = (text: string) => {
-    const index = Number(
-      text
-        .split('')
-        .filter((char) => char.match(/[0-9]/))
-        .join('')
-    );
-    showNewPathHandler(paths[index]);
-    setSelectedPath(paths[index]);
-  };
-
-  const handleSelect = () => {
-    if (selectedPath) {
-      const params: OnSelectPath = { path: selectedPath };
-      socket.emit('select path', params);
-      setActionState({ key: 'disabled enemy confirm' });
-      return <></>;
-    }
+const SelectPathButtons = ({ pathNames, setActionState }: SelectPathButtonsProps) => {
+  const handleSelect = (pathName: string) => {
+    const params: OnSelectPath = { pathName };
+    socket.emit('select path', params);
+    setActionState({ key: 'disabled enemy confirm' });
   };
 
   return (
     <>
-      <p>Choose next path</p>
-      {paths.map((path, index) => (
-        <button
-          key={index}
-          onClick={(e) => handlerPathButton((e.target as HTMLElement).innerHTML)}
-          className={!selectedPath || selectedPath === paths[index] ? '' : 'disabled'}>
-          Path {index}
-        </button>
-      ))}
-      {selectedPath && <button onClick={handleSelect}>Confirm</button>}
+      <h1>Choose next path</h1>
+
+      <div>
+        {pathNames.map((name, index) => (
+          <button key={name} onClick={() => handleSelect(name)} className={`${styles.button} ${styles[name]}`}>
+            {getLetter(index)}
+          </button>
+        ))}
+      </div>
     </>
   );
+};
+
+const getLetter = (num: number) => {
+  return String.fromCharCode(num + 65);
 };
 
 export default SelectPathButtons;

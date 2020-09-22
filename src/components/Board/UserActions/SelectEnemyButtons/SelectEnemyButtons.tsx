@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../Buttons.module.scss';
 
 interface SelectEnemyButtonsProps {
   selectEnemyHandler: Function;
@@ -7,9 +8,16 @@ interface SelectEnemyButtonsProps {
 const SelectEnemyButtons = ({ selectEnemyHandler }: SelectEnemyButtonsProps) => {
   return (
     <>
-      <p>Choose which enemy to start with</p>
-      <button onClick={() => selectEnemyHandler('e1')}>Enemy 1</button>
-      <button onClick={() => selectEnemyHandler('e2')}>Enemy 2</button>
+      <h1>Choose which enemy to start with</h1>
+
+      <div>
+        <button className={`${styles.button} ${styles.enemy1}`} onClick={() => selectEnemyHandler('e1')}>
+          1
+        </button>
+        <button className={`${styles.button} ${styles.enemy2}`} onClick={() => selectEnemyHandler('e2')}>
+          2
+        </button>
+      </div>
     </>
   );
 };

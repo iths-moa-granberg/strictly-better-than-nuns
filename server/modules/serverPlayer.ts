@@ -28,6 +28,7 @@ interface Enemy {
 
   playersVisible: boolean;
   path: Position[];
+  pathName: string;
   lastPosition: Position;
 }
 
@@ -107,9 +108,11 @@ class Player {
 class Enemy {
   constructor(id: 'e1' | 'e2') {
     if (id === 'e1') {
-      this.path = enemyPaths[0];
+      this.path = enemyPaths.purpleA;
+      this.pathName = 'purpleA';
     } else {
-      this.path = enemyPaths[2];
+      this.path = enemyPaths.lightPurpleB;
+      this.pathName = 'lightPurpleB';
     }
 
     this.id = id;
@@ -140,7 +143,12 @@ class Enemy {
   };
 
   getNewPossiblePaths = () => {
-    return enemyPaths.filter((path) => path[0].id === this.path[this.path.length - 1].id && path != this.path);
+    return Object.keys(enemyPaths).filter((pathName) => enemyPaths[pathName][0].id === this.position.id);
+  };
+
+  setNewPath = (pathName: string) => {
+    this.pathName = pathName;
+    this.path = enemyPaths[pathName];
   };
 }
 

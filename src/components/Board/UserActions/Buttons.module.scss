@@ -1,0 +1,114 @@
+@import '../../../utils';
+
+.button {
+  font-family: $standard-font;
+  width: 100px;
+  height: 28px;
+  border: none;
+  border-radius: 2px;
+  margin: 8px;
+  color: $button-font-color;
+  background-color: $primary-button-color;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+  opacity: 0.9;
+
+  &:hover:enabled {
+    opacity: 1;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &.active {
+    background-color: $active-button-color;
+  }
+
+  &.confirm {
+    background-color: $confirm-button-color;
+  }
+
+  &.back {
+    background-color: $back-button-color;
+  }
+
+  &.enemy1 {
+    background-color: $enemy1-main-color;
+  }
+
+  &.enemy2 {
+    background-color: $enemy2-main-color;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    box-shadow: none;
+  }
+
+  &.lightRedA,
+  &.lightRedB {
+    background-color: $light-red-path-color;
+  }
+
+  &.greenA,
+  &.greenB {
+    background-color: $green-path-color;
+  }
+
+  &.blueA,
+  &.blueB {
+    background-color: $blue-path-color;
+  }
+
+  &.bluePurpleA,
+  &.bluePurpleB {
+    background-color: $blue-purple-path-color;
+  }
+
+  &.lightPurpleA,
+  &.lightPurpleB {
+    background-color: $light-purple-path-color;
+  }
+
+  &.mossA,
+  &.mossB {
+    background-color: $moss-path-color;
+  }
+
+  &.mustardA,
+  &.mustardB {
+    background-color: $mustard-path-color;
+  }
+
+  &.orangeA,
+  &.orangeB {
+    background-color: $orange-path-color;
+  }
+
+  &.peaA,
+  &.peaB {
+    background-color: $pea-path-color;
+  }
+
+  &.pinkA,
+  &.pinkB {
+    background-color: $pink-path-color;
+  }
+
+  &.purpleA,
+  &.purpleB {
+    background-color: $purple-path-color;
+  }
+
+  &.redA,
+  &.redB {
+    background-color: $red-path-color;
+  }
+
+  &.tealA,
+  &.tealB {
+    background-color: $teal-path-color;
+  }
+
+  &.yellowA,
+  &.yellowB {
+    background-color: $yellow-path-color;
+  }
+}
