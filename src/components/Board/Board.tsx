@@ -20,6 +20,7 @@ import {
 import { ClientPlayer } from '../../modules/player';
 import paths from './paths/pathIndex';
 import styles from './Board.module.scss';
+import getChildren from './PositionChildren/getChildren';
 
 interface BoardProps {
   myPlayer: MyPlayer;
@@ -182,55 +183,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       />
     </>
   );
-};
-
-const Player = ({ playerId, direction }: { playerId: string; direction?: string }) => {
-  if (isNaN(Number(playerId)) && direction) {
-    return (
-      <div className={styles.enemyPlayerWrapper}>
-        <div className={`${styles.triangle} ${styles[direction]} ${styles[`${playerId.toString()}`]}`} />
-        <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />
-      </div>
-    );
-  }
-  return <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />;
-};
-
-const Token = ({ type }: { type: 'sight' | 'sound' }) => {
-  return <div className={`${type}-token`} />;
-};
-
-const getChildren = (
-  position: Position,
-  myPlayer: MyPlayer,
-  visiblePlayers: VisiblePlayers,
-  soundTokens: SoundToken[],
-  sightTokens: SightToken[]
-) => {
-  const children: JSX.Element[] = [];
-
-  if (!myPlayer.isEvil) {
-    const goodPlayer = myPlayer as ClientPlayer;
-    if (position.id === goodPlayer.position.id) {
-      children.push(<Player playerId={goodPlayer.id} key={children.length} />);
-    }
-    visiblePlayers = visiblePlayers.filter((player) => player.id !== goodPlayer.id);
-  }
-  for (let player of visiblePlayers) {
-    if (position.id === player.position.id) {
-      children.push(
-        <Player playerId={player.id} key={children.length} direction={player.direction ? player.direction : ''} />
-      );
-    }
-  }
-  if (soundTokens.find((token) => token.id === position.id)) {
-    children.push(<Token type={'sound'} key={children.length} />);
-  }
-  if (sightTokens.find((token) => token.id === position.id)) {
-    children.push(<Token type={'sight'} key={children.length} />);
-  }
-
-  return children;
 };
 
 const getClassName = (position: Position, reachablePositions: Position[], id: string) => {
