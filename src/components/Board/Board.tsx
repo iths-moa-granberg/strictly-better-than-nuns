@@ -156,8 +156,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
         )}
 
         {positionsArray.map((position) => {
-          const children = getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens);
-
           const className = myPlayer.isEvil
             ? getClassName(position, reachablePositions, currentPlayerID as 'e1' | 'e2')
             : getClassName(position, reachablePositions, (myPlayer as ClientPlayer).id);
@@ -167,7 +165,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
               key={position.id}
               position={position}
               className={className}
-              children={children}
+              children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens)}
               clickHandler={clickHandler}
             />
           );
