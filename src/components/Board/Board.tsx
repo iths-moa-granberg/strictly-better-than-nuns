@@ -132,7 +132,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     }
   };
 
-  if (!myPlayer || !visiblePlayers.length || !e1Path.length || !e2Path.length) {
   if (!myPlayer || !visiblePlayers.length || !e1Path || !e2Path) {
     return <>loading</>;
   }
