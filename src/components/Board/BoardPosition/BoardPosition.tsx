@@ -10,9 +10,11 @@ interface BoardPositionProps {
 }
 
 const BoardPosition = ({ position, className, children, clickHandler }: BoardPositionProps) => {
+  const multipleChildren = children.length > 1 ? 'multipleChildren' : '';
+
   return (
     <div
-      className={`${styles.position} ${styles[className]}`}
+      className={`${styles.position} ${styles[className]} ${styles[multipleChildren]}`}
       style={{ top: `${position.y * (856 / 900)}vh`, left: `${position.x * (856 / 900)}vh` }}
       onClick={() => clickHandler(position)}>
       {children}

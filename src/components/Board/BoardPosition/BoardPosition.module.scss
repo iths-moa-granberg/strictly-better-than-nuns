@@ -14,6 +14,24 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &.multipleChildren {
+    div:nth-of-type(2n) svg {
+      padding: 0 0 16px 16px;
+    }
+
+    div:nth-of-type(3) svg {
+      padding: 16px 16px 0 0;
+    }
+
+    div:nth-of-type(4) svg {
+      padding: 0 16px 16px 0;
+    }
+
+    div:nth-of-type(5) svg {
+      padding: 16px 0 0 16px;
+    }
+  }
 }
 
 .enemy1-end-of-path,
