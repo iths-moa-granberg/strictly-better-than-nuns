@@ -141,7 +141,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 
   return (
     <>
-      <section className={`${styles.boardWrapper} ${styles[viewLock]}`}>
+      <section className={styles.boardWrapper}>
         {actionState.key === 'select new path' ? (
           possiblePaths.map((pathName) => {
             const Comp = paths[getPathComponentName(pathName)];
@@ -153,6 +153,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
             <Enemy2PathComp className={styles.enemy2Path} />
           </>
         )}
+        <article className={`${styles.locks} ${styles[viewLock]}`} />
 
         {positionsArray.map((position) => (
           <BoardPosition

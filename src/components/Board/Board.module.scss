@@ -16,13 +16,17 @@
   background-image: url(../../assets/Board.svg);
 
   position: relative;
+}
+
+.locks {
+  @include bg-image-layout;
 
   &.locked {
-    background-image: url(../../assets/Locked.svg), url(../../assets/Board.svg);
+    background-image: url(../../assets/Locked.svg);
   }
 
   &.unlocked {
-    background-image: url(../../assets/Unlocked.svg), url(../../assets/Board.svg);
+    background-image: url(../../assets/Unlocked.svg);
   }
 }
 
