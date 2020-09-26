@@ -21,6 +21,8 @@ import { ClientPlayer } from '../../modules/player';
 import paths from './paths/pathIndex';
 import styles from './Board.module.scss';
 import getChildren from './PositionChildren/getChildren';
+import Keys from './Keys/Keys';
+import Goals from './Goals/Goals';
 
 interface BoardProps {
   myPlayer: MyPlayer;
@@ -153,7 +155,11 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
             <Enemy2PathComp className={styles.enemy2Path} />
           </>
         )}
+
         <article className={`${styles.locks} ${styles[viewLock]}`} />
+
+        <Keys myPlayer={myPlayer} />
+        <Goals myPlayer={myPlayer} />
 
         {positionsArray.map((position) => (
           <BoardPosition

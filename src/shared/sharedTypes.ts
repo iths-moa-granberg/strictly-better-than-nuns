@@ -71,6 +71,7 @@ export interface OnPlayerPlacedToken {
 }
 
 export interface OnUpdatePlayer {
+  id: string;
   hasKey: boolean;
   hasGoal: boolean;
   visible: boolean;

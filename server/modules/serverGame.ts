@@ -1,9 +1,10 @@
 import positions from '../../src/shared/positions';
 import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
-import { logProgress } from '../controllers/sharedFunctions';
+import { logProgress, updatePlayer } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';
 import { SoundToken, SightToken, VisiblePlayers } from '../../src/shared/sharedTypes';
+import keys from '../../src/shared/keys';
 
 interface Game {
   id: string;
@@ -87,6 +88,8 @@ class Game {
         player.isCaught();
         this.addCaughtPlayer(player);
 
+        updatePlayer(player, this.id);
+
         logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id });
       }
     }
@@ -108,11 +111,13 @@ class Game {
   };
 
   generatePlayerInfo = (username: string) => {
+    const key = keys[Math.round(Math.random() * 8)]; //TODO: make individual for each player
+
     return {
       id: this.players.length.toString(),
       home: positions[1 + this.players.length],
-      key: positions[12 + this.players.length],
-      goal: positions[10 + this.players.length],
+      key: positions[key.id],
+      goal: positions[key.goal],
       username,
     };
   };

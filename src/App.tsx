@@ -28,8 +28,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const onUpdatePlayer = ({ hasKey, hasGoal, visible }: OnUpdatePlayer) => {
-      setMyPlayer({ ...(myPlayer as ClientPlayer), hasKey, hasGoal, visible });
+    const onUpdatePlayer = ({ id, hasKey, hasGoal, visible }: OnUpdatePlayer) => {
+      if (!myPlayer!.isEvil) {
+        if ((myPlayer as ClientPlayer).id === id) {
+          setMyPlayer({ ...(myPlayer as ClientPlayer), hasKey, hasGoal, visible });
+        }
+      }
     };
 
     socket.on('update player', onUpdatePlayer);

@@ -45,5 +45,5 @@
 }
 
 .path {
-  @include bg-image-layout();
+  @include bg-image-layout;
 }

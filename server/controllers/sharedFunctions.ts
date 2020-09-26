@@ -2,7 +2,8 @@ import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
-import { Position, OnUpdateBoard, OnPlayersTurn, OnProgress } from '../../src/shared/sharedTypes';
+import { Position, OnUpdateBoard, OnPlayersTurn, OnProgress, OnUpdatePlayer } from '../../src/shared/sharedTypes';
+import { ClientPlayer } from '../../src/modules/player';
 
 export const updateBoard = (game: Game) => {
   const visiblePlayers = game.getVisiblePlayers();
@@ -27,6 +28,17 @@ export const updateBoard = (game: Game) => {
     reachablePositions,
   };
   io.in(game.id).emit('update board', params);
+};
+
+export const updatePlayer = (player: ClientPlayer, room: string) => {
+  const params: OnUpdatePlayer = {
+    id: player.id,
+    hasKey: player.hasKey,
+    hasGoal: player.hasGoal,
+    visible: player.visible,
+  };
+
+  io.in(room).emit('update player', params);
 };
 
 const getDirection = (position: Position, lastPosition: Position) => {
