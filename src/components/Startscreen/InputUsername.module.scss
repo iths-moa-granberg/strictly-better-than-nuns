@@ -1,0 +1,11 @@
+@import '../../scss/utils';
+
+.input {
+  padding: 4px 16px;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  line-height: 1.6;
+  font-size: 14px;
+  font-family: $standard-font;
+}

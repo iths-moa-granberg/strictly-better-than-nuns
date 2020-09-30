@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../Buttons.module.scss';
+import styles from '../../../../scss/Buttons.module.scss';
 
 interface SelectEnemyButtonsProps {
   selectEnemyHandler: Function;

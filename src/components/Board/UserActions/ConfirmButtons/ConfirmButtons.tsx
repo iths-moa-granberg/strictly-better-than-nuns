@@ -1,7 +1,7 @@
 import React from 'react';
 import { socket } from '../../../../App';
 import { MyPlayer } from '../../../../clientTypes';
-import styles from '../Buttons.module.scss';
+import styles from '../../../../scss/Buttons.module.scss';
 
 interface ConfirmButtonsProps {
   myPlayer: MyPlayer;

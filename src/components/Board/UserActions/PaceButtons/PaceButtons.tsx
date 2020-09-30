@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../../../../App';
 import { MyPlayer } from '../../../../clientTypes';
 import { OnPlayerSelectsPace, OnEnemySelectsPace } from '../../../../shared/sharedTypes';
-import styles from '../Buttons.module.scss';
+import styles from '../../../../scss/Buttons.module.scss';
 
 interface PaceButtonsProps {
   myPlayer: MyPlayer;

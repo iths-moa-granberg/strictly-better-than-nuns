@@ -1,9 +1,10 @@
-@import './utils';
+@import './scss/utils';
 
 body {
   margin: 0;
   font-family: $standard-font;
   max-height: 90vh;
+  background-color: $board-background-color;
 }
 
 #root > div {

@@ -1,9 +1,9 @@
-@import '../../../utils';
+@import './utils';
 
 .button {
   font-family: $standard-font;
-  width: 100px;
-  height: 28px;
+  padding: 8px 16px;
+  min-width: 100px;
   border: none;
   border-radius: 2px;
   margin: 8px;
@@ -11,10 +11,17 @@
   background-color: $primary-button-color;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
   opacity: 0.9;
+  font-size: 14px;
 
   &:hover:enabled {
     opacity: 1;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  &.big {
+    padding: 16px 32px;
+    border-radius: 5px;
+    font-size: 16px;
   }
 
   &.active {

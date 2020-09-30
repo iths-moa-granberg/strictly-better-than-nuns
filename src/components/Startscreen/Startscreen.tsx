@@ -14,6 +14,11 @@ import {
   OnInitNewGame,
   OpenGame,
 } from '../../shared/sharedTypes';
+import startscreenStyles from './Startscreen.module.scss';
+import buttonStyles from '../../scss/Buttons.module.scss';
+import inputUsernameStyles from './InputUsername.module.scss';
+import gameListStyles from './GameList.module.scss';
+import gameStyles from './Game.module.scss';
 
 interface StartscreenProps {
   setMyPlayer: Function;
@@ -97,10 +102,11 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
 
   const Game = ({ game }: { game: OpenGame }) => {
     return (
-      <div>
+      <div className={gameStyles.gameWrapper}>
         <h3>{game.name}</h3>
         <p>Joined players: {getUsernames(game.users)}</p>
         <button
+          className={buttonStyles.button}
           onClick={() => {
             setJoinedGame(true);
             if (user) {
@@ -121,12 +127,20 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       }
     };
 
-    return <input type="text" placeholder="username" onKeyDown={(e) => handleUsernameInput(e)} />;
+    return (
+      <input
+        className={inputUsernameStyles.input}
+        type="text"
+        placeholder="username"
+        onKeyDown={(e) => handleUsernameInput(e)}
+      />
+    );
   };
 
   const StartButton = () => {
     return (
       <button
+        className={buttonStyles.button}
         onClick={() => {
           socket.emit('start');
         }}>
@@ -145,10 +159,12 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
 
     return (
       <div>
-        <button disabled={enemyJoined} onClick={() => join(false)}>
+        <button className={buttonStyles.button} disabled={enemyJoined} onClick={() => join(false)}>
           Evil
         </button>
-        <button onClick={() => join(true)}>Good</button>
+        <button className={buttonStyles.button} onClick={() => join(true)}>
+          Good
+        </button>
       </div>
     );
   };
@@ -163,25 +179,27 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
     };
 
     return (
-      <>
+      <div className={`${gameListStyles.gamesWrapper} ${openGames.length > 7 ? gameListStyles.start : ''}`}>
+        <button className={`${buttonStyles.button} ${buttonStyles.big}`} onClick={handleNewGame}>
+          New game
+        </button>
         {openGames.map((game) => (
           <Game key={game.id} game={game} />
         ))}
-        <button onClick={handleNewGame}>New game</button>
-      </>
+      </div>
     );
   };
 
   const Content = () => {
     if (!user) return <InputUsername />;
     if (ready) return <StartButton />;
-    if (myPlayer) return <p>wait for other players</p>;
+    if (myPlayer) return <p>Waiting for other players</p>;
     if (joinedGame) return <GoodOrEvilButtons />;
     return <GameList />;
   };
 
   return (
-    <div className="start-wrapper">
+    <div className={startscreenStyles.startWrapper}>
       <Content />
     </div>
   );

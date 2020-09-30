@@ -1,0 +1,15 @@
+@import '../../scss/utils';
+
+.startWrapper {
+  background-color: $board-background-color;
+  background-image: url('../../assets/start-background.svg');
+  background-position: bottom left;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: scroll;
+}
