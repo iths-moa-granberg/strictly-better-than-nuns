@@ -23,6 +23,8 @@ interface Game {
   enemyListened: number;
   board: Board;
   enemies: Enemies;
+
+  claimedKeys: number[];
 }
 
 class Game {
@@ -42,6 +44,8 @@ class Game {
 
     this.board = new Board();
     this.enemies = { e1: new Enemy('e1'), e2: new Enemy('e2') };
+
+    this.claimedKeys = [];
   }
 
   generateGameID = () => {
@@ -111,7 +115,13 @@ class Game {
   };
 
   generatePlayerInfo = (username: string) => {
-    const key = keys[Math.round(Math.random() * 8)]; //TODO: make individual for each player
+    let key = keys[Math.round(Math.random() * 7)];
+
+    while (this.claimedKeys.find((id) => id === key.id)) {
+      key = keys[Math.round(Math.random() * 7)];
+    }
+
+    this.claimedKeys.push(key.id);
 
     return {
       id: this.players.length.toString(),
