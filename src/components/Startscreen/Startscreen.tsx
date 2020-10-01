@@ -29,6 +29,7 @@ interface StartscreenProps {
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenProps) => {
   const [openGames, setOpenGames] = useState<OpenGame[]>([]);
   const [enemyJoined, setEnemyJoined] = useState<boolean>(false);
+  const [allGoodPlayersJoined, setAllGoodPlayersJoined] = useState<boolean>(false);
   const [joinedGame, setJoinedGame] = useState<boolean>(false);
   const [ready, setReady] = useState<boolean>(false);
   const [user, setUser] = useState<ClientUser | null>(null);
@@ -46,6 +47,10 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       setEnemyJoined(true);
     };
 
+    const onDisableJoinAsGood = () => {
+      setAllGoodPlayersJoined(true);
+    };
+
     const onInit = ({ enemyJoined }: OnInit) => {
       setEnemyJoined(enemyJoined);
     };
@@ -61,6 +66,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
     socket.on('start screen', onStartScreen);
     socket.on('update open games', onUpdateOpenGames);
     socket.on('disable join as evil', onDisableJoinAsEvil);
+    socket.on('disable join as good', onDisableJoinAsGood);
     socket.on('init', onInit);
     socket.on('waiting for players', onWaitingForPlayers);
     socket.on('players ready', onPlayersReady);
@@ -69,6 +75,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       socket.off('start screen', onStartScreen);
       socket.off('update open games', onUpdateOpenGames);
       socket.off('disable join as evil', onDisableJoinAsEvil);
+      socket.off('disable join as good', onDisableJoinAsGood);
       socket.off('init', onInit);
       socket.off('waiting for players', onWaitingForPlayers);
       socket.off('players ready', onPlayersReady);
@@ -162,7 +169,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
         <button className={buttonStyles.button} disabled={enemyJoined} onClick={() => join(false)}>
           Evil
         </button>
-        <button className={buttonStyles.button} onClick={() => join(true)}>
+        <button className={buttonStyles.button} disabled={allGoodPlayersJoined} onClick={() => join(true)}>
           Good
         </button>
       </div>

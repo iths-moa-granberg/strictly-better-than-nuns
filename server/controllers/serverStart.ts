@@ -68,6 +68,10 @@ io.on('connection', (socket: ExtendedSocket) => {
     games[gameID].users[user.userID] = { username: user.username, role: '' };
     socket.game = games[gameID].game;
 
+    if (Object.values(games[gameID].users).length === 7) {
+      games[socket.game.id].status = 'closed';
+    }
+
     const params: OnUpdateOpenGames = { openGames: getOpenGames() };
     io.emit('update open games', params);
 
@@ -83,9 +87,14 @@ io.on('connection', (socket: ExtendedSocket) => {
   socket.on('player joined', ({ good, user }: OnPlayerJoined) => {
     if (good) {
       games[socket.game.id].users[user.userID].role = 'good';
+
       socket.player = new Player(socket.game.generatePlayerInfo(user.username));
 
       socket.game.addPlayer(socket.player as Player);
+
+      if (socket.game.players.length === 6) {
+        io.in(socket.game.id).emit('disable join as good');
+      }
 
       const params: OnSetUpPlayer = {
         id: socket.player.id,
