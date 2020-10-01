@@ -32,8 +32,8 @@ let games: Games = {};
 const getOpenGames = () => {
   return Object.keys(games)
     .map((id) => {
-      if (games[id].status === 'open') {
-        return { id, name: games[id].name, users: games[id].users };
+      if (games[id].status !== 'closed') {
+        return { id, name: games[id].name, users: games[id].users, status: games[id].status };
       }
     })
     .filter((game) => game != null) as OpenGame[];
@@ -43,6 +43,11 @@ io.on('connection', (socket: ExtendedSocket) => {
   const params: OnStartScreen = { openGames: getOpenGames() };
   socket.emit('start screen', params);
 
+  const updateOpenGames = () => {
+    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
+    io.emit('update open games', params);
+  };
+
   socket.on('init new game', ({ user }: OnInitNewGame) => {
     socket.game = new Game();
 
@@ -50,35 +55,40 @@ io.on('connection', (socket: ExtendedSocket) => {
       game: socket.game,
       name: `${user.username}'s game`,
       status: 'open',
-      users: { [user.userID]: { username: user.username, role: '' } },
+      users: { [user.userID]: { username: user.username, role: '', playerId: '' } },
     };
 
-    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
-    io.emit('update open games', params);
+    updateOpenGames();
 
     socket.join(socket.game.id);
 
-    const paramsInit: OnInit = { enemyJoined: socket.game.enemyJoined };
+    const paramsInit: OnInit = {
+      enemyJoined: socket.game.enemyJoined,
+      allGoodPlayersJoined: socket.game.players.length === 6,
+    };
     socket.emit('init', paramsInit);
 
     logProgress(`${user.username} has joined`, { room: socket.game.id });
   });
 
   socket.on('join game', ({ gameID, user }: OnJoinGame) => {
-    games[gameID].users[user.userID] = { username: user.username, role: '' };
+    games[gameID].users[user.userID] = { username: user.username, role: '', playerId: '' };
     socket.game = games[gameID].game;
 
     if (Object.values(games[gameID].users).length === 7) {
-      games[socket.game.id].status = 'closed';
+      games[socket.game.id].status = 'full';
     }
 
-    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
-    io.emit('update open games', params);
+    updateOpenGames();
 
     socket.join(socket.game.id);
 
-    const paramsInit: OnInit = { enemyJoined: socket.game.enemyJoined };
+    const paramsInit: OnInit = {
+      enemyJoined: socket.game.enemyJoined,
+      allGoodPlayersJoined: socket.game.players.length === 6,
+    };
     socket.emit('init', paramsInit);
+
     io.in(socket.game.id).emit('waiting for players');
 
     logProgress(`${user.username} has joined`, { room: socket.game.id });
@@ -91,10 +101,7 @@ io.on('connection', (socket: ExtendedSocket) => {
       socket.player = new Player(socket.game.generatePlayerInfo(user.username));
 
       socket.game.addPlayer(socket.player as Player);
-
-      if (socket.game.players.length === 6) {
-        io.in(socket.game.id).emit('disable join as good');
-      }
+      games[socket.game.id].users[user.userID].playerId = socket.player.id;
 
       const params: OnSetUpPlayer = {
         id: socket.player.id,
@@ -104,8 +111,14 @@ io.on('connection', (socket: ExtendedSocket) => {
         isEvil: socket.player.isEvil,
       };
       socket.emit('set up player', params);
+
+      if (socket.game.players.length === 6) {
+        io.in(socket.game.id).emit('disable join as good');
+      }
+      updateOpenGames();
     } else {
       games[socket.game.id].users[user.userID].role = 'evil';
+      games[socket.game.id].users[user.userID].playerId = 'e1';
       socket.player = socket.game.enemies;
       socket.game.enemyJoined = true;
       const params: OnSetUpEnemy = {
@@ -113,6 +126,7 @@ io.on('connection', (socket: ExtendedSocket) => {
       };
       socket.emit('set up enemy', params);
       io.in(socket.game.id).emit('disable join as evil');
+      updateOpenGames();
     }
 
     logProgress(`${user.username} is ${games[socket.game.id].users[user.userID].role}`, { room: socket.game.id });
@@ -142,8 +156,7 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     games[socket.game.id].status = 'closed';
 
-    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
-    io.emit('update open games', params);
+    updateOpenGames();
 
     await sleep(1000);
 

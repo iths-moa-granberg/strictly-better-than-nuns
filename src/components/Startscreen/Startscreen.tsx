@@ -19,6 +19,7 @@ import buttonStyles from '../../scss/Buttons.module.scss';
 import inputUsernameStyles from './InputUsername.module.scss';
 import gameListStyles from './GameList.module.scss';
 import gameStyles from './Game.module.scss';
+import playerListStyles from './PlayerList.module.scss';
 
 interface StartscreenProps {
   setMyPlayer: Function;
@@ -51,8 +52,9 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       setAllGoodPlayersJoined(true);
     };
 
-    const onInit = ({ enemyJoined }: OnInit) => {
+    const onInit = ({ enemyJoined, allGoodPlayersJoined }: OnInit) => {
       setEnemyJoined(enemyJoined);
+      setAllGoodPlayersJoined(allGoodPlayersJoined);
     };
 
     const onWaitingForPlayers = () => {
@@ -190,11 +192,30 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
         <button className={`${buttonStyles.button} ${buttonStyles.big}`} onClick={handleNewGame}>
           New game
         </button>
-        {openGames.map((game) => (
-          <Game key={game.id} game={game} />
-        ))}
+        {openGames.map((game) => game.status === 'open' && <Game key={game.id} game={game} />)}
       </div>
     );
+  };
+
+  const PlayerList = () => {
+    const myGame = openGames.find((game) => Object.keys(game.users).find((u) => u === (user as ClientUser).userID));
+
+    if (myGame) {
+      return (
+        <div className={playerListStyles.playerListWrapper}>
+          <h1>Players:</h1>
+          <div className={playerListStyles.playersWrapper}>
+            {Object.values(myGame.users).map((user) => (
+              <p key={user.username} className={playerListStyles[`player-${user.playerId}`]}>
+                {user.username} ({user.role ? user.role : '?'})
+              </p>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return <>Something went wrong</>;
   };
 
   const Content = () => {
@@ -207,6 +228,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
 
   return (
     <div className={startscreenStyles.startWrapper}>
+      {joinedGame && <PlayerList />}
       <Content />
     </div>
   );

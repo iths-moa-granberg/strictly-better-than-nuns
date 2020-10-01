@@ -1,7 +1,7 @@
 $board-resolution: (856/900);
 
 $board-background-color: #3da4ab;
-$secondary-blue : #1D4A4D;
+$secondary-blue: #1d4a4d;
 $user-actions-background-color: #330f2b;
 $progress-log-background-color: #320325;
 
@@ -15,18 +15,24 @@ $enemy1-secondary-color: #450a0a;
 $enemy2-main-color: #041d5b;
 $enemy2-secondary-color: #3c409d;
 
-$player0-main-color: #d88d49;
-$player0-secondary-color: #bd691b;
-$player1-main-color: #78b826;
-$player1-secondary-color: #16701f;
-$player2-main-color: #d2d60c;
-$player2-secondary-color: #90930a;
-$player3-main-color: #8761b8;
-$player3-secondary-color: #7553a1;
-$player4-main-color: #c2c2c2;
-$player4-secondary-color: #8a8a8a;
-$player5-main-color: #d06363;
-$player5-secondary-color: #b64848;
+$player1-main-color: #d88d49;
+$player1-secondary-color: #bd691b;
+$player2-main-color: #78b826;
+$player2-secondary-color: #16701f;
+$player3-main-color: #d2d60c;
+$player3-secondary-color: #90930a;
+$player4-main-color: #8761b8;
+$player4-secondary-color: #7553a1;
+$player5-main-color: #c2c2c2;
+$player5-secondary-color: #8a8a8a;
+$player6-main-color: #d06363;
+$player6-secondary-color: #b64848;
+
+$playerColors: $player1-main-color, $player2-main-color, $player3-main-color, $player4-main-color, $player5-main-color,
+  $player6-main-color;
+
+$playerSecondaryColors: $player1-secondary-color, $player2-secondary-color, $player3-secondary-color,
+  $player4-secondary-color, $player5-secondary-color, $player6-secondary-color;
 
 $button-font-color: #efefef;
 

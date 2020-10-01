@@ -17,34 +17,11 @@
     border: 1px solid $enemy2-secondary-color;
   }
 
-  &.0 {
-    background-color: $player0-main-color;
-    border: 1px solid $player0-secondary-color;
-  }
-
-  &.1 {
-    background-color: $player1-main-color;
-    border: 1px solid $player1-secondary-color;
-  }
-
-  &.2 {
-    background-color: $player2-main-color;
-    border: 1px solid $player2-secondary-color;
-  }
-
-  &.3 {
-    background-color: $player3-main-color;
-    border: 1px solid $player3-secondary-color;
-  }
-
-  &.4 {
-    background-color: $player4-main-color;
-    border: 1px solid $player4-secondary-color;
-  }
-
-  &.5 {
-    background-color: $player5-main-color;
-    border: 1px solid $player5-secondary-color;
+  @for $i from 1 through length($playerColors) {
+    &.#{$i} {
+      background-color: rgba(nth($playerColors, $i), 1);
+      border: 1px solid rgba(nth($playerSecondaryColors, $i), 1);
+    }
   }
 }
 

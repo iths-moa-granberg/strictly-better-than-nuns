@@ -16,6 +16,7 @@ export interface Users {
 interface User {
   username: string;
   role: string;
+  playerId: string;
 }
 
 export interface SightToken {
@@ -106,6 +107,7 @@ export interface OpenGame {
   id: string;
   name: string;
   users: Users;
+  status: 'open' | 'full';
 }
 
 export interface OnStartScreen {
@@ -118,6 +120,7 @@ export interface OnUpdateOpenGames {
 
 export interface OnInit {
   enemyJoined: boolean;
+  allGoodPlayersJoined: boolean;
 }
 
 export interface OnSetUpPlayer {

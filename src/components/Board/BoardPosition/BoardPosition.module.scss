@@ -44,26 +44,8 @@
   background-color: $enemy2-main-color;
 }
 
-.reachable-0 {
-  background-color: $player0-main-color;
-}
-
-.reachable-1 {
-  background-color: $player1-main-color;
-}
-
-.reachable-2 {
-  background-color: $player2-main-color;
-}
-
-.reachable-3 {
-  background-color: $player3-main-color;
-}
-
-.reachable-4 {
-  background-color: $player4-main-color;
-}
-
-.reachable-5 {
-  background-color: $player5-main-color;
+@for $i from 1 through length($playerColors) {
+  .reachable-#{$i} {
+    background-color: rgba(nth($playerColors, $i), 1);
+  }
 }

@@ -124,7 +124,7 @@ class Game {
     this.claimedKeys.push(key.id);
 
     return {
-      id: this.players.length.toString(),
+      id: (this.players.length + 1).toString(),
       home: positions[1 + this.players.length],
       key: positions[key.id],
       goal: positions[key.goal],

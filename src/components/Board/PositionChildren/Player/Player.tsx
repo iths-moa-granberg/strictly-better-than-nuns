@@ -6,11 +6,11 @@ const Player = ({ playerId, direction }: { playerId: string; direction?: string 
     return (
       <div className={styles.enemyPlayerWrapper}>
         <div className={`${styles.triangle} ${styles[direction]} ${styles[`${playerId.toString()}`]}`} />
-        <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />
+        <div className={`${styles.player} ${styles[`${playerId}`]}`} />
       </div>
     );
   }
-  return <div className={`${styles.player} ${styles[`${playerId.toString()}`]}`} />;
+  return <div className={`${styles.player} ${styles[`${playerId}`]}`} />;
 };
 
 export default Player;
