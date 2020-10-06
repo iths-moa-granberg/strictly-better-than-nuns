@@ -1,0 +1,11 @@
+@import '../../../scss/utils';
+
+.loadingWrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: $board-background-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

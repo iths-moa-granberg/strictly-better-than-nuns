@@ -23,6 +23,7 @@ import styles from './Board.module.scss';
 import getChildren from './PositionChildren/getChildren';
 import Keys from './Keys/Keys';
 import Goals from './Goals/Goals';
+import LoadingScreen from './LoadingScreen/LoadingScreen';
 
 interface BoardProps {
   myPlayer: MyPlayer;
@@ -135,7 +136,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   };
 
   if (!myPlayer || !visiblePlayers.length || !e1Path || !e2Path) {
-    return <>loading</>;
+    return <LoadingScreen />;
   }
 
   const Enemy1PathComp = paths[getPathComponentName(e1Path)];
