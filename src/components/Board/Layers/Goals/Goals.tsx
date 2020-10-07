@@ -1,7 +1,7 @@
 import React from 'react';
-import { MyPlayer } from '../../../clientTypes';
-import { ClientPlayer } from '../../../modules/player';
-import goals from '../../../shared/goals';
+import { MyPlayer } from '../../../../clientTypes';
+import { ClientPlayer } from '../../../../modules/player';
+import goals from '../../../../shared/goals';
 
 interface GoalsProps {
   myPlayer: MyPlayer;
@@ -41,7 +41,7 @@ const Goals = ({ myPlayer, viewAll }: GoalsProps) => {
 const Goal = ({ x, y }: GoalProps) => {
   return (
     <img
-      src={require('../../../assets/goal.svg')}
+      src={require('../../../../assets/goal.svg')}
       alt="goal"
       style={{ position: 'absolute', top: `${y * (856 / 900)}vh`, left: `${x * (856 / 900)}vh` }}
     />

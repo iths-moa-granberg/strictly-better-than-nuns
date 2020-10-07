@@ -1,0 +1,36 @@
+@import '../../../scss/utils';
+
+.locks {
+  @include bg-image-layout;
+
+  &.locked {
+    background-image: url(../../../assets/Locked.svg);
+  }
+
+  &.unlocked {
+    background-image: url(../../../assets/Unlocked.svg);
+  }
+}
+
+.toggleWrapper {
+  @include bg-image-layout;
+
+  .itemWrapper {
+    display: flex;
+    align-items: center;
+    max-width: 130px;
+    padding: 6px;
+    cursor: pointer;
+
+    img {
+      width: 16px;
+      max-height: 16px;
+      margin-right: 8px;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+}

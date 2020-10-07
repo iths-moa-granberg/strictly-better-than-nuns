@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
+
+import { getClassName, stepIsValid } from './boardUtils';
 import positions from '../../shared/positions';
+import homes from './homes/homeIndex';
+
+import getChildren from './PositionChildren/getChildren';
+import LoadingScreen from './LoadingScreen/LoadingScreen';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
+import Layers from './Layers/Layers';
+
 import { MyPlayer, ActionStateParams, ClientEnemies } from '../../clientTypes';
 import {
   Position,
@@ -18,13 +26,8 @@ import {
   OnPlayerPlacedToken,
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
-import paths from './paths/pathIndex';
-import homes from './homes/homeIndex';
+
 import styles from './Board.module.scss';
-import getChildren from './PositionChildren/getChildren';
-import Keys from './Keys/Keys';
-import Goals from './Goals/Goals';
-import LoadingScreen from './LoadingScreen/LoadingScreen';
 
 interface BoardProps {
   myPlayer: MyPlayer;
@@ -57,11 +60,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 
   const positionsArray: Position[] = Object.values(positions);
 
-  const [viewLock, setViewLock] = useState<'locked' | 'unlocked'>(myPlayer.isEvil ? 'unlocked' : 'locked');
-  const [viewAllKeys, setViewAllKeys] = useState<boolean>(myPlayer.isEvil);
-  const [viewAllGoals, setViewAllGoals] = useState<boolean>(myPlayer.isEvil);
-  const [viewAllPaths, setViewAllPaths] = useState<boolean>(false);
-
   useEffect(() => {
     socket.on(
       'update board',
@@ -82,10 +80,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   }, []);
 
   useEffect(() => {
-    if ((myPlayer as ClientPlayer).hasKey) {
-      setViewLock('unlocked');
-    }
-
     const onPossibleSteps = ({ possibleSteps, stepsLeft }: OnPossibleSteps) => {
       if ((myPlayer.isEvil && stepsLeft! <= 1) || (!myPlayer.isEvil && !possibleSteps.length)) {
         setActionState({ key: 'confirm' });
@@ -143,9 +137,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     return <LoadingScreen />;
   }
 
-  const Enemy1PathComp = paths[getPathComponentName(e1Path)];
-  const Enemy2PathComp = paths[getPathComponentName(e2Path)];
-
   let Home = homes.Home0;
   if (!myPlayer.isEvil) {
     Home = homes[`Home${(myPlayer as ClientPlayer).id}`];
@@ -156,54 +147,27 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       {!myPlayer.isEvil && <Home className={styles.home} />}
 
       <section className={styles.boardWrapper}>
-        {actionState.key === 'select new path' ? (
-          possiblePaths.map((pathName) => {
-            const Comp = paths[getPathComponentName(pathName)];
-            return <Comp className={styles.path} key={pathName} />;
-          })
-        ) : viewAllPaths ? (
-          <>
-            {Object.values(paths).map((Path, index) => (
-              <Path className={styles.path} key={index} />
-            ))}
-          </>
-        ) : (
-          <>
-            <Enemy1PathComp className={styles.enemy1Path} />
-            <Enemy2PathComp className={styles.enemy2Path} />
-          </>
-        )}
+        <Layers
+          actionState={actionState}
+          possiblePaths={possiblePaths}
+          myPlayer={myPlayer}
+          e1Path={e1Path}
+          e2Path={e2Path}
+        />
 
-        <article className={`${styles.locks} ${styles[viewLock]}`} />
-
-        <Keys myPlayer={myPlayer} viewAll={viewAllKeys} />
-        <Goals myPlayer={myPlayer} viewAll={viewAllGoals} />
-
-        <article className={styles.toggleWrapper}>
-          <div className={styles.itemWrapper} onClick={() => setViewAllKeys(!viewAllKeys)}>
-            <img src={require(`../../assets/${viewAllKeys ? 'inactive-' : ''}key.svg`)} alt="key toggle" />
-            <p>{viewAllKeys ? 'Hide all keys' : 'Show all keys'}</p>
-          </div>
-          <div className={styles.itemWrapper} onClick={() => setViewAllGoals(!viewAllGoals)}>
-            <img src={require(`../../assets/${viewAllGoals ? 'inactive-' : ''}goal.svg`)} alt="goal toggle" />
-            <p>{viewAllGoals ? 'Hide all goals' : 'Show all goals'}</p>
-          </div>
-          <div className={styles.itemWrapper} onClick={() => setViewAllPaths(!viewAllPaths)}>
-            <img src={require(`../../assets/${viewAllPaths ? 'inactive-' : ''}path-toggle.svg`)} alt="path toggle" />
-            <p>{viewAllPaths ? 'Hide all paths' : 'Show all paths'}</p>
-          </div>
+        <article className="board-position-wrapper">
+          {positionsArray.map((position) => (
+            <BoardPosition
+              key={position.id}
+              position={position}
+              className={getClassName(myPlayer, currentPlayerID, position, reachablePositions)}
+              children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens)}
+              clickHandler={clickHandler}
+            />
+          ))}
         </article>
-
-        {positionsArray.map((position) => (
-          <BoardPosition
-            key={position.id}
-            position={position}
-            className={getClassName(myPlayer, currentPlayerID, position, reachablePositions)}
-            children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens)}
-            clickHandler={clickHandler}
-          />
-        ))}
       </section>
+
       <UserActions
         actionState={actionState}
         setActionState={setActionState}
@@ -214,38 +178,6 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       />
     </>
   );
-};
-
-const getClassName = (
-  myPlayer: MyPlayer,
-  currentPlayerID: 'e1' | 'e2' | null,
-  position: Position,
-  reachablePositions: Position[]
-) => {
-  const id = myPlayer.isEvil ? currentPlayerID : (myPlayer as ClientPlayer).id;
-  return reachablePositions.find((pos) => pos.id === position.id) ? `reachable-${id}` : '';
-};
-
-const stepIsValid = (
-  myPlayer: MyPlayer,
-  currentPlayerID: 'e1' | 'e2' | null,
-  position: Position,
-  possibleSteps: Position[]
-) => {
-  if (myPlayer.isEvil) {
-    return (
-      (myPlayer as ClientEnemies)[currentPlayerID!].position.neighbours.includes(position.id) &&
-      possibleSteps.find((pos) => pos.id === position.id)
-    );
-  }
-  return (
-    (myPlayer as ClientPlayer).position.neighbours.includes(position.id) &&
-    possibleSteps.find((pos) => pos.id === position.id)
-  );
-};
-
-const getPathComponentName = (str: string) => {
-  return `${str.charAt(0).toUpperCase() + str.slice(1)}`.substring(0, str.length - 1);
 };
 
 export default Board;

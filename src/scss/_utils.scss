@@ -43,3 +43,11 @@ $pathColors: (
   'yellow': #f0f28a,
   'lightRed': #bf6565,
 );
+
+@mixin bg-image-layout {
+  height: 100vh;
+  width: 100vh * $board-resolution;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { MyPlayer } from '../../../clientTypes';
-import keys from '../../../shared/keys';
-import { ClientPlayer } from '../../../modules/player';
+import { MyPlayer } from '../../../../clientTypes';
+import keys from '../../../../shared/keys';
+import { ClientPlayer } from '../../../../modules/player';
 
 interface KeysProps {
   myPlayer: MyPlayer;
@@ -41,7 +41,7 @@ const Keys = ({ myPlayer, viewAll }: KeysProps) => {
 const Key = ({ x, y }: KeyProps) => {
   return (
     <img
-      src={require('../../../assets/key.svg')}
+      src={require('../../../../assets/key.svg')}
       alt="key"
       style={{ position: 'absolute', top: `${y * (856 / 900)}vh`, left: `${x * (856 / 900)}vh` }}
     />

@@ -1,13 +1,5 @@
 @import '../../scss/utils';
 
-@mixin bg-image-layout {
-  height: 100vh;
-  width: 100vh * $board-resolution;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: absolute;
-}
-
 .boardWrapper {
   grid-area: board;
 
@@ -16,49 +8,6 @@
   position: relative;
 }
 
-.home,
-.locks,
-.enemy1Path,
-.enemy2Path,
-.path,
-.toggleWrapper {
+.home {
   @include bg-image-layout;
-}
-
-.locks {
-  &.locked {
-    background-image: url(../../assets/Locked.svg);
-  }
-
-  &.unlocked {
-    background-image: url(../../assets/Unlocked.svg);
-  }
-}
-
-.enemy1Path path {
-  stroke: $enemy1-main-color;
-}
-
-.enemy2Path path {
-  stroke: $enemy2-main-color;
-}
-
-.toggleWrapper {
-  .itemWrapper {
-    display: flex;
-    align-items: center;
-    max-width: 130px;
-    padding: 6px;
-    cursor: pointer;
-
-    img {
-      width: 16px;
-      margin-right: 8px;
-    }
-
-    p {
-      font-size: 12px;
-      margin: 0;
-    }
-  }
 }

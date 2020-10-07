@@ -1,0 +1,15 @@
+@import '../../../../scss/utils';
+
+.enemy1Path,
+.enemy2Path,
+.path {
+  @include bg-image-layout;
+}
+
+.enemy1Path path {
+  stroke: $enemy1-main-color;
+}
+
+.enemy2Path path {
+  stroke: $enemy2-main-color;
+}
