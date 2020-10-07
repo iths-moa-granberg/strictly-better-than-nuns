@@ -20,7 +20,8 @@
 .locks,
 .enemy1Path,
 .enemy2Path,
-.path {
+.path,
+.toggleWrapper {
   @include bg-image-layout;
 }
 
@@ -40,4 +41,24 @@
 
 .enemy2Path path {
   stroke: $enemy2-main-color;
+}
+
+.toggleWrapper {
+  .itemWrapper {
+    display: flex;
+    align-items: center;
+    max-width: 130px;
+    padding: 6px;
+    cursor: pointer;
+
+    img {
+      width: 16px;
+      margin-right: 8px;
+    }
+
+    p {
+      font-size: 12px;
+      margin: 0;
+    }
+  }
 }

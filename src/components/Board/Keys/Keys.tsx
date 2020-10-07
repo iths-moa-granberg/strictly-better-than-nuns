@@ -5,6 +5,7 @@ import { ClientPlayer } from '../../../modules/player';
 
 interface KeysProps {
   myPlayer: MyPlayer;
+  viewAll: boolean;
 }
 
 interface KeyProps {
@@ -12,8 +13,8 @@ interface KeyProps {
   y: number;
 }
 
-const Keys = ({ myPlayer }: KeysProps) => {
-  if (myPlayer.isEvil) {
+const Keys = ({ myPlayer, viewAll }: KeysProps) => {
+  if (viewAll) {
     return (
       <>
         <article className="keyWrapper">
@@ -25,7 +26,7 @@ const Keys = ({ myPlayer }: KeysProps) => {
     );
   }
 
-  if ((myPlayer as ClientPlayer).hasKey) {
+  if (myPlayer.isEvil || (myPlayer as ClientPlayer).hasKey) {
     return <></>;
   }
 
@@ -40,7 +41,7 @@ const Keys = ({ myPlayer }: KeysProps) => {
 const Key = ({ x, y }: KeyProps) => {
   return (
     <img
-      src={require('../../../assets/key.png')}
+      src={require('../../../assets/key.svg')}
       alt="key"
       style={{ position: 'absolute', top: `${y * (856 / 900)}vh`, left: `${x * (856 / 900)}vh` }}
     />

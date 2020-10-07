@@ -5,6 +5,7 @@ import goals from '../../../shared/goals';
 
 interface GoalsProps {
   myPlayer: MyPlayer;
+  viewAll: boolean;
 }
 
 interface GoalProps {
@@ -12,8 +13,8 @@ interface GoalProps {
   y: number;
 }
 
-const Goals = ({ myPlayer }: GoalsProps) => {
-  if (myPlayer.isEvil) {
+const Goals = ({ myPlayer, viewAll }: GoalsProps) => {
+  if (viewAll) {
     return (
       <>
         <article className="goalWrapper">
@@ -25,7 +26,7 @@ const Goals = ({ myPlayer }: GoalsProps) => {
     );
   }
 
-  if ((myPlayer as ClientPlayer).hasGoal) {
+  if (myPlayer.isEvil || (myPlayer as ClientPlayer).hasGoal) {
     return <></>;
   }
 
@@ -40,7 +41,7 @@ const Goals = ({ myPlayer }: GoalsProps) => {
 const Goal = ({ x, y }: GoalProps) => {
   return (
     <img
-      src={require('../../../assets/goal.png')}
+      src={require('../../../assets/goal.svg')}
       alt="goal"
       style={{ position: 'absolute', top: `${y * (856 / 900)}vh`, left: `${x * (856 / 900)}vh` }}
     />
