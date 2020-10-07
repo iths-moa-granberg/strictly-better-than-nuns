@@ -19,6 +19,7 @@ import {
 } from '../../shared/sharedTypes';
 import { ClientPlayer } from '../../modules/player';
 import paths from './paths/pathIndex';
+import homes from './homes/homeIndex';
 import styles from './Board.module.scss';
 import getChildren from './PositionChildren/getChildren';
 import Keys from './Keys/Keys';
@@ -142,8 +143,15 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const Enemy1PathComp = paths[getPathComponentName(e1Path)];
   const Enemy2PathComp = paths[getPathComponentName(e2Path)];
 
+  let Home = homes.Home0;
+  if (!myPlayer.isEvil) {
+    Home = homes[`Home${(myPlayer as ClientPlayer).id}`];
+  }
+
   return (
     <>
+      {!myPlayer.isEvil && <Home className={styles.home} />}
+
       <section className={styles.boardWrapper}>
         {actionState.key === 'select new path' ? (
           possiblePaths.map((pathName) => {

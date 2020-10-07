@@ -12,10 +12,12 @@
   grid-area: board;
 
   @include bg-image-layout;
-  background-color: $board-background-color;
   background-image: url(../../assets/Board.svg);
-
   position: relative;
+}
+
+.home {
+  @include bg-image-layout;
 }
 
 .locks {
