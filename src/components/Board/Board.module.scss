@@ -16,13 +16,15 @@
   position: relative;
 }
 
-.home {
+.home,
+.locks,
+.enemy1Path,
+.enemy2Path,
+.path {
   @include bg-image-layout;
 }
 
 .locks {
-  @include bg-image-layout;
-
   &.locked {
     background-image: url(../../assets/Locked.svg);
   }
@@ -32,20 +34,10 @@
   }
 }
 
-.enemy1Path {
-  @include bg-image-layout;
-  path {
-    stroke: $enemy1-main-color;
-  }
+.enemy1Path path {
+  stroke: $enemy1-main-color;
 }
 
-.enemy2Path {
-  @include bg-image-layout;
-  path {
-    stroke: $enemy2-main-color;
-  }
-}
-
-.path {
-  @include bg-image-layout;
+.enemy2Path path {
+  stroke: $enemy2-main-color;
 }

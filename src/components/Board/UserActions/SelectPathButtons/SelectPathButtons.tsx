@@ -21,13 +21,20 @@ const SelectPathButtons = ({ pathNames, setActionState }: SelectPathButtonsProps
 
       <div>
         {pathNames.map((name, index) => (
-          <button key={name} onClick={() => handleSelect(name)} className={`${styles.button} ${styles[name]}`}>
+          <button
+            key={name}
+            onClick={() => handleSelect(name)}
+            className={`${styles.button} ${styles[getStyleName(name)]}`}>
             {getLetter(index)}
           </button>
         ))}
       </div>
     </>
   );
+};
+
+const getStyleName = (name: string) => {
+  return name.substring(0, name.length - 1);
 };
 
 const getLetter = (num: number) => {
