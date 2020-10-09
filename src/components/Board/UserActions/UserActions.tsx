@@ -91,7 +91,7 @@ const UserActions = ({
       {actionState.key === 'disabled enemy confirm' && (
         <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} disabled={true} />
       )}
-      {actionState.key === 'select token' && <p>click on soundtoken to select sound-position</p>}
+      {actionState.key === 'select token' && <h1>Click on soundtoken to select sound-position</h1>}
       {actionState.key === 'select enemy' &&
         (myPlayer.isEvil ? (
           <SelectEnemyButtons selectEnemyHandler={selectEnemyHandler} />
