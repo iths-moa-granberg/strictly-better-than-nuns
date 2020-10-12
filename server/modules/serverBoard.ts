@@ -148,21 +148,25 @@ class Board {
   };
 
   isSeen = (position: Position, enemyPos: Position, enemyLastPos: Position) => {
-    if (enemyPos.x === enemyLastPos.x) {
-      if (enemyPos.y < enemyLastPos.y) {
-        return enemyPos.inSight.includes(position.id) && position.y <= enemyPos.y;
-      } else {
-        return enemyPos.inSight.includes(position.id) && position.y >= enemyPos.y;
-      }
-    } else if (enemyPos.y === enemyLastPos.y) {
-      if (enemyPos.x < enemyLastPos.x) {
-        return enemyPos.inSight.includes(position.id) && position.x <= enemyPos.x;
-      } else {
-        return enemyPos.inSight.includes(position.id) && position.x >= enemyPos.x;
-      }
-    } else {
+    if (!enemyPos.inSight.includes(position.id)) {
       return false;
     }
+
+    const isVisibleFromDirection = (axis: 'x' | 'y') => {
+      if (enemyPos[axis] < enemyLastPos[axis]) {
+        return position[axis] <= enemyPos[axis];
+      }
+      return position[axis] >= enemyPos[axis];
+    };
+
+    if (enemyPos.x !== enemyLastPos.x && enemyPos.y !== enemyLastPos.y) {
+      if (Math.abs(enemyPos.y - enemyLastPos.y) >= Math.abs(enemyPos.x - enemyLastPos.x)) {
+        return isVisibleFromDirection('y');
+      }
+      return isVisibleFromDirection('x');
+    }
+
+    return isVisibleFromDirection(enemyPos.x === enemyLastPos.x ? 'y' : 'x');
   };
 }
 
