@@ -96,7 +96,7 @@ const UserActions = ({
         (myPlayer.isEvil ? (
           <SelectEnemyButtons selectEnemyHandler={selectEnemyHandler} />
         ) : (
-          <PaceButtons myPlayer={myPlayer} {...paceProps} />
+          <h1>Waiting for your turn</h1>
         ))}
       {actionState.key === 'select new path' && (
         <SelectPathButtons {...actionState.params!} setActionState={setActionState} />
