@@ -61,22 +61,33 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
   const positionsArray: Position[] = Object.values(positions);
 
   useEffect(() => {
-    socket.on(
-      'update board',
-      ({ visiblePlayers, soundTokens, sightTokens, enemyPaths, reachablePositions }: OnUpdateBoard) => {
-        setVisiblePlayers(visiblePlayers);
-        setSoundTokens(soundTokens);
-        setSightTokens(sightTokens);
-        setE1Path(enemyPaths[0]);
-        setE2Path(enemyPaths[1]);
-        setReachablePositions(reachablePositions);
-      }
-    );
+    const onUpdateBoard = ({
+      visiblePlayers,
+      soundTokens,
+      sightTokens,
+      enemyPaths,
+      reachablePositions,
+    }: OnUpdateBoard) => {
+      setVisiblePlayers(visiblePlayers);
+      setSoundTokens(soundTokens);
+      setSightTokens(sightTokens);
+      setE1Path(enemyPaths[0]);
+      setE2Path(enemyPaths[1]);
+      setReachablePositions(reachablePositions);
+    };
 
-    socket.on('choose new path', ({ pathNames }: OnChooseNewPath) => {
+    const onChooseNewPath = ({ pathNames }: OnChooseNewPath) => {
       setActionState({ key: 'select new path', params: { pathNames } });
       setPossiblePaths(pathNames);
-    });
+    };
+
+    socket.on('update board', onUpdateBoard);
+    socket.on('choose new path', onChooseNewPath);
+
+    return () => {
+      socket.off('update board', onUpdateBoard);
+      socket.off('choose new path', onChooseNewPath);
+    };
   }, []);
 
   useEffect(() => {

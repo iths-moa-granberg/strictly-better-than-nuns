@@ -1,10 +1,4 @@
-import { Position } from './shared/sharedTypes';
 import { ClientPlayer, ClientEnemy } from './modules/player';
-
-export interface ClientUser {
-  username: string;
-  userID: string;
-}
 
 export interface ClientEnemies {
   e1: ClientEnemy;

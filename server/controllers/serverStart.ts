@@ -120,6 +120,7 @@ io.on('connection', (socket: ExtendedSocket) => {
       games[socket.game.id].users[user.userID].role = 'evil';
       games[socket.game.id].users[user.userID].playerId = 'e1';
       socket.player = socket.game.enemies;
+      socket.player.username = user.username;
       socket.game.enemyJoined = true;
       const params: OnSetUpEnemy = {
         startPositions: [socket.player.e1.position, socket.player.e2.position],

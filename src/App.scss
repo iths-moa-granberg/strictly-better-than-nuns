@@ -7,7 +7,7 @@ body {
   background-color: $main-background-color;
 }
 
-#root > div {
+.main-wrapper {
   display: grid;
   grid: 40% 60% / 1fr 1fr;
   grid-template-areas:

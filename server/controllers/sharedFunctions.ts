@@ -2,7 +2,15 @@ import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
-import { Position, OnUpdateBoard, OnPlayersTurn, OnProgress, OnUpdatePlayer } from '../../src/shared/sharedTypes';
+import {
+  ClientUser,
+  Position,
+  OnUpdateBoard,
+  OnPlayersTurn,
+  OnProgress,
+  OnUpdatePlayer,
+  OnGameOver,
+} from '../../src/shared/sharedTypes';
 import { ClientPlayer } from '../../src/modules/player';
 
 export const updateBoard = (game: Game) => {
@@ -108,4 +116,9 @@ export const isSeen = (player: Player, game: Game) => {
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+export const gameOver = (winner: ClientUser, room: string) => {
+  const params: OnGameOver = { winner };
+  io.in(room).emit('game over', params);
 };

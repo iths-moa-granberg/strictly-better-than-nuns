@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
 import { ClientPlayer, ClientEnemy } from '../../modules/player';
 import { createUser, getUsernames } from './startscreenUtils';
-import { ClientUser, MyPlayer } from '../../clientTypes';
+import { MyPlayer } from '../../clientTypes';
 import {
+  ClientUser,
   OnStartScreen,
   OnUpdateOpenGames,
   OnInit,

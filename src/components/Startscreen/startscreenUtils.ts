@@ -1,5 +1,5 @@
 import { Users } from '../../shared/sharedTypes';
-import { ClientUser } from '../../clientTypes';
+import { ClientUser } from '../../shared/sharedTypes';
 
 export const createUser = (username: string) =>
   ({

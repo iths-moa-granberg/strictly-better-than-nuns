@@ -1,7 +1,7 @@
 import positions from '../../src/shared/positions';
 import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
-import { logProgress, updatePlayer } from '../controllers/sharedFunctions';
+import { gameOver, logProgress, updatePlayer } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';
 import { SoundToken, SightToken, VisiblePlayers } from '../../src/shared/sharedTypes';
 import keys from '../../src/shared/keys';
@@ -43,7 +43,7 @@ class Game {
     this.enemyListened = 0;
 
     this.board = new Board();
-    this.enemies = { e1: new Enemy('e1'), e2: new Enemy('e2') };
+    this.enemies = { e1: new Enemy('e1'), e2: new Enemy('e2'), username: '' };
 
     this.claimedKeys = [];
   }
@@ -98,7 +98,7 @@ class Game {
       }
     }
     if (this.enemyWinCounter > this.players.length) {
-      logProgress(`Enemy wins!`, { room: this.id });
+      gameOver({ username: this.enemies.username, userID: 'e1' }, this.id);
     }
   };
 

@@ -1,5 +1,3 @@
-import { ClientUser } from '../clientTypes';
-
 export interface Position {
   id: number;
   x: number;
@@ -17,6 +15,11 @@ interface User {
   username: string;
   role: string;
   playerId: string;
+}
+
+export interface ClientUser {
+  username: string;
+  userID: string;
 }
 
 export interface SightToken {
@@ -147,4 +150,8 @@ export interface OnPlayerJoined {
 
 export interface OnInitNewGame {
   user: ClientUser;
+}
+
+export interface OnGameOver {
+  winner: ClientUser;
 }

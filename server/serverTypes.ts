@@ -12,5 +12,7 @@ export interface PlayerSocket extends SocketIO.Socket {
 }
 
 export interface Enemies {
-  [key: string]: Enemy;
+  e1: Enemy;
+  e2: Enemy;
+  username: string;
 }

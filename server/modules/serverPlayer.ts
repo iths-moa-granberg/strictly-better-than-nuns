@@ -1,5 +1,5 @@
 import enemyPaths from './enemyPaths';
-import { logProgress } from '../controllers/sharedFunctions';
+import { gameOver, logProgress } from '../controllers/sharedFunctions';
 import { Position } from '../../src/shared/sharedTypes';
 
 interface Player {
@@ -79,7 +79,7 @@ class Player {
     if (this.hasKey) {
       if (this.hasGoal) {
         if (this.home.id === this.position.id) {
-          logProgress(`${this.username} has won!`, { room });
+          gameOver({ username: this.username, userID: this.id }, room);
         }
       } else if (this.goal.id === this.position.id) {
         this.hasGoal = true;
