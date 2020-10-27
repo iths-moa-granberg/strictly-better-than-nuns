@@ -16,7 +16,7 @@ const Paths = ({ actionState, possiblePaths, viewAllPaths, e1Path, e2Path }: Pat
   const Enemy2PathComp = paths[getPathComponentName(e2Path)];
 
   return (
-    <article>
+    <article className="enemy-paths-wrapper">
       {actionState.key === 'select new path' ? (
         possiblePaths.map((pathName) => {
           const Comp = paths[getPathComponentName(pathName)];

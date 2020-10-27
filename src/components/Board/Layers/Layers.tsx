@@ -19,11 +19,11 @@ const Toggle = ({ myPlayer, actionState, possiblePaths, e1Path, e2Path }: Toggle
   const [viewAllGoals, setViewAllGoals] = useState<boolean>(myPlayer.isEvil);
   const [viewAllPaths, setViewAllPaths] = useState<boolean>(false);
 
-  const [viewLock, setViewLock] = useState<'locked' | 'unlocked'>(myPlayer.isEvil ? 'unlocked' : 'locked');
+  const [unlocked, setUnlocked] = useState<boolean>(myPlayer.isEvil);
 
   useEffect(() => {
     if ((myPlayer as ClientPlayer).hasKey) {
-      setViewLock('unlocked');
+      setUnlocked(true);
     }
   }, [myPlayer]);
 
@@ -37,7 +37,13 @@ const Toggle = ({ myPlayer, actionState, possiblePaths, e1Path, e2Path }: Toggle
         e2Path={e2Path}
       />
 
-      <article className={`${styles.locks} ${styles[viewLock]}`} />
+      <article className={styles.locks}>
+        <img
+          src={require(`../../../assets/${unlocked ? 'Unlocked' : 'Locked'}.svg`)}
+          alt="lock"
+          className={styles.locksImg}
+        />
+      </article>
 
       <Keys myPlayer={myPlayer} viewAll={viewAllKeys} />
 

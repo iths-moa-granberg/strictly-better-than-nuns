@@ -155,9 +155,17 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
 
   return (
     <>
-      {!myPlayer.isEvil && <Home className={styles.home} />}
-
       <section className={styles.boardWrapper}>
+        {!myPlayer.isEvil && (
+          <article className="player-home">
+            <Home className={styles.home} />
+          </article>
+        )}
+
+        <article className={styles.backgroundImageWrapper}>
+          <img src={require('../../assets/Board.svg')} alt="background" className={styles.backgroundImage} />
+        </article>
+
         <Layers
           actionState={actionState}
           possiblePaths={possiblePaths}

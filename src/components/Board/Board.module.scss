@@ -4,10 +4,11 @@
   grid-area: board;
 
   @include bg-image-layout;
-  background-image: url(../../assets/Board.svg);
   position: relative;
 }
 
-.home {
+.home,
+.backgroundImageWrapper,
+.backgroundImage {
   @include bg-image-layout;
 }

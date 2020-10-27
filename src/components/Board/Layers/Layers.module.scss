@@ -1,15 +1,8 @@
 @import '../../../scss/utils';
 
-.locks {
+.locks,
+.locksImg {
   @include bg-image-layout;
-
-  &.locked {
-    background-image: url(../../../assets/Locked.svg);
-  }
-
-  &.unlocked {
-    background-image: url(../../../assets/Unlocked.svg);
-  }
 }
 
 .toggleWrapper {
