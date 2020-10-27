@@ -59,7 +59,7 @@ class Game {
   startNextTurn = () => {
     this.roundCounter++;
     if (this.roundCounter > 15) {
-      console.log('end game');
+      gameOver({ username: this.enemies.username, userID: 'e1' }, this.id);
     }
   };
 
