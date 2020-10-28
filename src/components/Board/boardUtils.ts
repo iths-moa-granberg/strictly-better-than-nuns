@@ -9,7 +9,15 @@ export const getClassName = (
   reachablePositions: Position[]
 ) => {
   const id = myPlayer.isEvil ? currentPlayerID : (myPlayer as ClientPlayer).id;
-  return reachablePositions.find((pos) => pos.id === position.id) ? `reachable-${id}` : '';
+  const reachable = reachablePositions.find((pos) => pos.id === position.id) ? `reachable-${id}` : '';
+
+  const playerPositionID = myPlayer.isEvil
+    ? (myPlayer as ClientEnemies)[currentPlayerID!].position.id
+    : (myPlayer as ClientPlayer).position.id;
+  const positionIsNeighbour = position.neighbours.includes(playerPositionID);
+  const clickable = positionIsNeighbour && reachable ? 'clickable' : '';
+
+  return { reachable, clickable };
 };
 
 export const stepIsValid = (

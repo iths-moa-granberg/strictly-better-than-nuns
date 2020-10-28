@@ -1,5 +1,5 @@
 import { io } from '../index';
-import { updateBoard, logProgress, logSound, isSeen, updatePlayer } from './sharedFunctions';
+import { updateBoard, logProgress, logSound, isSeen, updatePlayer, updateBoardSocket } from './sharedFunctions';
 import { PlayerSocket, Enemies } from '../serverTypes';
 import {
   Position,
@@ -70,6 +70,7 @@ io.on('connection', (socket: PlayerSocket) => {
 
     const params: OnPlayersTurn = { resetPosition: socket.player.position, caughtPlayers: socket.game.caughtPlayers };
     socket.emit('players turn', params);
+    updateBoardSocket(socket.game, socket);
   });
 
   socket.on('player move completed', () => {

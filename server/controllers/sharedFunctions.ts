@@ -1,7 +1,7 @@
 import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
-import { ExtendedSocket } from '../serverTypes';
+import { ExtendedSocket, PlayerSocket } from '../serverTypes';
 import {
   ClientUser,
   Position,
@@ -13,7 +13,7 @@ import {
 } from '../../src/shared/sharedTypes';
 import { ClientPlayer } from '../../src/modules/player';
 
-export const updateBoard = (game: Game) => {
+const _updateBoard = (game: Game) => {
   const visiblePlayers = game.getVisiblePlayers();
   visiblePlayers.push({
     id: 'e1',
@@ -28,14 +28,23 @@ export const updateBoard = (game: Game) => {
 
   const reachablePositions: Position[] = [];
 
-  const params: OnUpdateBoard = {
+  return {
     visiblePlayers,
     soundTokens: game.soundTokens,
     sightTokens: game.sightTokens,
     enemyPaths: [game.enemies.e1.pathName, game.enemies.e2.pathName],
     reachablePositions,
   };
+};
+
+export const updateBoard = (game: Game) => {
+  const params: OnUpdateBoard = _updateBoard(game);
   io.in(game.id).emit('update board', params);
+};
+
+export const updateBoardSocket = (game: Game, socket: ExtendedSocket) => {
+  const params: OnUpdateBoard = _updateBoard(game);
+  socket.emit('update board', params);
 };
 
 export const updatePlayer = (player: ClientPlayer, room: string) => {

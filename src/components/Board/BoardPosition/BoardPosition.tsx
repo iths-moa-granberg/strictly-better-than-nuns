@@ -4,7 +4,10 @@ import styles from './BoardPosition.module.scss';
 
 interface BoardPositionProps {
   position: Position;
-  className: string;
+  className: {
+    reachable: string;
+    clickable: string;
+  };
   children: JSX.Element[];
   clickHandler: Function;
 }
@@ -14,7 +17,12 @@ const BoardPosition = ({ position, className, children, clickHandler }: BoardPos
 
   return (
     <div
-      className={`${styles.position} ${styles[className]} ${styles[multipleChildren]}`}
+      className={`
+        ${styles.position} 
+        ${styles[className.reachable]} 
+        ${styles[className.clickable]} 
+        ${styles[multipleChildren]}
+      `}
       style={{ top: `${position.y * (856 / 900)}vh`, left: `${position.x * (856 / 900)}vh` }}
       onClick={() => clickHandler(position)}>
       {children}
