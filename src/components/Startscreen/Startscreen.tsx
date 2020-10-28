@@ -206,8 +206,8 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
         <div className={playerListStyles.playerListWrapper}>
           <h1>Players:</h1>
           <div className={playerListStyles.playersWrapper}>
-            {Object.values(myGame.users).map((user) => (
-              <p key={user.username} className={playerListStyles[`player-${user.playerId}`]}>
+            {Object.values(myGame.users).map((user, index) => (
+              <p key={user.username + index} className={playerListStyles[`player-${user.playerId}`]}>
                 {user.username} ({user.role ? user.role : '?'})
               </p>
             ))}
