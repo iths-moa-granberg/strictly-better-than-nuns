@@ -160,6 +160,8 @@ io.on('connection', (socket: PlayerSocket) => {
       socket.game.playerTurnCompleted = 0;
       logSound(socket.game);
       startEnemyTurn();
+    } else {
+      socket.emit('enemy turn');
     }
   };
 
