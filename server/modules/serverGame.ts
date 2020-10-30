@@ -94,7 +94,11 @@ class Game {
 
         updatePlayer(player, this.id);
 
-        logProgress(`${player.username} is caught! Enemy wincounter is now ${this.enemyWinCounter}`, { room: this.id });
+        const msg = [
+          { text: player.username, id: player.id },
+          { text: ` is caught! Enemy win counter is now ${this.enemyWinCounter}` },
+        ];
+        logProgress(msg, { room: this.id });
       }
     }
     if (this.enemyWinCounter > this.players.length) {

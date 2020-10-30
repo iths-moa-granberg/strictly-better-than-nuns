@@ -83,11 +83,15 @@ class Player {
         }
       } else if (this.goal.id === this.position.id) {
         this.hasGoal = true;
-        logProgress(`You have reached your goal!`, { socket });
+
+        const msg = [{ text: `You have reached your goal!` }];
+        logProgress(msg, { socket });
       }
     } else if (this.key.id === this.position.id) {
       this.hasKey = true;
-      logProgress(`You have reached your key!`, { socket });
+
+      const msg = [{ text: `You have reached your key!` }];
+      logProgress(msg, { socket });
     }
   };
 

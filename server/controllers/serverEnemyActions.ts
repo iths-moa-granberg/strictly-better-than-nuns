@@ -26,7 +26,11 @@ io.on('connection', (socket: ExtendedSocket) => {
     currentEnemy.stepsLeft = pace === 'walk' ? 4 : 6;
     enemyStepOptions();
 
-    logProgress(`${currentEnemy.id} is ${pace}ing`, { room: socket.game.id });
+    const msg = [
+      { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
+      { text: ` is ${pace === 'run' ? 'runn' : pace}ing` },
+    ];
+    logProgress(msg, { room: socket.game.id });
   });
 
   const enemyStepOptions = () => {
@@ -67,7 +71,20 @@ io.on('connection', (socket: ExtendedSocket) => {
         player.visible = true;
         player.updatePathVisibility(player.position, seenBy);
 
-        logProgress(`${player.username} is seen by ${currentEnemy.id}`, { room: socket.game.id });
+        const msg = [
+          {
+            text: player.username,
+            id: player.id,
+          },
+          {
+            text: ' is seen by',
+          },
+          {
+            text: currentEnemy.id === 'e1' ? ' Enemy 1' : ' Enemy 2',
+            id: currentEnemy.id,
+          },
+        ];
+        logProgress(msg, { room: socket.game.id });
       }
     }
     if (currentEnemy.endOfPath()) {
@@ -90,7 +107,12 @@ io.on('connection', (socket: ExtendedSocket) => {
 
   socket.on('select path', ({ pathName }: OnSelectPath) => {
     currentEnemy.setNewPath(pathName);
-    logProgress(`${currentEnemy.id} has selected a new path`, { room: socket.game.id });
+
+    const msg = [
+      { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
+      { text: ' has selected a new path' },
+    ];
+    logProgress(msg, { room: socket.game.id });
 
     actOnEnemyStep();
   });

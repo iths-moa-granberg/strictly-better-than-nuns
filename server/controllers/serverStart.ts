@@ -67,8 +67,6 @@ io.on('connection', (socket: ExtendedSocket) => {
       allGoodPlayersJoined: socket.game.players.length === 6,
     };
     socket.emit('init', paramsInit);
-
-    logProgress(`${user.username} has joined`, { room: socket.game.id });
   });
 
   socket.on('join game', ({ gameID, user }: OnJoinGame) => {
@@ -90,8 +88,6 @@ io.on('connection', (socket: ExtendedSocket) => {
     socket.emit('init', paramsInit);
 
     io.in(socket.game.id).emit('waiting for players');
-
-    logProgress(`${user.username} has joined`, { room: socket.game.id });
   });
 
   socket.on('player joined', ({ good, user }: OnPlayerJoined) => {
@@ -130,8 +126,6 @@ io.on('connection', (socket: ExtendedSocket) => {
       updateOpenGames();
     }
 
-    logProgress(`${user.username} is ${games[socket.game.id].users[user.userID].role}`, { room: socket.game.id });
-
     updateBoard(socket.game);
     if (playersReady()) {
       io.in(socket.game.id).emit('players ready');
@@ -152,7 +146,6 @@ io.on('connection', (socket: ExtendedSocket) => {
   };
 
   socket.on('start', async () => {
-    logProgress(`The game has started!`, { room: socket.game.id });
     io.in(socket.game.id).emit('game started');
 
     games[socket.game.id].status = 'closed';
@@ -163,6 +156,8 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     updateBoard(socket.game);
     startNextTurn(socket.game);
-    logProgress(`Players turn`, { room: socket.game.id });
+
+    const msg = [{ text: 'Players turn' }];
+    logProgress(msg, { room: socket.game.id });
   });
 });

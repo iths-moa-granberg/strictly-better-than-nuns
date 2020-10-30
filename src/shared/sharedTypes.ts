@@ -34,6 +34,11 @@ export interface SoundToken {
 
 export type VisiblePlayers = { id: string; position: Position; direction?: string }[];
 
+export interface ProgressLogObject {
+  text: string;
+  id?: string;
+}
+
 export interface OnUpdateBoard {
   visiblePlayers: VisiblePlayers;
   soundTokens: SoundToken[];
@@ -103,7 +108,7 @@ export interface OnSelectPath {
 }
 
 export interface OnProgress {
-  msg: string;
+  msg: ProgressLogObject[];
 }
 
 export interface OpenGame {

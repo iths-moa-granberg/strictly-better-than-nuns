@@ -18,5 +18,21 @@
 
   p {
     margin: 2px 0;
+
+    span {
+      &.e1 {
+        color: $enemy1-light-color;
+      }
+
+      &.e2 {
+        color: $enemy2-light-color;
+      }
+
+      @for $i from 1 through length($playerColors) {
+        &.#{$i} {
+          color: rgba(nth($playerColors, $i), 1);
+        }
+      }
+    }
   }
 }

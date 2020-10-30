@@ -10,6 +10,7 @@ import {
   OnProgress,
   OnUpdatePlayer,
   OnGameOver,
+  ProgressLogObject,
 } from '../../src/shared/sharedTypes';
 import { ClientPlayer } from '../../src/modules/player';
 
@@ -79,7 +80,7 @@ export const startNextTurn = (game: Game) => {
   io.in(game.id).emit('players turn', params);
 };
 
-export const logProgress = (msg: string, { socket, room }: { socket?: ExtendedSocket; room?: string }) => {
+export const logProgress = (msg: ProgressLogObject[], { socket, room }: { socket?: ExtendedSocket; room?: string }) => {
   const params: OnProgress = { msg };
   if (room) {
     io.in(room).emit('progress', params);
@@ -93,13 +94,28 @@ export const logSound = (game: Game) => {
     game.soundTokens.find((token) => token.enemyID === 'e1') &&
     game.soundTokens.find((token) => token.enemyID === 'e2')
   ) {
-    logProgress(`Both enemies heard someone!`, { room: game.id });
+    const msg = [{ text: 'Both enemies heard someone!' }];
+    logProgress(msg, { room: game.id });
   } else {
     if (game.soundTokens.find((token) => token.enemyID === 'e1')) {
-      logProgress(`e1 heard someone!`, { room: game.id });
+      const msg = [
+        {
+          text: 'Enemy 1',
+          id: 'e1',
+        },
+        { text: ' heard someone!' },
+      ];
+      logProgress(msg, { room: game.id });
     }
     if (game.soundTokens.find((token) => token.enemyID === 'e2')) {
-      logProgress(`e2 heard someone!`, { room: game.id });
+      const msg = [
+        {
+          text: 'Enemy 2',
+          id: 'e2',
+        },
+        { text: ' heard someone!' },
+      ];
+      logProgress(msg, { room: game.id });
     }
   }
 };

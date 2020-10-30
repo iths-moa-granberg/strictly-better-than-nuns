@@ -48,12 +48,15 @@ io.on('connection', (socket: PlayerSocket) => {
     const seenBy = isSeen(socket.player, socket.game);
     socket.player.visible = Boolean(seenBy.length);
     if (seenBy.length) {
-      logProgress(`You are seen! Click back if you want to take a different route`, { socket });
+      const msg = [{ text: 'You are seen! Click back if you want to take a different route' }];
+      logProgress(msg, { socket });
     }
 
     if (socket.game.isCaught(socket.player) && !socket.player.visible) {
       socket.game.removeCaughtPlayer(socket.player);
-      logProgress(`You are out of sight and can move freely again`, { socket });
+
+      const msg = [{ text: 'You are out of sight and can move freely again' }];
+      logProgress(msg, { socket });
     }
     socket.player.path.push({ position: socket.player.position, visible: socket.player.visible, enemyID: seenBy });
 
@@ -92,7 +95,9 @@ io.on('connection', (socket: PlayerSocket) => {
     for (let obj of path) {
       if (obj.visible && obj != path[0]) {
         socket.game.addToken(obj.position.id, 'sight', obj.enemyID);
-        logProgress(`${player.username} has disappeared`, { room: socket.game.id });
+
+        const msg = [{ text: player.username, id: player.id }, { text: ' has disappeared' }];
+        logProgress(msg, { room: socket.game.id });
         return;
       }
     }
@@ -144,7 +149,12 @@ io.on('connection', (socket: PlayerSocket) => {
     updatePlayer(socket.player, socket.game.id);
 
     socket.game.playerTurnCompleted++;
-    logProgress(`${socket.player.username} is ${socket.player.pace}ing`, { room: socket.game.id });
+
+    const msg = [
+      { text: socket.player.username, id: socket.player.id },
+      { text: ` is ${socket.player.pace === 'run' ? 'runn' : socket.player.pace}ing` },
+    ];
+    logProgress(msg, { room: socket.game.id });
 
     if (socket.game.playerTurnCompleted === socket.game.players.length) {
       socket.game.playerTurnCompleted = 0;
@@ -157,6 +167,7 @@ io.on('connection', (socket: PlayerSocket) => {
     updateBoard(socket.game);
     io.in(socket.game.id).emit('enemy turn');
 
-    logProgress(`Enemy turn`, { room: socket.game.id });
+    const msg = [{ text: 'Enemy turn' }];
+    logProgress(msg, { room: socket.game.id });
   };
 });
