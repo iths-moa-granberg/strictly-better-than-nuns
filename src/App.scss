@@ -9,7 +9,7 @@ body {
 
 .main-wrapper {
   display: grid;
-  grid: 40% 60% / 1fr 1fr;
+  grid: 1fr 1fr / 1fr 1fr;
   grid-template-areas:
     'board userActions'
     'board progressLog';

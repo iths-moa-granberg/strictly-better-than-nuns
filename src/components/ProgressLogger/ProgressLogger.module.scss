@@ -4,11 +4,13 @@
   grid-area: progressLog;
 
   background-color: $progress-log-background-color;
-  padding: 0 42px;
+  border: 24px solid $progress-log-background-color;
+  border-width: 24px 42px;
+  box-sizing: border-box;
 
   color: $white;
   font-size: 14px;
-  height: 60vh;
+  height: 50vh;
   overflow-y: scroll;
 
   display: flex;
