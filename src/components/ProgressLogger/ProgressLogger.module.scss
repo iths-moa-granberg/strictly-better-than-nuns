@@ -7,10 +7,10 @@
   border: 24px solid $progress-log-background-color;
   border-width: 24px 42px;
   box-sizing: border-box;
+  height: 50vh;
 
   color: $white;
   font-size: 14px;
-  height: 50vh;
   overflow-y: scroll;
 
   display: flex;

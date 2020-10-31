@@ -14,6 +14,7 @@ import {
   OnPlayerJoined,
   OnInitNewGame,
   OpenGame,
+  OnSetEnemyWinGoal,
 } from '../../src/shared/sharedTypes';
 
 interface Games {
@@ -153,6 +154,9 @@ io.on('connection', (socket: ExtendedSocket) => {
     updateOpenGames();
 
     await sleep(1000);
+
+    const params: OnSetEnemyWinGoal = { num: socket.game.players.length + 1 };
+    io.in(socket.game.id).emit('set enemy win goal', params);
 
     updateBoard(socket.game);
     startNextTurn(socket.game);

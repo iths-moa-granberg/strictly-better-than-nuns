@@ -160,3 +160,7 @@ export interface OnInitNewGame {
 export interface OnGameOver {
   winner: ClientUser;
 }
+
+export interface OnSetEnemyWinGoal {
+  num: number;
+}

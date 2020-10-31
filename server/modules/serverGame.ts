@@ -1,7 +1,7 @@
 import positions from '../../src/shared/positions';
 import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
-import { gameOver, logProgress, updatePlayer } from '../controllers/sharedFunctions';
+import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';
 import { SoundToken, SightToken, VisiblePlayers } from '../../src/shared/sharedTypes';
 import keys from '../../src/shared/keys';
@@ -99,6 +99,8 @@ class Game {
           { text: ` is caught! Enemy win counter is now ${this.enemyWinCounter}` },
         ];
         logProgress(msg, { room: this.id });
+
+        updateEnemyWinCounterClient(this.id);
       }
     }
     if (this.enemyWinCounter > this.players.length) {

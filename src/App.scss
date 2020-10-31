@@ -9,8 +9,9 @@ body {
 
 .main-wrapper {
   display: grid;
-  grid: 1fr 1fr / 1fr 1fr;
+  grid: 1fr 2fr 3fr / 1fr 1fr;
   grid-template-areas:
+    'board progressBars'
     'board userActions'
     'board progressLog';
 }

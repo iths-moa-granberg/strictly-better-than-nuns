@@ -1,0 +1,60 @@
+@import '../../scss/utils';
+
+.progressBarWrapper {
+  grid-area: progressBars;
+  background-color: $user-actions-background-color;
+  color: $white;
+  padding: 0 24px;
+}
+
+.barWrapper {
+  margin: 16px 0;
+
+  .textWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    > p {
+      margin: 0 0 4px 0;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.bar {
+  width: 100%;
+  height: 8px;
+  background-color: $white;
+  border-radius: 6px;
+
+  .progress {
+    height: 100%;
+    width: 0%;
+    border-radius: 6px;
+    background-color: $main-background-color;
+    transition: width 0.4s ease-out;
+
+    &.roundCounter {
+      // 15 is max number of rounds
+      @for $i from 1 through 15 {
+        &.step#{$i} {
+          width: calc(6.666% * #{$i});
+        }
+      }
+    }
+
+    &.enemyWinCounter {
+      // 6 is max number of good players, enemy need one more catch
+      @for $m from 1 through 7 {
+        &.max#{$m} {
+          @for $i from 1 through $m {
+            &.step#{$i} {
+              width: calc(100% / #{$m} * #{$i});
+            }
+          }
+        }
+      }
+    }
+  }
+}

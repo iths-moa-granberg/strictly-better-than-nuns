@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import Startscreen from './components/Startscreen/Startscreen';
 import Board from './components/Board/Board';
 import ProgressLogger from './components/ProgressLogger/ProgressLogger';
+import ProgressBars from './components/ProgressBars/ProgressBars';
 import GameOverScreen from './components/GameOverScreen/GameOverScreen';
 import { MyPlayer } from './clientTypes';
 import { ClientPlayer } from './modules/player';
@@ -66,6 +67,7 @@ const App = () => {
             currentPlayerID={currentPlayerID}
             setCurrentPlayerId={setCurrentPlayerId}
           />
+          <ProgressBars/>
           <ProgressLogger />
         </>
       )}

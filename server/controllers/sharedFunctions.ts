@@ -1,7 +1,7 @@
 import { io } from '../index';
 import Game from '../modules/serverGame';
 import { Player } from '../modules/serverPlayer';
-import { ExtendedSocket, PlayerSocket } from '../serverTypes';
+import { ExtendedSocket } from '../serverTypes';
 import {
   ClientUser,
   Position,
@@ -74,6 +74,8 @@ const getDirection = (position: Position, lastPosition: Position) => {
 };
 
 export const startNextTurn = (game: Game) => {
+  io.in(game.id).emit('update round counter');
+
   game.startNextTurn();
 
   const params: OnPlayersTurn = { caughtPlayers: game.caughtPlayers };
@@ -146,4 +148,8 @@ export const sleep = (ms: number) => {
 export const gameOver = (winner: ClientUser, room: string) => {
   const params: OnGameOver = { winner };
   io.in(room).emit('game over', params);
+};
+
+export const updateEnemyWinCounterClient = (room: string) => {
+  io.in(room).emit('update enemy win counter');
 };
