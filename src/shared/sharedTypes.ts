@@ -39,6 +39,11 @@ export interface ProgressLogObject {
   id?: string;
 }
 
+export interface ChatMessage {
+  text: string;
+  id: string;
+}
+
 export interface OnUpdateBoard {
   visiblePlayers: VisiblePlayers;
   soundTokens: SoundToken[];
@@ -163,4 +168,8 @@ export interface OnGameOver {
 
 export interface OnSetEnemyWinGoal {
   num: number;
+}
+
+export interface OnSendMessage {
+  msg: ChatMessage;
 }

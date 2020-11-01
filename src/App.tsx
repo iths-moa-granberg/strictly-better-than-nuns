@@ -67,8 +67,8 @@ const App = () => {
             currentPlayerID={currentPlayerID}
             setCurrentPlayerId={setCurrentPlayerId}
           />
-          <ProgressBars/>
-          <ProgressLogger />
+          <ProgressBars />
+          <ProgressLogger id={myPlayer!.isEvil ? 'e1' : (myPlayer as ClientPlayer).id} />
         </>
       )}
     </div>

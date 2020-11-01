@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
-import { OnProgress, ProgressLogObject } from '../../shared/sharedTypes';
+import { OnProgress, OnSendMessage, ProgressLogObject } from '../../shared/sharedTypes';
 import styles from './ProgressLogger.module.scss';
 
-const ProgressLogger = () => {
+interface ProgressLoggerProps {
+  id: string;
+}
+
+const ProgressLogger = ({ id }: ProgressLoggerProps) => {
   const [messages, setMessages] = useState<ProgressLogObject[][]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
 
   useEffect(() => {
     const onProgress = ({ msg }: OnProgress) => {
@@ -18,18 +23,38 @@ const ProgressLogger = () => {
     };
   }, [messages]);
 
+  const handleChatInput = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      let msg = { text: inputValue, id };
+      const params: OnSendMessage = { msg };
+      socket.emit('send message', params);
+      setInputValue('');
+    }
+  };
+
   return (
-    <section className={styles.progressLogWrapper}>
-      {messages.length > 0 &&
-        messages.map((msg, index) => (
-          <p key={index}>
-            {msg.map((obj) => (
-              <span className={obj.id ? styles[obj.id] : ''} key={obj.text}>
-                {obj.text}
-              </span>
-            ))}
-          </p>
-        ))}
+    <section className={styles.messageWrapper}>
+      <article className={styles.progressLogWrapper}>
+        {messages.length > 0 &&
+          messages.map((msg, index) => (
+            <p key={index}>
+              {msg.map((obj) => (
+                <span className={obj.id ? styles[obj.id] : ''} key={obj.text}>
+                  {obj.text}
+                </span>
+              ))}
+            </p>
+          ))}
+      </article>
+
+      <article className={styles.inputWrapper}>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => handleChatInput(e)}
+        />
+      </article>
     </section>
   );
 };

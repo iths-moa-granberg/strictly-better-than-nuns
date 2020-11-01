@@ -18,3 +18,4 @@ app.use(express.static(path.join(__dirname, 'public')));
 import './controllers/serverStart';
 import './controllers/serverPlayerActions';
 import './controllers/serverEnemyActions';
+import './controllers/chat';

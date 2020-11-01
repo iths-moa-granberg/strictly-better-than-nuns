@@ -1,13 +1,18 @@
 @import '../../scss/utils';
 
-.progressLogWrapper {
+.messageWrapper {
   grid-area: progressLog;
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+}
 
+.progressLogWrapper {
   background-color: $progress-log-background-color;
   border: 24px solid $progress-log-background-color;
   border-width: 24px 42px;
   box-sizing: border-box;
-  height: 50vh;
+  flex-grow: 1;
 
   color: $white;
   font-size: 14px;
@@ -34,5 +39,22 @@
         }
       }
     }
+  }
+}
+
+.inputWrapper {
+  background-color: $user-actions-background-color;
+  padding: 24px 42px;
+
+  > input {
+    width: 100%;
+    padding: 4px 16px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    line-height: 1.6;
+    font-size: 14px;
+    font-family: $standard-font;
   }
 }
