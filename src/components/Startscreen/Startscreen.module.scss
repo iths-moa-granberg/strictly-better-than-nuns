@@ -1,6 +1,8 @@
 @import '../../scss/utils';
 
 .startWrapper {
+  grid-area: all;
+
   background-color: $main-background-color;
   background-image: url('../../assets/start-background.svg');
   background-position: bottom left;
