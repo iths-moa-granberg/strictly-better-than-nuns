@@ -79,10 +79,12 @@ io.on('connection', (socket: PlayerSocket) => {
   socket.on('player move completed', () => {
     socket.player.checkTarget(socket, socket.game.id);
 
-    if (socket.player.visible || socket.player.caught) {
+    if (socket.player.visible) {
+      endPlayerTurn();
+    } else if (socket.player.caught) {
+      socket.player.caught = false;
       endPlayerTurn();
     } else {
-      socket.player.caught = false;
       leaveSight(socket.player);
 
       const sound = socket.game.board.getSoundReach(socket.player.pace, socket.game.board.getRandomSound());
