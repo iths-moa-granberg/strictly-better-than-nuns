@@ -1,4 +1,4 @@
-@import '../../../../scss/utils';
+@import '../../../scss/utils';
 
 .player {
   width: 20px;
@@ -6,6 +6,9 @@
   border-radius: 100%;
   position: absolute;
   z-index: 1;
+  transition: left 0.2s, top 0.2s;
+
+  pointer-events: none;
 
   &.e1 {
     background-color: $enemy1-main-color;
@@ -26,9 +29,12 @@
 }
 
 .enemyPlayerWrapper {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  transition: left 0.2s, top 0.2s;
 
   .triangle {
     position: absolute;

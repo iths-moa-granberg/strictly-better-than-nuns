@@ -10,6 +10,7 @@ import LoadingScreen from './LoadingScreen/LoadingScreen';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
 import Layers from './Layers/Layers';
+import Players from './Players/Players';
 
 import { MyPlayer, ActionStateParams, ClientEnemies } from '../../clientTypes';
 import {
@@ -185,6 +186,8 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
             />
           ))}
         </article>
+
+        <Players players={visiblePlayers} myPlayer={myPlayer} />
       </section>
 
       <UserActions
