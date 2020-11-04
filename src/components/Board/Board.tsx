@@ -181,7 +181,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
               key={position.id}
               position={position}
               className={getClassName(myPlayer, currentPlayerID, position, reachablePositions)}
-              children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens)}
+              children={getChildren(position, myPlayer, visiblePlayers, soundTokens, sightTokens, actionState.key)}
               clickHandler={clickHandler}
             />
           ))}

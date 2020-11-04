@@ -9,7 +9,8 @@ const getChildren = (
   myPlayer: MyPlayer,
   visiblePlayers: VisiblePlayers,
   soundTokens: SoundToken[],
-  sightTokens: SightToken[]
+  sightTokens: SightToken[],
+  actionStateKey: string
 ) => {
   const children: JSX.Element[] = [];
 
@@ -26,7 +27,7 @@ const getChildren = (
     }
   }
   if (soundTokens.find((token) => token.id === position.id)) {
-    children.push(<Token type={'sound'} key={children.length} />);
+    children.push(<Token type={'sound'} key={children.length} clickable={actionStateKey === 'select token'} />);
   }
   if (sightTokens.find((token) => token.id === position.id)) {
     children.push(<Token type={'sight'} key={children.length} />);
