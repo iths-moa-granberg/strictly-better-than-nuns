@@ -19,3 +19,4 @@ import './controllers/serverStart';
 import './controllers/serverPlayerActions';
 import './controllers/serverEnemyActions';
 import './controllers/chat';
+import './controllers/serverPlayerAnimations';

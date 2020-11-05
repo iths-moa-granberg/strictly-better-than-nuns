@@ -173,3 +173,11 @@ export interface OnSetEnemyWinGoal {
 export interface OnSendMessage {
   msg: ChatMessage;
 }
+
+export interface OnCheckPulseDistance {
+  position: Position;
+}
+
+export interface OnUpdatePulseFrequency {
+  newPulseFrequency: number;
+}

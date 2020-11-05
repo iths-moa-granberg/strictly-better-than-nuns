@@ -24,6 +24,22 @@
     &.#{$i} {
       background-color: rgba(nth($playerColors, $i), 1);
       border: 1px solid rgba(nth($playerSecondaryColors, $i), 1);
+
+      &.pulsatingShadow {
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 (rgba(nth($playerColors, $i), 0.7));
+          }
+          70% {
+            box-shadow: 0 0 0 8px (rgba(nth($playerColors, $i), 0));
+          }
+          100% {
+            box-shadow: 0 0 0 0 (rgba(nth($playerColors, $i), 0));
+          }
+        }
+
+        animation: pulse 2.4s infinite;
+      }
     }
   }
 }
