@@ -1,0 +1,7 @@
+@import '../../../scss/utils';
+
+.homesWrapper {
+  svg {
+    @include bg-image-layout;
+  }
+}

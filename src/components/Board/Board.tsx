@@ -3,7 +3,7 @@ import { socket } from '../../App';
 
 import { getClassName, stepIsValid } from './boardUtils';
 import positions from '../../shared/positions';
-import homes from './homes/homeIndex';
+import Homes from './Homes/Homes';
 
 import getChildren from './PositionChildren/getChildren';
 import LoadingScreen from './LoadingScreen/LoadingScreen';
@@ -149,19 +149,10 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     return <LoadingScreen />;
   }
 
-  let Home = homes.Home0;
-  if (!myPlayer.isEvil) {
-    Home = homes[`Home${(myPlayer as ClientPlayer).id}`];
-  }
-
   return (
     <>
       <section className={styles.boardWrapper}>
-        {!myPlayer.isEvil && (
-          <article className="player-home">
-            <Home className={styles.home} />
-          </article>
-        )}
+        <Homes />
 
         <article className={styles.backgroundImageWrapper}>
           <img src={require('../../assets/Board.svg')} alt="background" className={styles.backgroundImage} />

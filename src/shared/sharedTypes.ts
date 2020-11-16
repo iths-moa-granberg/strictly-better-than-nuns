@@ -181,3 +181,7 @@ export interface OnCheckPulseDistance {
 export interface OnUpdatePulseFrequency {
   newPulseFrequency: number;
 }
+
+export interface OnInitialPlayerIDs {
+  playerIDs: string[];
+}

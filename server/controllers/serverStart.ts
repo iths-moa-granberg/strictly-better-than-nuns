@@ -15,6 +15,7 @@ import {
   OnInitNewGame,
   OpenGame,
   OnSetEnemyWinGoal,
+  OnInitialPlayerIDs,
 } from '../../src/shared/sharedTypes';
 
 interface Games {
@@ -155,11 +156,14 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     await sleep(1000);
 
-    const params: OnSetEnemyWinGoal = { num: socket.game.players.length + 1 };
-    io.in(socket.game.id).emit('set enemy win goal', params);
+    const setEnemyWinGoalParams: OnSetEnemyWinGoal = { num: socket.game.players.length + 1 };
+    io.in(socket.game.id).emit('set enemy win goal', setEnemyWinGoalParams);
 
     updateBoard(socket.game);
     startNextTurn(socket.game);
+
+    const initialPlayerIDParams: OnInitialPlayerIDs = { playerIDs: socket.game.players.map((p) => p.id) };
+    io.in(socket.game.id).emit('inital players id', initialPlayerIDParams);
 
     const msg = [{ text: 'Players turn' }];
     logProgress(msg, { room: socket.game.id });
