@@ -3,6 +3,8 @@
 .progressBarWrapper {
   grid-area: progressBars;
   background-color: $user-actions-background-color;
+  min-width: 500px;
+  box-sizing: border-box;
   color: $white;
   padding: 0 24px;
 }
