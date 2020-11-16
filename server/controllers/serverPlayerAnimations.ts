@@ -4,6 +4,13 @@ import { ExtendedSocket } from '../serverTypes';
 
 io.on('connection', (socket: ExtendedSocket) => {
   socket.on('check pulse distance', ({ position }: OnCheckPulseDistance) => {
+    //if player on same position as either enemy, set pulseFreq to .3s
+    if (position.id === socket.game.enemies.e1.position.id || position.id === socket.game.enemies.e2.position.id) {
+      const params: OnUpdatePulseFrequency = { newPulseFrequency: 0.3 };
+      socket.emit('update pulse freqency', params);
+      return;
+    }
+
     let distance = 7; //distances >= 7 has standard pulsFrequency
 
     const updateShortestDistance = (enemyID: 'e1' | 'e2') => {
