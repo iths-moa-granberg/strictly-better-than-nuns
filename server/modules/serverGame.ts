@@ -137,7 +137,7 @@ class Game {
 
     return {
       id,
-      home: positions[1 + this.players.length],
+      home: positions[Number(id)],
       key: positions[key.id],
       goal: positions[key.goal],
       username,
