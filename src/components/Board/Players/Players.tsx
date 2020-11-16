@@ -8,12 +8,14 @@ import styles from './Players.module.scss';
 interface PlayersProps {
   myPlayer: MyPlayer;
   players: VisiblePlayers;
+  currentEnemyID: 'e1' | 'e2' | null;
 }
 
 interface EnemyPlayerProps {
   id: string;
   direction: string;
   position: Position;
+  currentEnemyID: 'e1' | 'e2' | null;
 }
 
 interface PlayerProps {
@@ -22,22 +24,32 @@ interface PlayerProps {
   pulseFrequency?: number;
 }
 
-interface PlayersWhenGoodPlayerActiveProps {
-  players: VisiblePlayers;
+interface ActiveGoodPlayerProps {
   myGoodPlayer: ClientPlayer;
 }
 
 interface MappedPlayersProps {
   players: VisiblePlayers;
+  myPlayer: MyPlayer;
+  currentEnemyID: 'e1' | 'e2' | null;
 }
 
-const EnemyPlayer = ({ id, direction, position }: EnemyPlayerProps) => {
+const EnemyPlayer = ({ id, direction, position, currentEnemyID }: EnemyPlayerProps) => {
   return (
     <div
       className={styles.enemyPlayerWrapper}
-      style={{ top: `${position.y * (856 / 900) + 0.6}vh`, left: `${position.x * (856 / 900) + 0.6}vh` }}>
+      style={{
+        top: `${position.y * (856 / 900) + 0.6}vh`,
+        left: `${position.x * (856 / 900) + 0.6}vh`,
+      }}>
       <div className={`${styles.triangle} ${styles[direction]} ${styles[`${id}`]}`} />
-      <div className={`${styles.player} ${styles[`${id}`]}`} />
+      <div
+        className={`
+        ${styles.player} 
+        ${styles[`${id}`]}
+        ${styles[currentEnemyID ? `pulsatingShadow-${currentEnemyID}` : '']}
+        `}
+      />
     </div>
   );
 };
@@ -59,12 +71,22 @@ const Player = ({ id, position, pulseFrequency }: PlayerProps) => {
   );
 };
 
-const MappedPlayers = ({ players }: MappedPlayersProps) => {
+const MappedPlayers = ({ players, myPlayer, currentEnemyID }: MappedPlayersProps) => {
+  if (!myPlayer.isEvil) {
+    players = players.filter((p) => p.id !== (myPlayer as ClientPlayer).id);
+  }
+
   return (
     <>
       {players.map((player) =>
         isNaN(Number(player.id)) && player.direction ? (
-          <EnemyPlayer key={player.id} id={player.id} direction={player.direction} position={player.position} />
+          <EnemyPlayer
+            key={player.id}
+            id={player.id}
+            direction={player.direction}
+            position={player.position}
+            currentEnemyID={currentEnemyID}
+          />
         ) : (
           <Player key={player.id} id={player.id} position={player.position} />
         )
@@ -73,9 +95,8 @@ const MappedPlayers = ({ players }: MappedPlayersProps) => {
   );
 };
 
-const PlayersWhenGoodPlayerActive = ({ players, myGoodPlayer }: PlayersWhenGoodPlayerActiveProps) => {
+const ActiveGoodPlayer = ({ myGoodPlayer }: ActiveGoodPlayerProps) => {
   const [pulseFrequency, setPulseFrequency] = useState<number>(2.4);
-  const otherPlayers = players.filter((p) => p.id !== myGoodPlayer.id);
 
   useEffect(() => {
     const params: OnCheckPulseDistance = { position: myGoodPlayer.position };
@@ -90,23 +111,17 @@ const PlayersWhenGoodPlayerActive = ({ players, myGoodPlayer }: PlayersWhenGoodP
     return () => {
       socket.off('update pulse frequency', onUpdatePulseFrequency);
     };
-  }, [myGoodPlayer.position, otherPlayers]);
+  }, [myGoodPlayer.position]);
 
-  return (
-    <article className="players-layer">
-      <Player id={myGoodPlayer.id} position={myGoodPlayer.position} pulseFrequency={pulseFrequency} />
-      <MappedPlayers players={otherPlayers} />
-    </article>
-  );
+  return <Player id={myGoodPlayer.id} position={myGoodPlayer.position} pulseFrequency={pulseFrequency} />;
 };
 
-const Players = ({ players, myPlayer }: PlayersProps) => {
-  return myPlayer.isEvil ? (
+const Players = ({ players, myPlayer, currentEnemyID }: PlayersProps) => {
+  return (
     <article className="players-layer">
-      <MappedPlayers players={players} />
+      {!myPlayer.isEvil && <ActiveGoodPlayer myGoodPlayer={myPlayer as ClientPlayer} />}
+      <MappedPlayers players={players} myPlayer={myPlayer} currentEnemyID={currentEnemyID} />
     </article>
-  ) : (
-    <PlayersWhenGoodPlayerActive players={players} myGoodPlayer={myPlayer as ClientPlayer} />
   );
 };
 

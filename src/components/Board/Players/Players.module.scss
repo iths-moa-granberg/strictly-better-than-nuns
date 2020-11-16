@@ -13,11 +13,43 @@
   &.e1 {
     background-color: $enemy1-main-color;
     border: 1px solid $enemy1-secondary-color;
+
+    &.pulsatingShadow-e1 {
+      @keyframes pulse-e1 {
+        0% {
+          box-shadow: 0 0 0 0 (rgba($enemy1-main-color, 0.7));
+        }
+        70% {
+          box-shadow: 0 0 0 8px (rgba($enemy1-main-color, 0));
+        }
+        100% {
+          box-shadow: 0 0 0 0 (rgba($enemy1-main-color, 0));
+        }
+      }
+
+      animation: pulse-e1 2.4s infinite;
+    }
   }
 
   &.e2 {
     background-color: $enemy2-main-color;
     border: 1px solid $enemy2-secondary-color;
+
+    &.pulsatingShadow-e2 {
+      @keyframes pulse-e2 {
+        0% {
+          box-shadow: 0 0 0 0 (rgba($enemy2-main-color, 0.7));
+        }
+        70% {
+          box-shadow: 0 0 0 8px (rgba($enemy2-main-color, 0));
+        }
+        100% {
+          box-shadow: 0 0 0 0 (rgba($enemy2-main-color, 0));
+        }
+      }
+
+      animation: pulse-e2 2.4s infinite;
+    }
   }
 
   @for $i from 1 through length($playerColors) {
@@ -26,7 +58,7 @@
       border: 1px solid rgba(nth($playerSecondaryColors, $i), 1);
 
       &.pulsatingShadow {
-        @keyframes pulse {
+        @keyframes pulse#{$i} {
           0% {
             box-shadow: 0 0 0 0 (rgba(nth($playerColors, $i), 0.7));
           }
@@ -38,7 +70,7 @@
           }
         }
 
-        animation: pulse 2.4s infinite;
+        animation: pulse#{$i} 2.4s infinite;
       }
     }
   }

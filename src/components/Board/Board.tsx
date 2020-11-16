@@ -187,7 +187,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
           ))}
         </article>
 
-        <Players players={visiblePlayers} myPlayer={myPlayer} />
+        <Players players={visiblePlayers} myPlayer={myPlayer} currentEnemyID={currentPlayerID} />
       </section>
 
       <UserActions
