@@ -129,8 +129,14 @@ class Game {
 
     this.claimedKeys.push(key.id);
 
+    let id = (Math.round(Math.random() * 5) + 1).toString(); //id starts with 1, max 6 players
+
+    while (this.players.find((player) => player.id === id)) {
+      id = (Math.round(Math.random() * 5) + 1).toString();
+    }
+
     return {
-      id: (this.players.length + 1).toString(),
+      id,
       home: positions[1 + this.players.length],
       key: positions[key.id],
       goal: positions[key.goal],
