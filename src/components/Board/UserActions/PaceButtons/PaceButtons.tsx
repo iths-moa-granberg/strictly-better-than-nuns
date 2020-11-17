@@ -106,10 +106,10 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
         <Button text="Run" />
       </div>
 
-      {hover === 'stand' && <p>When standing, you can move 0 steps and makes noise up to 3 spaces away</p>}
-      {hover === 'sneak' && <p>When sneaking, you can move 2 steps and makes noise up to 4 spaces away</p>}
-      {hover === 'walk' && <p>When walking, you can move 3 steps and makes noise up to 5 spaces away</p>}
-      {hover === 'run' && <p>When running, you can move 5 steps and makes noise up to 6 spaces away</p>}
+      {hover === 'stand' && <p>When standing, you can move 0 steps and make noise up to 3 spaces away</p>}
+      {hover === 'sneak' && <p>When sneaking, you can move 2 steps and make noise up to 4 spaces away</p>}
+      {hover === 'walk' && <p>When walking, you can move 3 steps and make noise up to 5 spaces away</p>}
+      {hover === 'run' && <p>When running, you can move 5 steps and make noise up to 6 spaces away</p>}
       {hover === '' && (
         <p>
           <br></br>

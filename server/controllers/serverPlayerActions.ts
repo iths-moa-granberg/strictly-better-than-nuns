@@ -15,7 +15,7 @@ import { Player, Enemy } from '../modules/serverPlayer';
 io.on('connection', (socket: PlayerSocket) => {
   socket.on('player selects pace', ({ pace }: OnPlayerSelectsPace) => {
     socket.player.pace = pace;
-    socket.player.stepsLeft = pace === 'stand' ? 0 : pace === 'sneak' ? 1 : pace === 'walk' ? 3 : 5;
+    socket.player.stepsLeft = pace === 'stand' ? 0 : pace === 'sneak' ? 2 : pace === 'walk' ? 3 : 5;
     playerStepOptions();
   });
 
