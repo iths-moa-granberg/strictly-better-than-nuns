@@ -1,6 +1,7 @@
 $board-resolution: (856/900);
 
 $white: #efefef;
+$black: #2d2d2d;
 
 $main-background-color: #3da4ab;
 $secondary-blue: #1d4a4d;
@@ -37,12 +38,12 @@ $pathColors: (
   'mustard': #c6a709,
   'red': #ab2727,
   'lightPurple': #b6bcf5,
-  'teal': #087b8a,
+  'babyBlue': #04ffff,
   'pea': #67e03d,
   'moss': #66620e,
   'bluePurple': #681eb1,
-  'orange': #b56a25,
-  'yellow': #f0f28a,
+  'darkGreen': #095402,
+  'yellow': #faff00,
   'lightRed': #bf6565,
 );
 
@@ -52,4 +53,12 @@ $pathColors: (
   background-repeat: no-repeat;
   background-size: cover;
   position: absolute;
+}
+
+@function set-button-color($color) {
+  @if (lightness($color) > 50) {
+    @return $black;
+  } @else {
+    @return $white;
+  }
 }

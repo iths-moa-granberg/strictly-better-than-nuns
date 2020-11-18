@@ -53,6 +53,14 @@
   @each $pathColor, $i in $pathColors {
     &.#{$pathColor} {
       background-color: $i;
+      color: set-button-color($i);
     }
   }
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }

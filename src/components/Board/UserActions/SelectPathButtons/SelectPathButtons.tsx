@@ -19,7 +19,7 @@ const SelectPathButtons = ({ pathNames, setActionState }: SelectPathButtonsProps
     <>
       <h1>Choose next path</h1>
 
-      <div>
+      <div className={styles.buttonWrapper}>
         {pathNames.map((name, index) => (
           <button
             key={name}

@@ -230,7 +230,7 @@ const enemyPaths: EnemyPaths = {
     positions[101],
   ],
 
-  tealA: [
+  babyBlueA: [
     positions[147],
     positions[138],
     positions[127],
@@ -247,7 +247,7 @@ const enemyPaths: EnemyPaths = {
     positions[26],
   ],
 
-  tealB: [
+  babyBlueB: [
     positions[26],
     positions[40],
     positions[41],
@@ -356,7 +356,7 @@ const enemyPaths: EnemyPaths = {
     positions[101],
   ],
 
-  orangeA: [
+  darkGreenA: [
     positions[147],
     positions[138],
     positions[127],
@@ -376,7 +376,7 @@ const enemyPaths: EnemyPaths = {
     positions[84],
   ],
 
-  orangeB: [
+  darkGreenB: [
     positions[84],
     positions[85],
     positions[108],

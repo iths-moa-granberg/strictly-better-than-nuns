@@ -5,12 +5,12 @@ import { ReactComponent as LightPurple } from './light-purple.svg';
 import { ReactComponent as LightRed } from './light-red.svg';
 import { ReactComponent as Moss } from './moss.svg';
 import { ReactComponent as Mustard } from './mustard.svg';
-import { ReactComponent as Orange } from './orange.svg';
+import { ReactComponent as DarkGreen } from './dark-green.svg';
 import { ReactComponent as Pea } from './pea.svg';
 import { ReactComponent as Pink } from './pink.svg';
 import { ReactComponent as Purple } from './purple.svg';
 import { ReactComponent as Red } from './red.svg';
-import { ReactComponent as Teal } from './teal.svg';
+import { ReactComponent as BabyBlue } from './baby-blue.svg';
 import { ReactComponent as Yellow } from './yellow.svg';
 
 interface PathComponents {
@@ -25,12 +25,12 @@ const Paths: PathComponents = {
   LightRed,
   Moss,
   Mustard,
-  Orange,
+  DarkGreen,
   Pea,
   Pink,
   Purple,
   Red,
-  Teal,
+  BabyBlue,
   Yellow,
 };
 
