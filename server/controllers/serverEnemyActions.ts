@@ -71,20 +71,23 @@ io.on('connection', (socket: ExtendedSocket) => {
         player.visible = true;
         player.updatePathVisibility(player.position, seenBy);
 
-        const msg = [
-          {
-            text: player.username,
-            id: player.id,
-          },
-          {
-            text: ' is seen by',
-          },
-          {
-            text: currentEnemy.id === 'e1' ? ' Enemy 1' : ' Enemy 2',
-            id: currentEnemy.id,
-          },
-        ];
-        logProgress(msg, { room: socket.game.id });
+        if (seenBy.length === 2) {
+          const msg = [{ text: player.username, id: player.id }, { text: ' is seen by both enemies' }];
+          logProgress(msg, { room: socket.game.id });
+        } else if (seenBy[0] === currentEnemy.id) {
+          const msg = [
+            {
+              text: player.username,
+              id: player.id,
+            },
+            { text: ' is seen by' },
+            {
+              text: seenBy[0] === 'e1' ? ' Enemy 1' : ' Enemy 2',
+              id: seenBy[0],
+            },
+          ];
+          logProgress(msg, { room: socket.game.id });
+        }
       }
     }
     if (currentEnemy.endOfPath()) {
