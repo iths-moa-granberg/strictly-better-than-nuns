@@ -67,6 +67,8 @@ io.on('connection', (socket: PlayerSocket) => {
     socket.player.position = socket.player.path[0].position;
     socket.player.visible = socket.player.path[0].visible;
     socket.player.resetPath(socket.player.path[0].enemyID);
+    socket.game.filterPlayersVisible(socket.player.id);
+
     if (socket.player.caught) {
       socket.game.addCaughtPlayer(socket.player);
     }

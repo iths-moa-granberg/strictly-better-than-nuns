@@ -114,9 +114,12 @@ class Game {
 
   removeCaughtPlayer = (player: Player) => {
     this.caughtPlayers = this.caughtPlayers.filter((id) => id != player.id);
+    this.filterPlayersVisible(player.id);
+  };
 
-    this.enemies.e1.playersVisible = this.enemies.e1.playersVisible.filter((id) => id !== player.id);
-    this.enemies.e2.playersVisible = this.enemies.e2.playersVisible.filter((id) => id !== player.id);
+  filterPlayersVisible = (id: string) => {
+    this.enemies.e1.playersVisible = this.enemies.e1.playersVisible.filter((playerID) => playerID !== id);
+    this.enemies.e2.playersVisible = this.enemies.e2.playersVisible.filter((playerID) => playerID !== id);
   };
 
   isCaught = (player: Player) => {
