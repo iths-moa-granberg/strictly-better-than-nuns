@@ -47,7 +47,7 @@ io.on('connection', (socket: PlayerSocket) => {
 
     const seenBy = isSeen(socket.player, socket.game);
     socket.player.visible = Boolean(seenBy.length);
-    if (seenBy.length) {
+    if (seenBy.length && !socket.game.isCaught(socket.player)) {
       const msg = [{ text: 'You are seen! Click back if you want to take a different route' }];
       logProgress(msg, { socket });
     }
