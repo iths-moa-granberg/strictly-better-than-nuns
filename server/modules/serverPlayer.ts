@@ -26,7 +26,7 @@ interface Enemy {
   stepsLeft: number;
   pace: string;
 
-  playersVisible: boolean;
+  playersVisible: string[];
   path: Position[];
   pathName: string;
   lastPosition: Position;
@@ -125,7 +125,7 @@ class Enemy {
 
     this.isEvil = true;
 
-    this.playersVisible = false;
+    this.playersVisible = [];
   }
 
   move = (position: Position) => {

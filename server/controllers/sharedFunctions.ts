@@ -129,14 +129,18 @@ export const isSeen = (player: Player, game: Game) => {
     game.enemies.e1.position.id === player.position.id
   ) {
     seenBy.push('e1');
-    game.enemies.e1.playersVisible = true;
+    if (!game.enemies.e1.playersVisible.includes(player.id)) {
+      game.enemies.e1.playersVisible.push(player.id);
+    }
   }
   if (
     game.board.isSeen(player.position, game.enemies.e2.position, game.enemies.e2.lastPosition) ||
     game.enemies.e2.position.id === player.position.id
   ) {
     seenBy.push('e2');
-    game.enemies.e2.playersVisible = true;
+    if (!game.enemies.e2.playersVisible.includes(player.id)) {
+      game.enemies.e2.playersVisible.push(player.id);
+    }
   }
   return seenBy;
 };
