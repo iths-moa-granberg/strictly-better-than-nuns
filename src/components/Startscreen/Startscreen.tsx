@@ -21,6 +21,7 @@ import inputUsernameStyles from './InputUsername.module.scss';
 import gameListStyles from './GameList.module.scss';
 import gameStyles from './Game.module.scss';
 import playerListStyles from './PlayerList.module.scss';
+import LoadingScreen from '../LoadingScreen/LoadingScreen';
 
 interface StartscreenProps {
   setMyPlayer: Function;
@@ -216,7 +217,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       );
     }
 
-    return <>Something went wrong</>;
+    return <LoadingScreen />;
   };
 
   const Content = () => {

@@ -6,7 +6,7 @@ import positions from '../../shared/positions';
 import Homes from './Homes/Homes';
 
 import getChildren from './PositionChildren/getChildren';
-import LoadingScreen from './LoadingScreen/LoadingScreen';
+import LoadingScreen from '../LoadingScreen/LoadingScreen';
 import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
 import Layers from './Layers/Layers';
