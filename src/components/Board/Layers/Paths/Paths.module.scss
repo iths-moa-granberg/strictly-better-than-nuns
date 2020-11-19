@@ -2,6 +2,7 @@
 
 .enemy1Path,
 .enemy2Path,
+.commonPath,
 .path {
   @include bg-image-layout;
 }
@@ -12,4 +13,8 @@
 
 .enemy2Path path {
   stroke: $enemy2-main-color;
+}
+
+.commonPath path {
+  stroke: $enemy-common-color;
 }
