@@ -54,7 +54,7 @@ const App = () => {
   }, [myPlayer, setMyPlayer]);
 
   return (
-    <div className={'main-wrapper'}>
+    <div className={`main-wrapper ${gameState === 'startscreen' ? 'start-view' : ''}`}>
       {gameState === 'game over' && <GameOverScreen winner={winner} />}
       {gameState === 'startscreen' && (
         <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerId={setCurrentPlayerId} />

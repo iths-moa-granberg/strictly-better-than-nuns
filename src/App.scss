@@ -9,9 +9,13 @@ body {
 
 .main-wrapper {
   display: grid;
-  grid: 1fr 2fr 3fr / 1fr 1fr;
+  grid: 20% 40% 40% / 1fr 1fr;
   grid-template-areas:
     'board progressBars'
     'board userActions'
     'board progressLog';
+
+  &.start-view {
+    grid: 1fr / 1fr;
+  }
 }

@@ -78,8 +78,12 @@ export const startNextTurn = (game: Game) => {
 
   game.startNextTurn();
 
-  const params: OnPlayersTurn = { caughtPlayers: game.caughtPlayers };
-  io.in(game.id).emit('players turn', params);
+  if (game.roundCounter === 1) {
+    io.in(game.id).emit('players first turn', {});
+  } else {
+    const params: OnPlayersTurn = { caughtPlayers: game.caughtPlayers };
+    io.in(game.id).emit('players turn', params);
+  }
 };
 
 export const logProgress = (msg: ProgressLogObject[], { socket, room }: { socket?: ExtendedSocket; room?: string }) => {

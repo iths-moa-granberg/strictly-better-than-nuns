@@ -102,6 +102,7 @@ export interface OnPlayersTurn {
 
 export interface OnPlayerSelectsPace {
   pace: string;
+  firstTurn?: boolean;
 }
 
 export interface OnEnemySelectsPace {
@@ -184,4 +185,8 @@ export interface OnUpdatePulseFrequency {
 
 export interface OnInitialPlayerIDs {
   playerIDs: string[];
+}
+
+export interface OnPlayersFirstTurn {
+  resetPosition?: Position;
 }

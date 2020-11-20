@@ -8,9 +8,10 @@ interface PaceButtonsProps {
   myPlayer: MyPlayer;
   playersTurn: boolean;
   caught: boolean;
+  firstTurn?: boolean;
 }
 
-const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
+const PaceButtons = ({ myPlayer, playersTurn, caught, firstTurn }: PaceButtonsProps) => {
   const [selectedPace, setSelectedPace] = useState<string>('');
   const [hover, setHover] = useState<string>('');
 
@@ -28,7 +29,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
       const params: OnEnemySelectsPace = { pace };
       socket.emit('enemy selects pace', params);
     } else {
-      const params: OnPlayerSelectsPace = { pace };
+      const params: OnPlayerSelectsPace = { pace, firstTurn };
       socket.emit('player selects pace', params);
     }
     setSelectedPace(pace);
@@ -98,6 +99,7 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
   return (
     <>
       <h1>Choose your pace</h1>
+      {firstTurn && <p>During your first turn, you're extra fast and may move more steps than usual.</p>}
 
       <div>
         <Button text="Stand" />
@@ -107,9 +109,21 @@ const PaceButtons = ({ myPlayer, playersTurn, caught }: PaceButtonsProps) => {
       </div>
 
       {hover === 'stand' && <p>When standing, you can move 0 steps and make noise up to 3 spaces away</p>}
-      {hover === 'sneak' && <p>When sneaking, you can move 2 steps and make noise up to 4 spaces away</p>}
-      {hover === 'walk' && <p>When walking, you can move 3 steps and make noise up to 5 spaces away</p>}
-      {hover === 'run' && <p>When running, you can move 5 steps and make noise up to 6 spaces away</p>}
+
+      {firstTurn ? (
+        <>
+          {hover === 'sneak' && <p>This round when sneaking, you can move 4 steps and make noise up to 4 spaces away</p>}
+          {hover === 'walk' && <p>This round when walking, you can move 6 steps and make noise up to 5 spaces away</p>}
+          {hover === 'run' && <p>This round when running, you can move 8 steps and make noise up to 6 spaces away</p>}
+        </>
+      ) : (
+        <>
+          {hover === 'sneak' && <p>When sneaking, you can move 2 steps and make noise up to 4 spaces away</p>}
+          {hover === 'walk' && <p>When walking, you can move 3 steps and make noise up to 5 spaces away</p>}
+          {hover === 'run' && <p>When running, you can move 5 steps and make noise up to 6 spaces away</p>}
+        </>
+      )}
+
       {hover === '' && (
         <p>
           <br></br>

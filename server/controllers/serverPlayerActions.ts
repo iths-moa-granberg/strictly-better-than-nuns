@@ -9,13 +9,19 @@ import {
   OnPlayerSelectsPace,
   OnPlayerPlacedToken,
   OnPlayerTakesStep,
+  OnPlayersFirstTurn,
 } from '../../src/shared/sharedTypes';
 import { Player, Enemy } from '../modules/serverPlayer';
 
 io.on('connection', (socket: PlayerSocket) => {
-  socket.on('player selects pace', ({ pace }: OnPlayerSelectsPace) => {
+  socket.on('player selects pace', ({ pace, firstTurn }: OnPlayerSelectsPace) => {
     socket.player.pace = pace;
     socket.player.stepsLeft = pace === 'stand' ? 0 : pace === 'sneak' ? 2 : pace === 'walk' ? 3 : 5;
+
+    if (firstTurn) {
+      socket.player.stepsLeft = pace === 'run' ? 8 : socket.player.stepsLeft * 2;
+    }
+
     playerStepOptions();
   });
 
@@ -73,8 +79,13 @@ io.on('connection', (socket: PlayerSocket) => {
       socket.game.addCaughtPlayer(socket.player);
     }
 
-    const params: OnPlayersTurn = { resetPosition: socket.player.position, caughtPlayers: socket.game.caughtPlayers };
-    socket.emit('players turn', params);
+    if (socket.game.roundCounter === 1) {
+      const params: OnPlayersFirstTurn = { resetPosition: socket.player.position };
+      socket.emit('players first turn', params);
+    } else {
+      const params: OnPlayersTurn = { resetPosition: socket.player.position, caughtPlayers: socket.game.caughtPlayers };
+      socket.emit('players turn', params);
+    }
     updateBoardSocket(socket.game, socket);
   });
 

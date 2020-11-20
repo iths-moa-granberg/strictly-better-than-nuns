@@ -4,7 +4,7 @@ import PaceButtons from './PaceButtons/PaceButtons';
 import ConfirmButtons from './ConfirmButtons/ConfirmButtons';
 import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
-import { OnSelectEnemy, OnPlayersTurn } from '../../../shared/sharedTypes';
+import { OnSelectEnemy, OnPlayersTurn, OnPlayersFirstTurn } from '../../../shared/sharedTypes';
 import { ActionStateParams, MyPlayer } from '../../../clientTypes';
 import { ClientPlayer } from '../../../modules/player';
 import styles from './UserActions.module.scss';
@@ -21,6 +21,7 @@ interface UserActionProps {
 interface PaceProps {
   playersTurn: boolean;
   caught: boolean;
+  firstTurn?: boolean;
 }
 
 const UserActions = ({
@@ -73,17 +74,28 @@ const UserActions = ({
       setPaceProps({ playersTurn: false, caught: false });
     };
 
+    const onPlayersFirstTurn = ({ resetPosition }: OnPlayersFirstTurn) => {
+      if (resetPosition) {
+        setMyPlayer({ ...myPlayer, position: resetPosition });
+      }
+      setActionState({ key: 'players first turn' });
+      setPaceProps({ caught: false, playersTurn: true, firstTurn: true });
+    };
+
     socket.on('players turn', onPlayersTurn);
     socket.on('enemy turn', onEnemyTurn);
+    socket.on('players first turn', onPlayersFirstTurn);
 
     return () => {
       socket.off('players turn', onPlayersTurn);
       socket.off('enemy turn', onEnemyTurn);
+      socket.off('players first turn');
     };
   }, [myPlayer, setMyPlayer, setActionState]);
 
   return (
     <section className={styles.userActionsWrapper}>
+      {actionState.key === 'players first turn' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
       {actionState.key === 'pace' && <PaceButtons myPlayer={myPlayer} {...paceProps} />}
       {actionState.key === 'confirm' && (
         <ConfirmButtons myPlayer={myPlayer} setActionState={setActionState} disabled={false} />
