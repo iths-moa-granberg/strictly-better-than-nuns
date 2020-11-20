@@ -28,7 +28,7 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     const msg = [
       { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
-      { text: ` is ${pace === 'run' ? 'runn' : pace}ing` },
+      { text: ` is considering ${pace === 'run' ? 'running' : 'walking'}` },
     ];
     logProgress(msg, { room: socket.game.id });
   });
@@ -61,6 +61,17 @@ io.on('connection', (socket: ExtendedSocket) => {
   };
 
   socket.on('enemy takes step', ({ position }: OnEnemyTakesStep) => {
+    if (
+      (currentEnemy.pace === 'walk' && currentEnemy.stepsLeft === 4) ||
+      (currentEnemy.pace === 'run' && currentEnemy.stepsLeft === 6)
+    ) {
+      const msg = [
+        { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
+        { text: ` is ${currentEnemy.pace === 'run' ? 'running' : 'walking'}` },
+      ];
+      logProgress(msg, { room: socket.game.id });
+    }
+
     const serverPosition = socket.game.getServerPosition(position.id);
     currentEnemy.move(serverPosition);
     socket.game.checkEnemyTarget(currentEnemy);
