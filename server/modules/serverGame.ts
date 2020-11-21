@@ -17,6 +17,7 @@ interface Game {
 
   soundTokens: SoundToken[];
   sightTokens: SightToken[];
+  newSoundLog: string[];
 
   enemyJoined: boolean;
   enemyMovesCompleted: number;
@@ -38,6 +39,7 @@ class Game {
     this.placedSoundCounter = 0;
     this.soundTokens = [];
     this.sightTokens = [];
+    this.newSoundLog = [];
     this.enemyJoined = false;
     this.enemyMovesCompleted = 0;
     this.enemyListened = 0;

@@ -25,12 +25,6 @@ io.on('connection', (socket: ExtendedSocket) => {
     currentEnemy.pace = pace;
     currentEnemy.stepsLeft = pace === 'walk' ? 4 : 6;
     enemyStepOptions();
-
-    const msg = [
-      { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
-      { text: ` is considering ${pace === 'run' ? 'running' : 'walking'}` },
-    ];
-    logProgress(msg, { room: socket.game.id });
   });
 
   const enemyStepOptions = () => {
@@ -121,13 +115,6 @@ io.on('connection', (socket: ExtendedSocket) => {
 
   socket.on('select path', ({ pathName }: OnSelectPath) => {
     currentEnemy.setNewPath(pathName);
-
-    const msg = [
-      { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
-      { text: ' has selected a new path' },
-    ];
-    logProgress(msg, { room: socket.game.id });
-
     actOnEnemyStep();
   });
 
@@ -173,6 +160,7 @@ io.on('connection', (socket: ExtendedSocket) => {
             io.in(socket.game.id).emit('player select token', params);
           } else {
             socket.game.addToken(heardTo[0].id, 'sound', enemy.id);
+            socket.game.newSoundLog.push(enemy.id);
             waitForTokenPlacement();
           }
         } else {
@@ -187,6 +175,7 @@ io.on('connection', (socket: ExtendedSocket) => {
   socket.on('player placed token', ({ position, turn, enemyID }: OnPlayerPlacedToken) => {
     if (turn === 'enemy') {
       socket.game.addToken(position.id, 'sound', enemyID);
+      socket.game.newSoundLog.push(enemyID);
       waitForTokenPlacement();
     }
   });

@@ -146,6 +146,7 @@ io.on('connection', (socket: PlayerSocket) => {
         return;
       } else {
         socket.game.addToken(heardTo[0].id, 'sound', enemy.id);
+        socket.game.newSoundLog.push(enemy.id);
       }
     }
     playerMakeSound(player, sound);
@@ -154,6 +155,7 @@ io.on('connection', (socket: PlayerSocket) => {
   socket.on('player placed token', ({ position, turn, enemyID, sound }: OnPlayerPlacedToken) => {
     if (turn === 'player') {
       socket.game.addToken(position.id, 'sound', enemyID);
+      socket.game.newSoundLog.push(enemyID);
       playerMakeSound(socket.player, sound);
     }
   });

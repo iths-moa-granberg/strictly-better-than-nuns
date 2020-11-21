@@ -96,14 +96,11 @@ export const logProgress = (msg: ProgressLogObject[], { socket, room }: { socket
 };
 
 export const logSound = (game: Game) => {
-  if (
-    game.soundTokens.find((token) => token.enemyID === 'e1') &&
-    game.soundTokens.find((token) => token.enemyID === 'e2')
-  ) {
+  if (game.newSoundLog.find((id) => id === 'e1') && game.newSoundLog.find((id) => id === 'e2')) {
     const msg = [{ text: 'Both enemies heard someone!' }];
     logProgress(msg, { room: game.id });
   } else {
-    if (game.soundTokens.find((token) => token.enemyID === 'e1')) {
+    if (game.newSoundLog.find((id) => id === 'e1')) {
       const msg = [
         {
           text: 'Enemy 1',
@@ -113,7 +110,7 @@ export const logSound = (game: Game) => {
       ];
       logProgress(msg, { room: game.id });
     }
-    if (game.soundTokens.find((token) => token.enemyID === 'e2')) {
+    if (game.newSoundLog.find((id) => id === 'e2')) {
       const msg = [
         {
           text: 'Enemy 2',
@@ -124,6 +121,7 @@ export const logSound = (game: Game) => {
       logProgress(msg, { room: game.id });
     }
   }
+  game.newSoundLog = [];
 };
 
 export const isSeen = (player: Player, game: Game) => {
