@@ -57,7 +57,7 @@ $pathColors: (
 }
 
 @function set-button-color($color) {
-  @if (lightness($color) > 50) {
+  @if (lightness($color) >= 50) {
     @return $black;
   } @else {
     @return $white;
