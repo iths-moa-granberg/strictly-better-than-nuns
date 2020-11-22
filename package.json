@@ -23,6 +23,7 @@
     "react-scripts": "3.4.1",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
+    "ts-jest": "^26.4.4",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.3"
   },
@@ -30,6 +31,9 @@
     "start": "BROWSER=none PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test-coverage": "CI=true react-scripts test --coverage",
+    "test-server": "jest ./server/**/*.test.ts --watch",
+    "test-server-coverage": "jest ./server/**/*.test.ts --coverage",
     "prettier": "prettier --write \"**/*.{js,ts,tsx,jsx,scss}\"",
     "eject": "react-scripts eject",
     "server-start": "PORT=3002 nodemon server/index.ts"
