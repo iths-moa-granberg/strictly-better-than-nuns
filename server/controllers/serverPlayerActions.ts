@@ -1,5 +1,13 @@
 import { io } from '../index';
-import { updateBoard, logProgress, logSound, isSeen, updatePlayer, updateBoardSocket } from './sharedFunctions';
+import {
+  updateBoard,
+  logProgress,
+  logSound,
+  isSeen,
+  updatePlayer,
+  updateBoardSocket,
+  gameOver,
+} from './sharedFunctions';
 import { PlayerSocket, Enemies } from '../serverTypes';
 import {
   Position,
@@ -90,7 +98,7 @@ io.on('connection', (socket: PlayerSocket) => {
   });
 
   socket.on('player move completed', () => {
-    socket.player.checkTarget(socket, socket.game.id);
+    socket.player.checkTarget(socket);
 
     if (socket.player.visible) {
       endPlayerTurn();
@@ -176,6 +184,11 @@ io.on('connection', (socket: PlayerSocket) => {
     if (socket.game.playerTurnCompleted === socket.game.players.length) {
       socket.game.playerTurnCompleted = 0;
       logSound(socket.game);
+
+      if (socket.game.winners.length) {
+        gameOver(socket.game.winners, socket.game.id);
+      }
+
       startEnemyTurn();
     } else {
       socket.emit('enemy turn');

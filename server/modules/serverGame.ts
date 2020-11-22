@@ -3,7 +3,7 @@ import { Player, Enemy } from './serverPlayer';
 import Board from './serverBoard';
 import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';
-import { SoundToken, SightToken, VisiblePlayers } from '../../src/shared/sharedTypes';
+import { SoundToken, SightToken, VisiblePlayers, ClientUser } from '../../src/shared/sharedTypes';
 import keys from '../../src/shared/keys';
 
 interface Game {
@@ -11,6 +11,7 @@ interface Game {
   roundCounter: number;
   players: Player[];
   caughtPlayers: string[];
+  winners: ClientUser[];
   enemyWinCounter: number;
   playerTurnCompleted: number;
   placedSoundCounter: number;
@@ -34,6 +35,7 @@ class Game {
     this.roundCounter = 0;
     this.players = [];
     this.caughtPlayers = [];
+    this.winners = [];
     this.enemyWinCounter = 0;
     this.playerTurnCompleted = 0;
     this.placedSoundCounter = 0;
@@ -61,7 +63,7 @@ class Game {
   startNextTurn = () => {
     this.roundCounter++;
     if (this.roundCounter > 15) {
-      gameOver({ username: this.enemies.username, userID: 'e1' }, this.id);
+      gameOver([{ username: this.enemies.username, userID: 'e1' }], this.id);
     }
   };
 
@@ -106,7 +108,7 @@ class Game {
       }
     }
     if (this.enemyWinCounter > this.players.length) {
-      gameOver({ username: this.enemies.username, userID: 'e1' }, this.id);
+      gameOver([{ username: this.enemies.username, userID: 'e1' }], this.id);
     }
   };
 

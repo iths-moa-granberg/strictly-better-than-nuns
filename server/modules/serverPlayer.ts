@@ -1,5 +1,5 @@
 import enemyPaths from './enemyPaths';
-import { gameOver, logProgress } from '../controllers/sharedFunctions';
+import { logProgress } from '../controllers/sharedFunctions';
 import { Position } from '../../src/shared/sharedTypes';
 
 interface Player {
@@ -75,11 +75,11 @@ class Player {
     this.hasGoal = false;
   };
 
-  checkTarget = (socket: any, room: string) => {
+  checkTarget = (socket: any) => {
     if (this.hasKey) {
       if (this.hasGoal) {
         if (this.home.id === this.position.id) {
-          gameOver({ username: this.username, userID: this.id }, room);
+          socket.game.winners.push({ username: this.username, userID: this.id });
         }
       } else if (this.goal.id === this.position.id) {
         this.hasGoal = true;

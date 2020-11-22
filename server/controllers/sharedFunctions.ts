@@ -151,8 +151,8 @@ export const sleep = (ms: number) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const gameOver = (winner: ClientUser, room: string) => {
-  const params: OnGameOver = { winner };
+export const gameOver = (winners: ClientUser[], room: string) => {
+  const params: OnGameOver = { winners };
   io.in(room).emit('game over', params);
 };
 

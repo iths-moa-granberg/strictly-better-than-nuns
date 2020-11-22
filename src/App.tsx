@@ -16,16 +16,16 @@ const App = () => {
   const [gameState, setGameState] = useState<string>('startscreen');
   const [myPlayer, setMyPlayer] = useState<MyPlayer | null>(null);
   const [currentPlayerID, setCurrentPlayerId] = useState<'e1' | 'e2' | null>(null);
-  const [winner, setWinner] = useState<ClientUser>({ username: '', userID: '' });
+  const [winners, setWinners] = useState<ClientUser[]>([]);
 
   useEffect(() => {
     const onGameStarted = () => {
       setGameState('started');
     };
 
-    const onGameOver = ({ winner }: OnGameOver) => {
+    const onGameOver = ({ winners }: OnGameOver) => {
       setGameState('game over');
-      setWinner(winner);
+      setWinners(winners);
     };
 
     socket.on('game started', onGameStarted);
@@ -55,7 +55,7 @@ const App = () => {
 
   return (
     <div className={`main-wrapper ${gameState === 'startscreen' ? 'start-view' : ''}`}>
-      {gameState === 'game over' && <GameOverScreen winner={winner} />}
+      {gameState === 'game over' && <GameOverScreen winners={winners} />}
       {gameState === 'startscreen' && (
         <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerId={setCurrentPlayerId} />
       )}
