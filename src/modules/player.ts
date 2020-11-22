@@ -19,9 +19,9 @@ interface ClientEnemy {
 }
 
 class ClientPlayer {
-  constructor(id: string, home: Position, key: Position, goal: Position, isEvil: boolean) {
+  constructor(id: string, home: Position, key: Position, goal: Position) {
     this.id = id;
-    this.isEvil = isEvil;
+    this.isEvil = false;
 
     this.home = home;
     this.key = key;

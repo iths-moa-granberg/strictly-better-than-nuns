@@ -87,8 +87,8 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
   }, []);
 
   useEffect(() => {
-    const onSetUpPlayer = ({ id, home, key, goal, isEvil }: OnSetUpPlayer) => {
-      const player = new ClientPlayer(id, home, key, goal, isEvil);
+    const onSetUpPlayer = ({ id, home, key, goal }: OnSetUpPlayer) => {
+      const player = new ClientPlayer(id, home, key, goal);
       setMyPlayer(player);
     };
 

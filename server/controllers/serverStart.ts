@@ -106,7 +106,6 @@ io.on('connection', (socket: ExtendedSocket) => {
         home: socket.player.home,
         key: socket.player.key,
         goal: socket.player.goal,
-        isEvil: socket.player.isEvil,
       };
       socket.emit('set up player', params);
 

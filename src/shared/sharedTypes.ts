@@ -142,7 +142,6 @@ export interface OnSetUpPlayer {
   home: Position;
   key: Position;
   goal: Position;
-  isEvil: boolean;
 }
 
 export interface OnSetUpEnemy {
