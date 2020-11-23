@@ -94,7 +94,7 @@ io.on('connection', (socket: PlayerSocket) => {
       const params: OnPlayersTurn = { resetPosition: socket.player.position, caughtPlayers: socket.game.caughtPlayers };
       socket.emit('players turn', params);
     }
-    updateBoardSocket(socket.game, socket);
+    updateBoardSocket(socket);
   });
 
   socket.on('player move completed', () => {

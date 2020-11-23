@@ -43,8 +43,8 @@ export const updateBoard = (game: Game) => {
   io.in(game.id).emit('update board', params);
 };
 
-export const updateBoardSocket = (game: Game, socket: ExtendedSocket) => {
-  const params: OnUpdateBoard = _updateBoard(game);
+export const updateBoardSocket = (socket: ExtendedSocket) => {
+  const params: OnUpdateBoard = _updateBoard(socket.game);
   socket.emit('update board', params);
 };
 

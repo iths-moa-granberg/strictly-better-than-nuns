@@ -1,5 +1,5 @@
 import { io } from '../index';
-import { updateBoard, startNextTurn, logProgress, logSound, isSeen } from './sharedFunctions';
+import { updateBoard, startNextTurn, logProgress, logSound, isSeen, updateBoardSocket } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
 import {
   Position,
@@ -124,6 +124,7 @@ io.on('connection', (socket: ExtendedSocket) => {
       socket.game.enemyMovesCompleted = 0;
       enemyMoveComplete();
     } else {
+      updateBoardSocket(socket);
       socket.emit('next enemy turn');
     }
   });
