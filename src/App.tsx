@@ -7,7 +7,7 @@ import ProgressLogger from './components/ProgressLogger/ProgressLogger';
 import ProgressBars from './components/ProgressBars/ProgressBars';
 import GameOverScreen from './components/GameOverScreen/GameOverScreen';
 import { MyPlayer } from './clientTypes';
-import { ClientPlayer } from './modules/player';
+import ClientPlayer from './modules/clientPlayer';
 import { ClientUser, OnGameOver, OnUpdatePlayer } from './shared/sharedTypes';
 
 const socket = io('http://localhost:3002');

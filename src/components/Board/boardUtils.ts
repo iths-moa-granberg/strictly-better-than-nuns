@@ -1,5 +1,5 @@
 import { MyPlayer, ClientEnemies } from '../../clientTypes';
-import { ClientPlayer } from '../../modules/player';
+import ClientPlayer from '../../modules/clientPlayer';
 import { Position } from '../../shared/sharedTypes';
 
 export const getClassName = (

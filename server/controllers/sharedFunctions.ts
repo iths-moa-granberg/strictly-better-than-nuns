@@ -12,7 +12,7 @@ import {
   OnGameOver,
   ProgressLogObject,
 } from '../../src/shared/sharedTypes';
-import { ClientPlayer } from '../../src/modules/player';
+import ClientPlayer from '../../src/modules/clientPlayer';
 
 const _updateBoard = (game: Game) => {
   const visiblePlayers = game.getVisiblePlayers();

@@ -26,7 +26,7 @@ import {
   OnPlayerTakesStep,
   OnPlayerPlacedToken,
 } from '../../shared/sharedTypes';
-import { ClientPlayer } from '../../modules/player';
+import ClientPlayer from '../../modules/clientPlayer';
 
 import styles from './Board.module.scss';
 

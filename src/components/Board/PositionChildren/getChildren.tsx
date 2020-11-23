@@ -1,7 +1,7 @@
 import React from 'react';
 import { MyPlayer } from '../../../clientTypes';
 import { Position, SightToken, SoundToken, VisiblePlayers } from '../../../shared/sharedTypes';
-import { ClientPlayer } from '../../../modules/player';
+import ClientPlayer from '../../../modules/clientPlayer';
 import Token from './Token/Token';
 
 const getChildren = (

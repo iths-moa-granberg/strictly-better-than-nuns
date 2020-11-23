@@ -1,4 +1,5 @@
-import { ClientPlayer, ClientEnemy } from './modules/player';
+import ClientPlayer from './modules/clientPlayer';
+import ClientEnemy from './modules/clientEnemy';
 
 export interface ClientEnemies {
   e1: ClientEnemy;

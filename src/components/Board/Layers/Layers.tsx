@@ -4,7 +4,7 @@ import Paths from './Paths/Paths';
 import Keys from './Keys/Keys';
 import Goals from './Goals/Goals';
 import styles from './Layers.module.scss';
-import { ClientPlayer } from '../../../modules/player';
+import ClientPlayer from '../../../modules/clientPlayer';
 
 interface ToggleProps {
   myPlayer: MyPlayer;

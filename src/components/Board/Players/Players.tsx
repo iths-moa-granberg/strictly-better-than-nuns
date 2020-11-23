@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from '../../../App';
 import { MyPlayer } from '../../../clientTypes';
-import { ClientPlayer } from '../../../modules/player';
+import ClientPlayer from '../../../modules/clientPlayer';
 import { VisiblePlayers, Position, OnUpdatePulseFrequency, OnCheckPulseDistance } from '../../../shared/sharedTypes';
 import styles from './Players.module.scss';
 

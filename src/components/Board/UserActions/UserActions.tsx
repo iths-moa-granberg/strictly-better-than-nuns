@@ -6,7 +6,7 @@ import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
 import { OnSelectEnemy, OnPlayersTurn, OnPlayersFirstTurn } from '../../../shared/sharedTypes';
 import { ActionStateParams, MyPlayer } from '../../../clientTypes';
-import { ClientPlayer } from '../../../modules/player';
+import ClientPlayer from '../../../modules/clientPlayer';
 import styles from './UserActions.module.scss';
 
 interface UserActionProps {

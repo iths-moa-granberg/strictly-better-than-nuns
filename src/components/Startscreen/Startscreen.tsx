@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
-import { ClientPlayer, ClientEnemy } from '../../modules/player';
+import ClientPlayer from '../../modules/clientPlayer';
+import ClientEnemy from '../../modules/clientEnemy';
 import { createUser, getUsernames } from './startscreenUtils';
 import { MyPlayer } from '../../clientTypes';
 import {
