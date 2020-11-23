@@ -135,7 +135,7 @@ class Enemy {
   };
 
   checkTarget = (player: Player) => {
-    return player.position.id === this.position.id;
+    return player.position.id === this.position.id && player.position.id !== player.home.id;
   };
 
   isOnPath = () => {
