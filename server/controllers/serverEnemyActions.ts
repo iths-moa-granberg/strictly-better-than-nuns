@@ -12,7 +12,7 @@ import {
   OnSelectPath,
   OnPlayerPlacedToken,
 } from '../../src/shared/sharedTypes';
-import { Enemy } from '../modules/serverPlayer';
+import Enemy from '../modules/serverEnemy';
 
 io.on('connection', (socket: ExtendedSocket) => {
   let currentEnemy: Enemy;

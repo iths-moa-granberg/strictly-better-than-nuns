@@ -1,5 +1,6 @@
 import positions from '../../src/shared/positions';
-import { Player, Enemy } from './serverPlayer';
+import Player from './serverPlayer';
+import Enemy from './serverEnemy';
 import Board from './serverBoard';
 import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';

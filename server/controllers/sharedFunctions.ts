@@ -1,6 +1,6 @@
 import { io } from '../index';
 import Game from '../modules/serverGame';
-import { Player } from '../modules/serverPlayer';
+import Player from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
 import {
   ClientUser,

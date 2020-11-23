@@ -1,5 +1,6 @@
 import Game from './modules/serverGame';
-import { Player, Enemy } from './modules/serverPlayer';
+import Player from './modules/serverPlayer';
+import Enemy from './modules/serverEnemy';
 
 export interface ExtendedSocket extends SocketIO.Socket {
   game: Game;

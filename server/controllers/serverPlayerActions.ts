@@ -19,8 +19,8 @@ import {
   OnPlayerTakesStep,
   OnPlayersFirstTurn,
 } from '../../src/shared/sharedTypes';
-import { Player, Enemy } from '../modules/serverPlayer';
-
+import Player from '../modules/serverPlayer';
+import Enemy from '../modules/serverEnemy';
 io.on('connection', (socket: PlayerSocket) => {
   socket.on('player selects pace', ({ pace, firstTurn }: OnPlayerSelectsPace) => {
     socket.player.pace = pace;
