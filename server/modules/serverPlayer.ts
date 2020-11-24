@@ -1,5 +1,6 @@
 import { logProgress } from '../controllers/sharedFunctions';
 import { Position } from '../../src/shared/sharedTypes';
+import { PlayerSocket } from '../serverTypes';
 
 interface Player {
   id: string;
@@ -61,7 +62,7 @@ class Player {
     this.hasGoal = false;
   };
 
-  checkTarget = (socket: any) => {
+  checkTarget = (socket: PlayerSocket) => {
     if (this.hasKey) {
       if (this.hasGoal) {
         if (this.home.id === this.position.id) {
@@ -86,12 +87,16 @@ class Player {
   };
 
   updatePathVisibility = (position: Position, enemyID: ('e1' | 'e2')[]) => {
-    this.path.forEach((obj) => {
-      if (obj.position.id === position.id) {
-        obj.visible = true;
-        obj.enemyID = enemyID;
-      }
-    });
+    if (enemyID.length) {
+      this.path.forEach((obj) => {
+        if (obj.position.id === position.id) {
+          obj.visible = true;
+          obj.enemyID = enemyID;
+        }
+      });
+    } else {
+      console.log('Error: player.updatePathVisibility called with empty enemyID');
+    }
   };
 }
 
