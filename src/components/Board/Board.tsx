@@ -11,6 +11,7 @@ import BoardPosition from './BoardPosition/BoardPosition';
 import UserActions from './UserActions/UserActions';
 import Layers from './Layers/Layers';
 import Players from './Players/Players';
+import PathEndings from './PathEndings/PathEndings';
 
 import { MyPlayer, ActionStateParams, ClientEnemies } from '../../clientTypes';
 import {
@@ -177,6 +178,8 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
             />
           ))}
         </article>
+
+        <PathEndings e1Path={e1Path} e2Path={e2Path} />
 
         <Players players={visiblePlayers} myPlayer={myPlayer} currentEnemyID={currentPlayerID} />
       </section>

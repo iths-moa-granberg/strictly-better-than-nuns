@@ -1,0 +1,17 @@
+@import '../../../scss/utils';
+
+.pathEndingWrapper {
+  pointer-events: none;
+}
+
+.pathEnding {
+  @include bg-image-layout;
+}
+
+.pathEnding.e1 path {
+  fill: $enemy1-main-color;
+}
+
+.pathEnding.e2 path {
+  fill: $enemy2-main-color;
+}
