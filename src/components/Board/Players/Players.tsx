@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from '../../../App';
+import { getPlayerPositionAdjustments, getPositioningValues } from './playerUtils';
 import { MyPlayer } from '../../../clientTypes';
 import ClientPlayer from '../../../modules/clientPlayer';
-import { VisiblePlayers, Position, OnUpdatePulseFrequency, OnCheckPulseDistance } from '../../../shared/sharedTypes';
+import { VisiblePlayers, OnUpdatePulseFrequency, OnCheckPulseDistance } from '../../../shared/sharedTypes';
 import styles from './Players.module.scss';
 
 interface PlayersProps {
@@ -14,33 +15,28 @@ interface PlayersProps {
 interface EnemyPlayerProps {
   id: string;
   direction: string;
-  position: Position;
   currentEnemyID: 'e1' | 'e2' | null;
+  positionValues: { top: number; left: number };
 }
 
 interface PlayerProps {
   id: string;
-  position: Position;
+  positionValues: { top: number; left: number };
   pulseFrequency?: number;
 }
 
 interface ActiveGoodPlayerProps {
   myGoodPlayer: ClientPlayer;
+  positionValues: { top: number; left: number };
 }
 
-interface MappedPlayersProps {
-  players: VisiblePlayers;
-  myPlayer: MyPlayer;
-  currentEnemyID: 'e1' | 'e2' | null;
-}
-
-const EnemyPlayer = ({ id, direction, position, currentEnemyID }: EnemyPlayerProps) => {
+const EnemyPlayer = ({ id, direction, currentEnemyID, positionValues }: EnemyPlayerProps) => {
   return (
     <div
       className={styles.enemyPlayerWrapper}
       style={{
-        top: `${position.y * (856 / 900) + 0.6}vh`,
-        left: `${position.x * (856 / 900) + 0.6}vh`,
+        top: `${positionValues.top}vh`,
+        left: `${positionValues.left}vh`,
       }}>
       <div className={`${styles.triangle} ${styles[direction]} ${styles[`${id}`]}`} />
       <div
@@ -54,7 +50,7 @@ const EnemyPlayer = ({ id, direction, position, currentEnemyID }: EnemyPlayerPro
   );
 };
 
-const Player = ({ id, position, pulseFrequency }: PlayerProps) => {
+const Player = ({ id, positionValues, pulseFrequency }: PlayerProps) => {
   return (
     <div
       className={`
@@ -63,39 +59,15 @@ const Player = ({ id, position, pulseFrequency }: PlayerProps) => {
         ${styles[pulseFrequency ? 'pulsatingShadow' : '']}
         `}
       style={{
-        top: `${position.y * (856 / 900) - 0.6}vh`,
-        left: `${position.x * (856 / 900) - 0.6}vh`,
+        top: `${positionValues.top}vh`,
+        left: `${positionValues.left}vh`,
         animationDuration: `${pulseFrequency}s`,
       }}
     />
   );
 };
 
-const MappedPlayers = ({ players, myPlayer, currentEnemyID }: MappedPlayersProps) => {
-  if (!myPlayer.isEvil) {
-    players = players.filter((p) => p.id !== (myPlayer as ClientPlayer).id);
-  }
-
-  return (
-    <>
-      {players.map((player) =>
-        isNaN(Number(player.id)) && player.direction ? (
-          <EnemyPlayer
-            key={player.id}
-            id={player.id}
-            direction={player.direction}
-            position={player.position}
-            currentEnemyID={currentEnemyID}
-          />
-        ) : (
-          <Player key={player.id} id={player.id} position={player.position} />
-        )
-      )}
-    </>
-  );
-};
-
-const ActiveGoodPlayer = ({ myGoodPlayer }: ActiveGoodPlayerProps) => {
+const ActiveGoodPlayer = ({ myGoodPlayer, positionValues }: ActiveGoodPlayerProps) => {
   const [pulseFrequency, setPulseFrequency] = useState<number>(2.4);
 
   useEffect(() => {
@@ -113,14 +85,56 @@ const ActiveGoodPlayer = ({ myGoodPlayer }: ActiveGoodPlayerProps) => {
     };
   }, [myGoodPlayer.position]);
 
-  return <Player id={myGoodPlayer.id} position={myGoodPlayer.position} pulseFrequency={pulseFrequency} />;
+  return <Player id={myGoodPlayer.id} positionValues={positionValues} pulseFrequency={pulseFrequency} />;
 };
 
 const Players = ({ players, myPlayer, currentEnemyID }: PlayersProps) => {
+  let activePlayerPositionAdjustment: number = 0;
+
+  const playerPositionAdjustments = getPlayerPositionAdjustments(players);
+
+  if (!myPlayer.isEvil) {
+    const myGoodPlayer = myPlayer as ClientPlayer;
+
+    // sets active player's position adjustment based on visibility and position
+    const player = players.find((p) => p.id === myGoodPlayer.id);
+    if (player && myGoodPlayer.position.id === player.position.id) {
+      activePlayerPositionAdjustment = playerPositionAdjustments[myGoodPlayer.id];
+    }
+
+    players = players.filter((p) => p.id !== myGoodPlayer.id);
+  }
+
   return (
     <article className="players-layer">
-      {!myPlayer.isEvil && <ActiveGoodPlayer myGoodPlayer={myPlayer as ClientPlayer} />}
-      <MappedPlayers players={players} myPlayer={myPlayer} currentEnemyID={currentEnemyID} />
+      {!myPlayer.isEvil && (
+        <ActiveGoodPlayer
+          myGoodPlayer={myPlayer as ClientPlayer}
+          positionValues={getPositioningValues(
+            (myPlayer as ClientPlayer).position,
+            activePlayerPositionAdjustment,
+            false
+          )}
+        />
+      )}
+
+      {players.map((player) =>
+        isNaN(Number(player.id)) && player.direction ? (
+          <EnemyPlayer
+            key={player.id}
+            id={player.id}
+            direction={player.direction}
+            currentEnemyID={currentEnemyID}
+            positionValues={getPositioningValues(player.position, playerPositionAdjustments[player.id], true)}
+          />
+        ) : (
+          <Player
+            key={player.id}
+            id={player.id}
+            positionValues={getPositioningValues(player.position, playerPositionAdjustments[player.id], false)}
+          />
+        )
+      )}
     </article>
   );
 };

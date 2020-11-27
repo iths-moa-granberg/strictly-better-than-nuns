@@ -32,7 +32,12 @@ export interface SoundToken {
   enemyID: 'e1' | 'e2';
 }
 
-export type VisiblePlayers = { id: string; position: Position; direction?: string }[];
+export type VisiblePlayers = {
+  id: string;
+  position: Position;
+  direction?: string;
+  adjustPosition?: number;
+}[];
 
 export interface ProgressLogObject {
   text: string;
