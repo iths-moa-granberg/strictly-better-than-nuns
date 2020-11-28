@@ -1,7 +1,6 @@
 import positions from '../../src/shared/positions';
 import Player from './serverPlayer';
 import Enemy from './serverEnemy';
-import Board from './serverBoard';
 import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
 import { Enemies } from '../serverTypes';
 import { SoundToken, SightToken, VisiblePlayers, ClientUser } from '../../src/shared/sharedTypes';
@@ -24,7 +23,6 @@ interface Game {
   enemyJoined: boolean;
   enemyMovesCompleted: number;
   enemyListened: number;
-  board: Board;
   enemies: Enemies;
 
   claimedKeys: number[];
@@ -47,7 +45,6 @@ class Game {
     this.enemyMovesCompleted = 0;
     this.enemyListened = 0;
 
-    this.board = new Board();
     this.enemies = { e1: new Enemy('e1'), e2: new Enemy('e2'), username: '' };
 
     this.claimedKeys = [];

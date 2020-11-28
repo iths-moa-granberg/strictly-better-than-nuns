@@ -3,11 +3,13 @@ import {
   updateBoard,
   logProgress,
   logSound,
-  isSeen,
+  getSeenBy,
   updatePlayer,
   updateBoardSocket,
   gameOver,
 } from './sharedFunctions';
+import { getClosestWayHome, getReachable, getSoundReach, getRandomSound, isHeard } from '../modules/boardUtils';
+
 import { PlayerSocket, Enemies } from '../serverTypes';
 import {
   Position,
@@ -36,13 +38,9 @@ io.on('connection', (socket: PlayerSocket) => {
   const playerStepOptions = () => {
     let possibleSteps: Position[] = [];
     if (socket.game.isCaught(socket.player)) {
-      possibleSteps = socket.game.board.getClosestWayHome(
-        socket.player.position,
-        socket.player.home,
-        socket.player.hasKey
-      );
+      possibleSteps = getClosestWayHome(socket.player.position, socket.player.home, socket.player.hasKey);
     } else {
-      possibleSteps = socket.game.board.getReachable(
+      possibleSteps = getReachable(
         socket.player.position,
         socket.player.stepsLeft,
         socket.player.hasKey,
@@ -59,7 +57,7 @@ io.on('connection', (socket: PlayerSocket) => {
     socket.player.position = serverPosition;
     socket.player.stepsLeft--;
 
-    const seenBy = isSeen(socket.player, socket.game);
+    const seenBy = getSeenBy(socket.player, socket.game);
     socket.player.visible = Boolean(seenBy.length);
     if (seenBy.length && !socket.game.isCaught(socket.player)) {
       const msg = [{ text: 'You are seen! Click back if you want to take a different route' }];
@@ -108,7 +106,7 @@ io.on('connection', (socket: PlayerSocket) => {
     } else {
       leaveSight(socket.player);
 
-      const sound = socket.game.board.getSoundReach(socket.player.pace, socket.game.board.getRandomSound());
+      const sound = getSoundReach(socket.player.pace, getRandomSound());
       playerMakeSound(socket.player, sound);
     }
   });
@@ -140,7 +138,7 @@ io.on('connection', (socket: PlayerSocket) => {
   };
 
   const makeSound = (player: Player, sound: number, enemy: Enemy, enemies: Enemies) => {
-    const heardTo = socket.game.board.isHeard(player.position, enemies, sound, enemy.id);
+    const heardTo = isHeard(player.position, enemies, sound, enemy.id);
     if (heardTo) {
       if (heardTo.length > 1) {
         const params: OnPlayerSelectToken = {

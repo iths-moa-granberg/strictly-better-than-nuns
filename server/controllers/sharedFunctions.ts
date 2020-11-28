@@ -1,4 +1,5 @@
 import { io } from '../index';
+import { isSeen } from '../modules/boardUtils';
 import Game from '../modules/serverGame';
 import Player from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
@@ -124,10 +125,10 @@ export const logSound = (game: Game) => {
   game.newSoundLog = [];
 };
 
-export const isSeen = (player: Player, game: Game) => {
+export const getSeenBy = (player: Player, game: Game) => {
   let seenBy: ('e1' | 'e2')[] = [];
   if (
-    game.board.isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition) ||
+    isSeen(player.position, game.enemies.e1.position, game.enemies.e1.lastPosition) ||
     game.enemies.e1.position.id === player.position.id
   ) {
     seenBy.push('e1');
@@ -136,7 +137,7 @@ export const isSeen = (player: Player, game: Game) => {
     }
   }
   if (
-    game.board.isSeen(player.position, game.enemies.e2.position, game.enemies.e2.lastPosition) ||
+    isSeen(player.position, game.enemies.e2.position, game.enemies.e2.lastPosition) ||
     game.enemies.e2.position.id === player.position.id
   ) {
     seenBy.push('e2');

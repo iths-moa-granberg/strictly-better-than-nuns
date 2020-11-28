@@ -1,5 +1,6 @@
 import { OnCheckPulseDistance, OnUpdatePulseFrequency } from '../../src/shared/sharedTypes';
 import { io } from '../index';
+import { getClosestPaths } from '../modules/boardUtils';
 import { ExtendedSocket } from '../serverTypes';
 
 io.on('connection', (socket: ExtendedSocket) => {
@@ -15,7 +16,7 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     const updateShortestDistance = (enemyID: 'e1' | 'e2') => {
       const enemyPosition = socket.game.enemies[enemyID].position;
-      const closestPaths = socket.game.board._getClosestPaths(position, enemyPosition, true);
+      const closestPaths = getClosestPaths(position, enemyPosition, true);
 
       closestPaths.forEach((path) => {
         if (path.length < distance) {
