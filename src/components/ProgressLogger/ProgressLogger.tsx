@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
+
 import { OnProgress, OnSendMessage, ProgressLogObject } from '../../shared/sharedTypes';
+
 import styles from './ProgressLogger.module.scss';
 
 interface ProgressLoggerProps {

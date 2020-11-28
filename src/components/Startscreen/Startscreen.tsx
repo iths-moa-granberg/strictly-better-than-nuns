@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../App';
+
 import ClientPlayer from '../../modules/clientPlayer';
 import ClientEnemy from '../../modules/clientEnemy';
 import { createUser, getUsernames } from './startscreenUtils';
+
+import LoadingScreen from '../LoadingScreen/LoadingScreen';
+
 import { MyPlayer } from '../../clientTypes';
 import {
   ClientUser,
@@ -16,13 +20,13 @@ import {
   OnInitNewGame,
   OpenGame,
 } from '../../shared/sharedTypes';
+
 import startscreenStyles from './Startscreen.module.scss';
 import buttonStyles from '../../scss/Buttons.module.scss';
 import inputUsernameStyles from './InputUsername.module.scss';
 import gameListStyles from './GameList.module.scss';
 import gameStyles from './Game.module.scss';
 import playerListStyles from './PlayerList.module.scss';
-import LoadingScreen from '../LoadingScreen/LoadingScreen';
 
 interface StartscreenProps {
   setMyPlayer: Function;

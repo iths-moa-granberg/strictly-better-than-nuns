@@ -1,10 +1,11 @@
-import positions from '../../src/shared/positions';
-import Player from './serverPlayer';
-import Enemy from './serverEnemy';
 import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
+import positions from '../../src/shared/positions';
+import keys from '../../src/shared/keys';
+import Enemy from './serverEnemy';
+
+import Player from './serverPlayer';
 import { Enemies } from '../serverTypes';
 import { SoundToken, SightToken, VisiblePlayers, ClientUser } from '../../src/shared/sharedTypes';
-import keys from '../../src/shared/keys';
 
 interface Game {
   id: string;

@@ -1,6 +1,7 @@
 import Enemy from './serverEnemy';
 import enemyPaths from './enemyPaths';
 import positions from '../../src/shared/positions';
+
 import Player from './serverPlayer';
 
 describe('serverEnemy', () => {

@@ -1,4 +1,5 @@
 import { logProgress } from '../controllers/sharedFunctions';
+
 import { Position } from '../../src/shared/sharedTypes';
 import { PlayerSocket } from '../serverTypes';
 

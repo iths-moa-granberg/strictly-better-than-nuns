@@ -1,7 +1,9 @@
 import React from 'react';
+
+import goals from '../../../../shared/goals';
+
 import { MyPlayer } from '../../../../clientTypes';
 import ClientPlayer from '../../../../modules/clientPlayer';
-import goals from '../../../../shared/goals';
 
 interface GoalsProps {
   myPlayer: MyPlayer;

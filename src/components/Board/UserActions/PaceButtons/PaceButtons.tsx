@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { socket } from '../../../../App';
+
 import { MyPlayer } from '../../../../clientTypes';
 import { OnPlayerSelectsPace, OnEnemySelectsPace } from '../../../../shared/sharedTypes';
+
 import styles from '../../../../scss/Buttons.module.scss';
 
 interface PaceButtonsProps {
@@ -112,7 +114,9 @@ const PaceButtons = ({ myPlayer, playersTurn, caught, firstTurn }: PaceButtonsPr
 
       {firstTurn ? (
         <>
-          {hover === 'sneak' && <p>This round when sneaking, you can move 4 steps and make noise up to 4 spaces away</p>}
+          {hover === 'sneak' && (
+            <p>This round when sneaking, you can move 4 steps and make noise up to 4 spaces away</p>
+          )}
           {hover === 'walk' && <p>This round when walking, you can move 6 steps and make noise up to 5 spaces away</p>}
           {hover === 'run' && <p>This round when running, you can move 8 steps and make noise up to 6 spaces away</p>}
         </>

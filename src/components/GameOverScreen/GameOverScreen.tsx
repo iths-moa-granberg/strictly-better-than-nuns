@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { ClientUser } from '../../shared/sharedTypes';
+
 import styles from './GameOverScreen.module.scss';
 import buttonStyles from '../../scss/Buttons.module.scss';
 

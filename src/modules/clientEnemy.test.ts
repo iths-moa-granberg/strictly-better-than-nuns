@@ -1,5 +1,5 @@
-import ClientEnemy from './clientEnemy';
 import positions from '../shared/positions';
+import ClientEnemy from './clientEnemy';
 
 describe('enemy', () => {
   it('ClientEnemy gets proper defaults', () => {

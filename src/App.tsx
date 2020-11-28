@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import './App.scss';
 import io from 'socket.io-client';
+
 import Startscreen from './components/Startscreen/Startscreen';
 import Board from './components/Board/Board';
 import ProgressLogger from './components/ProgressLogger/ProgressLogger';
 import ProgressBars from './components/ProgressBars/ProgressBars';
 import GameOverScreen from './components/GameOverScreen/GameOverScreen';
+
 import { MyPlayer } from './clientTypes';
 import ClientPlayer from './modules/clientPlayer';
 import { ClientUser, OnGameOver, OnUpdatePlayer } from './shared/sharedTypes';
+
+import './App.scss';
 
 const socket = io('http://localhost:3002');
 

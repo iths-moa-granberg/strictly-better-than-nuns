@@ -1,5 +1,5 @@
-import ClientPlayer from './clientPlayer';
 import positions from '../shared/positions';
+import ClientPlayer from './clientPlayer';
 
 describe('player', () => {
   it('ClientPlayer gets proper defaults', () => {

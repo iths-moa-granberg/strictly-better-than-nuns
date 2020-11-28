@@ -1,6 +1,9 @@
 import React from 'react';
-import { ActionStateParams } from '../../../../clientTypes';
+
 import paths from './paths-svg/pathIndex';
+
+import { ActionStateParams } from '../../../../clientTypes';
+
 import styles from './Paths.module.scss';
 
 interface PathsProps {

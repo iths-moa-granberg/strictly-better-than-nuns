@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { socket } from '../../../App';
+
 import PaceButtons from './PaceButtons/PaceButtons';
 import ConfirmButtons from './ConfirmButtons/ConfirmButtons';
 import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
+
 import { OnSelectEnemy, OnPlayersTurn, OnPlayersFirstTurn } from '../../../shared/sharedTypes';
 import { ActionStateParams, MyPlayer } from '../../../clientTypes';
 import ClientPlayer from '../../../modules/clientPlayer';
+
 import styles from './UserActions.module.scss';
 
 interface UserActionProps {

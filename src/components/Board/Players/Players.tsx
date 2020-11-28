@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from '../../../App';
+
 import { getPlayerPositionAdjustments, getPositioningValues } from './playerUtils';
+
 import { MyPlayer } from '../../../clientTypes';
 import ClientPlayer from '../../../modules/clientPlayer';
 import { VisiblePlayers, OnUpdatePulseFrequency, OnCheckPulseDistance } from '../../../shared/sharedTypes';
+
 import styles from './Players.module.scss';
 
 interface PlayersProps {

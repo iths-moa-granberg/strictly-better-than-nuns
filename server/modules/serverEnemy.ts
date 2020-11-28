@@ -1,4 +1,5 @@
 import enemyPaths from './enemyPaths';
+
 import { Position } from '../../src/shared/sharedTypes';
 import Player from './serverPlayer';
 

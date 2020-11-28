@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from '../../App';
+
 import { OnSetEnemyWinGoal } from '../../shared/sharedTypes';
+
 import styles from './ProgressBars.module.scss';
 
 const ProgressBars = () => {

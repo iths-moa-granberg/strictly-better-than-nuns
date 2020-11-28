@@ -1,6 +1,8 @@
 import React from 'react';
 import { socket } from '../../../../App';
+
 import { OnSelectPath } from '../../../../shared/sharedTypes';
+
 import styles from '../../../../scss/Buttons.module.scss';
 
 interface SelectPathButtonsProps {

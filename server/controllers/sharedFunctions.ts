@@ -1,5 +1,8 @@
 import { io } from '../index';
+
 import { isSeen } from '../modules/boardUtils';
+import ClientPlayer from '../../src/modules/clientPlayer';
+
 import Game from '../modules/serverGame';
 import Player from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
@@ -13,7 +16,6 @@ import {
   OnGameOver,
   ProgressLogObject,
 } from '../../src/shared/sharedTypes';
-import ClientPlayer from '../../src/modules/clientPlayer';
 
 const _updateBoard = (game: Game) => {
   const visiblePlayers = game.getVisiblePlayers();

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from '../../../App';
-import { OnInitialPlayerIDs } from '../../../shared/sharedTypes';
+
 import homes from './homeSvgs/homeIndex';
+
+import { OnInitialPlayerIDs } from '../../../shared/sharedTypes';
+
 import styles from './Homes.module.scss';
 
 const Homes = () => {

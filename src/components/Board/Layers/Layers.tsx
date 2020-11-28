@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ActionStateParams, MyPlayer } from '../../../clientTypes';
+
 import Paths from './Paths/Paths';
 import Keys from './Keys/Keys';
 import Goals from './Goals/Goals';
-import styles from './Layers.module.scss';
+
+import { ActionStateParams, MyPlayer } from '../../../clientTypes';
 import ClientPlayer from '../../../modules/clientPlayer';
+
+import styles from './Layers.module.scss';
 
 interface ToggleProps {
   myPlayer: MyPlayer;

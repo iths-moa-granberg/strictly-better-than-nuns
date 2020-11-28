@@ -3,8 +3,8 @@ import { socket } from '../../App';
 
 import { getClassName, stepIsValid } from './boardUtils';
 import positions from '../../shared/positions';
-import Homes from './Homes/Homes';
 
+import Homes from './Homes/Homes';
 import getChildren from './PositionChildren/getChildren';
 import LoadingScreen from '../LoadingScreen/LoadingScreen';
 import BoardPosition from './BoardPosition/BoardPosition';

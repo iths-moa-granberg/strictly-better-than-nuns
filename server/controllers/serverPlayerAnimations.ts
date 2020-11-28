@@ -1,6 +1,8 @@
-import { OnCheckPulseDistance, OnUpdatePulseFrequency } from '../../src/shared/sharedTypes';
 import { io } from '../index';
+
 import { getClosestPaths } from '../modules/boardUtils';
+
+import { OnCheckPulseDistance, OnUpdatePulseFrequency } from '../../src/shared/sharedTypes';
 import { ExtendedSocket } from '../serverTypes';
 
 io.on('connection', (socket: ExtendedSocket) => {

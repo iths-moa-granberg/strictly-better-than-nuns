@@ -1,7 +1,9 @@
 import { io } from '../index';
+
+import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
+
 import Game from '../modules/serverGame';
 import Player from '../modules/serverPlayer';
-import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
 import { ExtendedSocket } from '../serverTypes';
 import {
   Users,

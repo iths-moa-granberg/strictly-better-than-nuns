@@ -1,6 +1,8 @@
 import React from 'react';
-import { MyPlayer } from '../../../../clientTypes';
+
 import keys from '../../../../shared/keys';
+
+import { MyPlayer } from '../../../../clientTypes';
 import ClientPlayer from '../../../../modules/clientPlayer';
 
 interface KeysProps {
