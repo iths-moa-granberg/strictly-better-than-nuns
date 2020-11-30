@@ -7,7 +7,9 @@ const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 4000;
 
-export const io = socketIO(server);
+export const io = socketIO(server, {
+  pingTimeout: 3600000,
+});
 
 server.listen(port, () => {
   console.log('Server listening at port %d', port);
