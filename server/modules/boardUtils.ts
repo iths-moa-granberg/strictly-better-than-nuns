@@ -34,10 +34,14 @@ export const getEnemyStandardReachable = (start: Position, path: Position[], tot
   return path.filter((pos, index) => index > path.indexOf(serverStart!)).filter((pos, index) => index < totalSteps);
 };
 
-export const getClosestWayHome = (start: Position, end: Position, hasKey: boolean) => {
+export const getClosestWayHome = (start: Position, end: Position, hasKey: boolean, stepsLeft: number) => {
   return getClosestPaths(start, end, hasKey)
-    .flat()
-    .filter((pos) => pos.id != start.id) as Position[];
+    .map((path) => path.filter((pos) => pos.id !== start.id))
+    .map((path) => {
+      path.splice(0, path.length - stepsLeft);
+      return path;
+    })
+    .flat();
 };
 
 export const getClosestPaths = (start: Position, end: Position, hasKey: boolean) => {

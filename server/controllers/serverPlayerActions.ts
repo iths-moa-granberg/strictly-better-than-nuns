@@ -40,7 +40,12 @@ io.on('connection', (socket: PlayerSocket) => {
   const playerStepOptions = () => {
     let possibleSteps: Position[] = [];
     if (socket.game.isCaught(socket.player)) {
-      possibleSteps = getClosestWayHome(socket.player.position, socket.player.home, socket.player.hasKey);
+      possibleSteps = getClosestWayHome(
+        socket.player.position,
+        socket.player.home,
+        socket.player.hasKey,
+        socket.player.stepsLeft
+      );
     } else {
       possibleSteps = getReachable(
         socket.player.position,
