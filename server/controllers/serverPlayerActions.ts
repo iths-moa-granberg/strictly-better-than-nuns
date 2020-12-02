@@ -106,25 +106,10 @@ io.on('connection', (socket: PlayerSocket) => {
       socket.player.caught = false;
       endPlayerTurn();
     } else {
-      leaveSight(socket.player);
-
       const sound = getSoundReach(socket.player.pace, getRandomSound());
       playerMakeSound(socket.player, sound);
     }
   });
-
-  const leaveSight = (player: Player) => {
-    let path = player.path.reverse();
-    for (let obj of path) {
-      if (obj.visible && obj != path[0]) {
-        socket.game.addToken(obj.position.id, 'sight', obj.enemyID);
-
-        const msg = [{ text: player.username, id: player.id }, { text: ' has disappeared' }];
-        logProgress(msg, { room: socket.game.id });
-        return;
-      }
-    }
-  };
 
   const playerMakeSound = (player: Player, sound: number) => {
     if (socket.game.enemyListened === 0) {
@@ -168,11 +153,20 @@ io.on('connection', (socket: PlayerSocket) => {
     }
   });
 
+  const leaveSight = (player: Player) => {
+    let path = player.path.reverse();
+    for (let obj of path) {
+      if (obj.visible && obj != path[0]) {
+        socket.game.addToken(obj.position.id, 'sight', obj.enemyID);
+
+        const msg = [{ text: player.username, id: player.id }, { text: ' has disappeared' }];
+        logProgress(msg, { room: socket.game.id });
+        return;
+      }
+    }
+  };
+
   const endPlayerTurn = () => {
-    socket.player.resetPath(socket.player.path[0].enemyID);
-
-    updatePlayer(socket.player, socket.game.id);
-
     socket.game.playerTurnCompleted++;
 
     const msg = [
@@ -183,6 +177,14 @@ io.on('connection', (socket: PlayerSocket) => {
 
     if (socket.game.playerTurnCompleted === socket.game.players.length) {
       socket.game.playerTurnCompleted = 0;
+
+      for (let player of socket.game.players) {
+        leaveSight(player);
+        socket.player.resetPath(socket.player.path[0].enemyID);
+
+        updatePlayer(player, socket.game.id);
+      }
+
       logSound(socket.game);
 
       if (socket.game.winners.length) {
