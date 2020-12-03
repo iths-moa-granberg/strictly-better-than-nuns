@@ -48,7 +48,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     } else if (currentEnemy.isOnPath()) {
       possibleSteps = getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
     } else {
-      possibleSteps = getClosestWayToPath(currentEnemy.position, currentEnemy.path);
+      possibleSteps = getClosestWayToPath(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
     }
     const params: OnPossibleSteps = { possibleSteps, stepsLeft: currentEnemy.stepsLeft };
     socket.emit('possible steps', params);

@@ -82,7 +82,7 @@ export const getClosestPaths = (start: Position, end: Position, hasKey: boolean)
   return paths;
 };
 
-export const getClosestWayToPath = (start: Position, path: Position[]) => {
+export const getClosestWayToPath = (start: Position, path: Position[], stepsLeft: number) => {
   let allPaths: Position[][] = [];
   let shortestPathLength = 100; //magic number, max distance bw any pos board
   for (let position of path) {
@@ -92,10 +92,15 @@ export const getClosestWayToPath = (start: Position, path: Position[]) => {
     }
     allPaths = allPaths.concat(paths);
   }
+
   return allPaths
     .filter((path) => path.length === shortestPathLength)
-    .flat()
-    .filter((pos) => pos.id != start.id) as Position[];
+    .map((path) => path.filter((pos) => pos.id !== start.id))
+    .map((path) => {
+      path.splice(0, path.length - stepsLeft);
+      return path;
+    })
+    .flat();
 };
 
 const _getQueue = (start: Position, end: Position, hasKey: boolean) => {
