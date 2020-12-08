@@ -1,6 +1,14 @@
 import { io } from '../index';
 
-import { updateBoard, startNextTurn, logProgress, logSound, getSeenBy, updateBoardSocket } from './sharedFunctions';
+import {
+  updateBoard,
+  startNextTurn,
+  logProgress,
+  logSound,
+  getSeenBy,
+  updateBoardSocket,
+  selectInitialPaths,
+} from './sharedFunctions';
 import {
   getReachable,
   getEnemyStandardReachable,
@@ -21,6 +29,7 @@ import {
   OnEnemySelectsPace,
   OnSelectPath,
   OnPlayerPlacedToken,
+  OnSetInitialPath,
 } from '../../src/shared/sharedTypes';
 import Enemy from '../modules/serverEnemy';
 
@@ -112,6 +121,18 @@ io.on('connection', (socket: ExtendedSocket) => {
     const params: OnChooseNewPath = { pathNames };
     socket.emit('choose new path', params);
   };
+
+  socket.on('set initial path', ({ pathName }: OnSetInitialPath) => {
+    if (!socket.game.enemies.e1.pathName) {
+      socket.game.enemies.e1.setNewPath(pathName);
+      updateBoard(socket.game);
+      selectInitialPaths(socket.game);
+    } else {
+      socket.game.enemies.e2.setNewPath(pathName);
+      updateBoard(socket.game);
+      startNextTurn(socket.game);
+    }
+  });
 
   socket.on('select path', ({ pathName }: OnSelectPath) => {
     currentEnemy.setNewPath(pathName);

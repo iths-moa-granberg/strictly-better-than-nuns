@@ -2,6 +2,7 @@ import enemyPaths from './enemyPaths';
 
 import { Position } from '../../src/shared/sharedTypes';
 import Player from './serverPlayer';
+import positions from '../../src/shared/positions';
 
 interface Enemy {
   id: 'e1' | 'e2';
@@ -18,17 +19,12 @@ interface Enemy {
 
 class Enemy {
   constructor(id: 'e1' | 'e2') {
-    if (id === 'e1') {
-      this.path = enemyPaths.purpleA;
-      this.pathName = 'purpleA';
-    } else {
-      this.path = enemyPaths.lightPurpleB;
-      this.pathName = 'lightPurpleB';
-    }
+    this.path = [];
+    this.pathName = '';
 
     this.id = id;
-    this.position = this.path[0];
-    this.lastPosition = this.path[0];
+    this.position = positions[26];
+    this.lastPosition = positions[26];
 
     this.isEvil = true;
 

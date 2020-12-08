@@ -13,14 +13,15 @@ describe('serverEnemy', () => {
 
   describe('constructor', () => {
     it('sets up proper defaults', () => {
+      expect(enemy.path).toEqual([]);
+      expect(enemy.pathName).toEqual('');
+
       expect(enemy.id).toEqual('e1');
-      expect(enemy.position).toEqual(enemy.path[0]);
-      expect(enemy.lastPosition).toEqual(enemy.path[0]);
+      expect(enemy.position).toEqual(positions[26]);
+      expect(enemy.lastPosition).toEqual(positions[26]);
+
       expect(enemy.isEvil).toEqual(true);
       expect(enemy.playersVisible).toEqual([]);
-
-      expect(enemy.path).toEqual(enemyPaths.purpleA);
-      expect(enemy.pathName).toEqual('purpleA');
     });
   });
 
@@ -61,6 +62,10 @@ describe('serverEnemy', () => {
   });
 
   describe('isOnPath', () => {
+    beforeEach(() => {
+      enemy.setNewPath('pinkB');
+    });
+
     it('should return true if on path', () => {
       expect(enemy.isOnPath()).toEqual(true);
     });
@@ -94,6 +99,7 @@ describe('serverEnemy', () => {
   describe('getNewPossiblePaths', () => {
     it('returns available paths correctly', () => {
       enemy.path = enemyPaths.purpleA;
+      enemy.position = enemy.path[0];
       const expectedOutput = ['pinkB', 'purpleA', 'babyBlueA', 'peaA', 'darkGreenA'];
       expect(enemy.getNewPossiblePaths()).toEqual(expectedOutput);
     });

@@ -1,6 +1,6 @@
 import { io } from '../index';
 
-import { updateBoard, startNextTurn, logProgress, sleep } from './sharedFunctions';
+import { updateBoard, sleep, selectInitialPaths } from './sharedFunctions';
 
 import Game from '../modules/serverGame';
 import Player from '../modules/serverPlayer';
@@ -161,12 +161,11 @@ io.on('connection', (socket: ExtendedSocket) => {
     io.in(socket.game.id).emit('set enemy win goal', setEnemyWinGoalParams);
 
     updateBoard(socket.game);
-    startNextTurn(socket.game);
 
+    //used to render players' homes after board is rendered for the first time
     const initialPlayerIDParams: OnInitialPlayerIDs = { playerIDs: socket.game.players.map((p) => p.id) };
     io.in(socket.game.id).emit('inital players id', initialPlayerIDParams);
 
-    const msg = [{ text: 'Players turn' }];
-    logProgress(msg, { room: socket.game.id });
+    selectInitialPaths(socket.game);
   });
 });

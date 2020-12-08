@@ -12,6 +12,7 @@ import { ReactComponent as Purple } from './purple.svg';
 import { ReactComponent as Red } from './red.svg';
 import { ReactComponent as BabyBlue } from './baby-blue.svg';
 import { ReactComponent as Yellow } from './yellow.svg';
+import { ReactComponent as Empty } from './empty.svg';
 
 interface PathComponents {
   [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -32,6 +33,7 @@ const Paths: PathComponents = {
   Red,
   BabyBlue,
   Yellow,
+  Empty,
 };
 
 export default Paths;

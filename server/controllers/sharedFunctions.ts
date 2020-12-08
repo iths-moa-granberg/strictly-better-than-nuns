@@ -15,6 +15,7 @@ import {
   OnUpdatePlayer,
   OnGameOver,
   ProgressLogObject,
+  OnSelectInitialPaths,
 } from '../../src/shared/sharedTypes';
 
 const _updateBoard = (game: Game) => {
@@ -76,8 +77,16 @@ const getDirection = (position: Position, lastPosition: Position) => {
   return 'up';
 };
 
+export const selectInitialPaths = (game: Game) => {
+  const params: OnSelectInitialPaths = { pathNames: game.enemies.e1.getNewPossiblePaths() };
+  io.in(game.id).emit('select initial paths', params);
+};
+
 export const startNextTurn = (game: Game) => {
   io.in(game.id).emit('update round counter');
+
+  const msg = [{ text: 'Players turn' }];
+  logProgress(msg, { room: game.id });
 
   game.startNextTurn();
 

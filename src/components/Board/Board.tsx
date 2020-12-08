@@ -26,6 +26,7 @@ import {
   OnEnemyTakesStep,
   OnPlayerTakesStep,
   OnPlayerPlacedToken,
+  OnSelectInitialPaths,
 } from '../../shared/sharedTypes';
 import ClientPlayer from '../../modules/clientPlayer';
 
@@ -109,12 +110,24 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       }
     };
 
+    const onSelectInitialPaths = ({ pathNames }: OnSelectInitialPaths) => {
+      if (myPlayer.isEvil) {
+        setActionState({
+          key: 'select initial paths',
+          params: { pathNames, selectInitial: true },
+        });
+        setPossiblePaths(pathNames);
+      }
+    };
+
     socket.on('possible steps', onPossibleSteps);
     socket.on('player select token', onPlayerSelectToken);
+    socket.on('select initial paths', onSelectInitialPaths);
 
     return () => {
       socket.off('possible steps', onPossibleSteps);
       socket.off('player select token', onPlayerSelectToken);
+      socket.off('select initial paths', onSelectInitialPaths);
     };
   }, [myPlayer]);
 
@@ -146,7 +159,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     }
   };
 
-  if (!myPlayer || !visiblePlayers.length || !e1Path || !e2Path) {
+  if (!myPlayer || !visiblePlayers.length) {
     return <LoadingScreen />;
   }
 

@@ -19,7 +19,7 @@ const Paths = ({ actionState, possiblePaths, viewAllPaths, e1Path, e2Path }: Pat
   const Enemy2PathComp = paths[getPathComponentName(e2Path)];
 
   const getContent = () => {
-    if (actionState.key === 'select new path') {
+    if (actionState.key === 'select new path' || actionState.key === 'select initial paths') {
       return possiblePaths.map((pathName) => {
         const Comp = paths[getPathComponentName(pathName)];
         return <Comp className={styles.path} key={pathName} />;
@@ -46,7 +46,10 @@ const Paths = ({ actionState, possiblePaths, viewAllPaths, e1Path, e2Path }: Pat
 };
 
 const getPathComponentName = (str: string) => {
-  return `${str.charAt(0).toUpperCase() + str.slice(1)}`.substring(0, str.length - 1);
+  if (str) {
+    return `${str.charAt(0).toUpperCase() + str.slice(1)}`.substring(0, str.length - 1);
+  }
+  return 'Empty';
 };
 
 export default Paths;

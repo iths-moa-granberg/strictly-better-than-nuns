@@ -35,7 +35,7 @@ const UserActions = ({
   setMyPlayer,
   setCurrentPlayerId,
 }: UserActionProps) => {
-  const [paceProps, setPaceProps] = useState<PaceProps>({ playersTurn: true, caught: false });
+  const [paceProps, setPaceProps] = useState<PaceProps>({ playersTurn: false, caught: false });
 
   const selectEnemyHandler = useCallback(
     (enemyID: 'e1' | 'e2') => {
@@ -115,6 +115,9 @@ const UserActions = ({
         ))}
       {actionState.key === 'select new path' && (
         <SelectPathButtons {...actionState.params!} setActionState={setActionState} />
+      )}
+      {actionState.key === 'select initial paths' && (
+        <SelectPathButtons setActionState={setActionState} {...actionState.params!} />
       )}
     </section>
   );

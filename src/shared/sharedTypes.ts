@@ -194,3 +194,11 @@ export interface OnInitialPlayerIDs {
 export interface OnPlayersFirstTurn {
   resetPosition?: Position;
 }
+
+export interface OnSetInitialPath {
+  pathName: string;
+}
+
+export interface OnSelectInitialPaths {
+  pathNames: string[];
+}

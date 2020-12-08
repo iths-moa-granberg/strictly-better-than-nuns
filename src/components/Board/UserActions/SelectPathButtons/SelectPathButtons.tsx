@@ -1,32 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { socket } from '../../../../App';
 
-import { OnSelectPath } from '../../../../shared/sharedTypes';
+import { OnSetInitialPath, OnSelectPath } from '../../../../shared/sharedTypes';
 
-import styles from '../../../../scss/Buttons.module.scss';
+import styles from './SelectPathButtons.module.scss';
+import buttonStyles from '../../../../scss/Buttons.module.scss';
 
 interface SelectPathButtonsProps {
   pathNames: string[];
   setActionState: Function;
+  selectInitial?: boolean;
 }
 
-const SelectPathButtons = ({ pathNames, setActionState }: SelectPathButtonsProps) => {
+const SelectPathButtons = ({ pathNames, setActionState, selectInitial }: SelectPathButtonsProps) => {
+  const [initialSelectCounter, setInitialSelectCounter] = useState<number>(0);
+
   const handleSelect = (pathName: string) => {
-    const params: OnSelectPath = { pathName };
-    socket.emit('select path', params);
-    setActionState({ key: 'disabled enemy confirm' });
+    if (selectInitial) {
+      const params: OnSetInitialPath = { pathName };
+      socket.emit('set initial path', params);
+      setInitialSelectCounter(initialSelectCounter + 1);
+    } else {
+      const params: OnSelectPath = { pathName };
+      socket.emit('select path', params);
+      setActionState({ key: 'disabled enemy confirm' });
+    }
   };
 
   return (
     <>
-      <h1>Choose next path</h1>
+      {!selectInitial ? (
+        <h1>Choose next path</h1>
+      ) : initialSelectCounter === 0 ? (
+        <h1>
+          Choose path for <span className={styles.e1}>Enemy 1</span>
+        </h1>
+      ) : (
+        <h1>
+          Choose path for <span className={styles.e2}>Enemy 2</span>
+        </h1>
+      )}
 
-      <div className={styles.buttonWrapper}>
+      <div className={buttonStyles.buttonWrapper}>
         {pathNames.map((name, index) => (
           <button
             key={name}
             onClick={() => handleSelect(name)}
-            className={`${styles.button} ${styles[getStyleName(name)]}`}>
+            className={`${buttonStyles.button} ${buttonStyles[getStyleName(name)]}`}>
             {getLetter(index)}
           </button>
         ))}
