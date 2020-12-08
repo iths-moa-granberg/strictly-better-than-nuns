@@ -136,23 +136,6 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
     );
   };
 
-  const InputUsername = () => {
-    const handleUsernameInput = (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        setUser(createUser((e.target as HTMLInputElement).value));
-      }
-    };
-
-    return (
-      <input
-        className={inputUsernameStyles.input}
-        type="text"
-        placeholder="username"
-        onKeyDown={(e) => handleUsernameInput(e)}
-      />
-    );
-  };
-
   const StartButton = () => {
     return (
       <button
@@ -226,17 +209,31 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
   };
 
   const Content = () => {
-    if (!user) return <InputUsername />;
     if (ready) return <StartButton />;
     if (myPlayer) return <p>Waiting for other players</p>;
     if (joinedGame) return <GoodOrEvilButtons />;
     return <GameList />;
   };
 
+  const handleUsernameInput = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setUser(createUser((e.target as HTMLInputElement).value));
+    }
+  };
+
   return (
     <div className={startscreenStyles.startWrapper}>
       {joinedGame && <PlayerList />}
-      <Content />
+      {!user ? (
+        <input
+          className={inputUsernameStyles.input}
+          type="text"
+          placeholder="username"
+          onKeyDown={(e) => handleUsernameInput(e)}
+        />
+      ) : (
+        <Content />
+      )}
     </div>
   );
 };
