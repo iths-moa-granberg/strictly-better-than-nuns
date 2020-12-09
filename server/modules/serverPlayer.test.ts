@@ -134,12 +134,23 @@ describe('serverPlayer', () => {
   });
 
   describe('updatePathVisibility', () => {
-    it('updates targeted position properly', () => {
+    beforeEach(() => {
       player.path.push({ position: positions[2], visible: false, enemyID: [] });
+    });
+
+    it('updates targeted position properly', () => {
+      const expectedOutput = [{ ...player.path[0] }, { position: positions[2], visible: true, enemyID: ['e1'] }];
 
       player.updatePathVisibility(positions[2], ['e1']);
 
-      const expectedOutput = [player.path[0], { position: positions[2], visible: true, enemyID: ['e1'] }];
+      expect(player.path).toEqual(expectedOutput);
+    });
+
+    it('does not update path if called improperly', () => {
+      const expectedOutput = [{ ...player.path[0] }, { position: positions[2], visible: false, enemyID: [] }];
+
+      player.updatePathVisibility(positions[2], []);
+
       expect(player.path).toEqual(expectedOutput);
     });
   });
