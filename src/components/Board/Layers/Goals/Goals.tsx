@@ -6,13 +6,13 @@ import { MyPlayer } from '../../../../clientTypes';
 import ClientPlayer from '../../../../modules/clientPlayer';
 
 interface GoalsProps {
-  myPlayer: MyPlayer;
-  viewAll: boolean;
+  readonly myPlayer: MyPlayer;
+  readonly viewAll: boolean;
 }
 
 interface GoalProps {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 const Goals = ({ myPlayer, viewAll }: GoalsProps) => {

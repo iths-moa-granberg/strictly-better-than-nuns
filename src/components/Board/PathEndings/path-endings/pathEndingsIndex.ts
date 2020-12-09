@@ -5,7 +5,7 @@ import { ReactComponent as Left } from './left-path-ending.svg';
 import { ReactComponent as Right } from './right-path-ending.svg';
 
 interface PathEndingComponents {
-  [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  readonly [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 const PathEndings: PathEndingComponents = {

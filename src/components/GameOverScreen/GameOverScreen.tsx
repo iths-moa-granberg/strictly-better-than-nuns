@@ -6,7 +6,7 @@ import styles from './GameOverScreen.module.scss';
 import buttonStyles from '../../scss/Buttons.module.scss';
 
 interface GameOverScreenProps {
-  winners: ClientUser[];
+  readonly winners: ClientUser[];
 }
 
 const formatWinners = (winners: ClientUser[]) => {

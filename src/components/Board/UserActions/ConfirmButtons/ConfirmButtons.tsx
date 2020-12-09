@@ -6,9 +6,9 @@ import { MyPlayer } from '../../../../clientTypes';
 import styles from '../../../../scss/Buttons.module.scss';
 
 interface ConfirmButtonsProps {
-  myPlayer: MyPlayer;
-  setActionState: Function;
-  disabled: boolean;
+  readonly myPlayer: MyPlayer;
+  readonly setActionState: Function;
+  readonly disabled: boolean;
 }
 
 const ConfirmButtons = ({ myPlayer, setActionState, disabled }: ConfirmButtonsProps) => {

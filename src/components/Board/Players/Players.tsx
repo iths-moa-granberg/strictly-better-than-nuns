@@ -10,16 +10,16 @@ import { VisiblePlayers, OnUpdatePulseFrequency, OnCheckPulseDistance } from '..
 import styles from './Players.module.scss';
 
 interface PlayersProps {
-  myPlayer: MyPlayer;
-  players: VisiblePlayers;
-  currentEnemyID: 'e1' | 'e2' | null;
+  readonly myPlayer: MyPlayer;
+  readonly players: VisiblePlayers;
+  readonly currentEnemyID: 'e1' | 'e2' | null;
 }
 
 interface EnemyPlayerProps {
-  id: string;
-  direction: string;
-  currentEnemyID: 'e1' | 'e2' | null;
-  positionValues: { top: number; left: number };
+  readonly id: string;
+  readonly direction: string;
+  readonly currentEnemyID: 'e1' | 'e2' | null;
+  readonly positionValues: { top: number; left: number };
 }
 
 interface PlayerProps {

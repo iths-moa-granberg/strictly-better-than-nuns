@@ -2,7 +2,7 @@ import positions from '../../src/shared/positions';
 import { Position } from '../../src/shared/sharedTypes';
 
 interface EnemyPaths {
-  [key: string]: Position[];
+  readonly [key: string]: Position[];
 }
 
 const enemyPaths: EnemyPaths = {

@@ -33,10 +33,10 @@ import ClientPlayer from '../../modules/clientPlayer';
 import styles from './Board.module.scss';
 
 interface BoardProps {
-  myPlayer: MyPlayer;
-  setMyPlayer: Function;
-  currentPlayerID: 'e1' | 'e2' | null;
-  setCurrentPlayerId: Function;
+  readonly myPlayer: MyPlayer;
+  readonly setMyPlayer: Function;
+  readonly currentPlayerID: 'e1' | 'e2' | null;
+  readonly setCurrentPlayerId: Function;
 }
 
 interface ClickStateParams {

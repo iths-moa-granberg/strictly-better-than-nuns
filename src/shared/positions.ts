@@ -1,7 +1,7 @@
 import { Position } from './sharedTypes';
 
 interface Positions {
-  [key: number]: Position;
+  readonly [key: number]: Position;
 }
 
 const positions: Positions = {

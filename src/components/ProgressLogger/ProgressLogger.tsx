@@ -6,7 +6,7 @@ import { OnProgress, OnSendMessage, ProgressLogObject } from '../../shared/share
 import styles from './ProgressLogger.module.scss';
 
 interface ProgressLoggerProps {
-  id: string;
+  readonly id: string;
 }
 
 const ProgressLogger = ({ id }: ProgressLoggerProps) => {

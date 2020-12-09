@@ -6,13 +6,13 @@ import { MyPlayer } from '../../../../clientTypes';
 import ClientPlayer from '../../../../modules/clientPlayer';
 
 interface KeysProps {
-  myPlayer: MyPlayer;
-  viewAll: boolean;
+  readonly myPlayer: MyPlayer;
+  readonly viewAll: boolean;
 }
 
 interface KeyProps {
-  x: number;
-  y: number;
+  readonly x: number;
+  readonly y: number;
 }
 
 const Keys = ({ myPlayer, viewAll }: KeysProps) => {

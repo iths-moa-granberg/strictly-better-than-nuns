@@ -21,17 +21,17 @@ interface Player {
 }
 
 interface PlayerPathPosition {
-  position: Position;
+  readonly position: Position;
   visible: boolean;
   enemyID: ('e1' | 'e2')[];
 }
 
 interface PlayerConstructor {
-  id: string;
-  home: Position;
-  key: Position;
-  goal: Position;
-  username: string;
+  readonly id: string;
+  readonly home: Position;
+  readonly key: Position;
+  readonly goal: Position;
+  readonly username: string;
 }
 
 class Player {

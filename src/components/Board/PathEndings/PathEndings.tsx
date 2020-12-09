@@ -3,8 +3,8 @@ import pathEndings from './path-endings/pathEndingsIndex';
 import styles from './PathEndings.module.scss';
 
 interface PathEndingsProps {
-  e1Path: string;
-  e2Path: string;
+  readonly e1Path: string;
+  readonly e2Path: string;
 }
 
 const PathEndings = ({ e1Path, e2Path }: PathEndingsProps) => {

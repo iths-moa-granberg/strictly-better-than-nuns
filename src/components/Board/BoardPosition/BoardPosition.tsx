@@ -3,13 +3,13 @@ import { Position } from '../../../shared/sharedTypes';
 import styles from './BoardPosition.module.scss';
 
 interface BoardPositionProps {
-  position: Position;
-  className: {
+  readonly position: Position;
+  readonly className: {
     reachable: string;
     clickable: string;
   };
-  children: JSX.Element[];
-  clickHandler: Function;
+  readonly children: JSX.Element[];
+  readonly clickHandler: Function;
 }
 
 const BoardPosition = ({ position, className, children, clickHandler }: BoardPositionProps) => {

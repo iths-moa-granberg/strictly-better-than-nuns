@@ -10,11 +10,11 @@ import ClientPlayer from '../../../modules/clientPlayer';
 import styles from './Layers.module.scss';
 
 interface ToggleProps {
-  myPlayer: MyPlayer;
-  actionState: { key: string; params?: ActionStateParams };
-  possiblePaths: string[];
-  e1Path: string;
-  e2Path: string;
+  readonly myPlayer: MyPlayer;
+  readonly actionState: { key: string; params?: ActionStateParams };
+  readonly possiblePaths: string[];
+  readonly e1Path: string;
+  readonly e2Path: string;
 }
 
 const Toggle = ({ myPlayer, actionState, possiblePaths, e1Path, e2Path }: ToggleProps) => {

@@ -7,10 +7,10 @@ import { OnPlayerSelectsPace, OnEnemySelectsPace } from '../../../../shared/shar
 import styles from '../../../../scss/Buttons.module.scss';
 
 interface PaceButtonsProps {
-  myPlayer: MyPlayer;
-  playersTurn: boolean;
-  caught: boolean;
-  firstTurn?: boolean;
+  readonly myPlayer: MyPlayer;
+  readonly playersTurn: boolean;
+  readonly caught: boolean;
+  readonly firstTurn?: boolean;
 }
 
 const PaceButtons = ({ myPlayer, playersTurn, caught, firstTurn }: PaceButtonsProps) => {

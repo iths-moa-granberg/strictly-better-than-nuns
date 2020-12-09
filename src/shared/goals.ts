@@ -1,4 +1,10 @@
-const goals = [
+interface goal {
+  readonly id: number;
+  readonly x: number;
+  readonly y: number;
+}
+
+const goals: goal[] = [
   {
     id: 155,
     x: 58.2,

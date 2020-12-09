@@ -7,7 +7,7 @@ import { ReactComponent as Home5 } from './home5.svg';
 import { ReactComponent as Home6 } from './home6.svg';
 
 interface HomeComponents {
-  [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+  readonly [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
 const Homes: HomeComponents = {

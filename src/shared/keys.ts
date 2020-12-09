@@ -1,4 +1,11 @@
-const keys = [
+interface key {
+  readonly id: number;
+  readonly x: number;
+  readonly y: number;
+  readonly goal: number;
+}
+
+const keys: key[] = [
   {
     id: 10,
     x: 7,

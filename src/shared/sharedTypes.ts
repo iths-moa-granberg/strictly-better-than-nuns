@@ -1,10 +1,10 @@
 export interface Position {
-  id: number;
-  x: number;
-  y: number;
-  neighbours: number[];
-  inSight: number[];
-  requireKey?: boolean;
+  readonly id: number;
+  readonly x: number;
+  readonly y: number;
+  readonly neighbours: number[];
+  readonly inSight: number[];
+  readonly requireKey?: boolean;
 }
 
 export interface Users {
@@ -18,187 +18,187 @@ interface User {
 }
 
 export interface ClientUser {
-  username: string;
-  userID: string;
+  readonly username: string;
+  readonly userID: string;
 }
 
 export interface SightToken {
-  id: number;
-  enemyID: ('e1' | 'e2')[];
+  readonly id: number;
+  readonly enemyID: ('e1' | 'e2')[];
 }
 
 export interface SoundToken {
-  id: number;
-  enemyID: 'e1' | 'e2';
+  readonly id: number;
+  readonly enemyID: 'e1' | 'e2';
 }
 
 export type VisiblePlayers = {
-  id: string;
-  position: Position;
-  direction?: string;
-  adjustPosition?: number;
+  readonly id: string;
+  readonly position: Position;
+  readonly direction?: string;
+  readonly adjustPosition?: number;
 }[];
 
 export interface ProgressLogObject {
-  text: string;
-  id?: string;
+  readonly text: string;
+  readonly id?: string;
 }
 
 export interface ChatMessage {
-  text: string;
-  id: string;
+  readonly text: string;
+  readonly id: string;
 }
 
 export interface OnUpdateBoard {
-  visiblePlayers: VisiblePlayers;
-  soundTokens: SoundToken[];
-  sightTokens: SightToken[];
-  enemyPaths: string[];
-  reachablePositions: Position[];
+  readonly visiblePlayers: VisiblePlayers;
+  readonly soundTokens: SoundToken[];
+  readonly sightTokens: SightToken[];
+  readonly enemyPaths: string[];
+  readonly reachablePositions: Position[];
 }
 
 export interface OnPlayerSelectToken {
-  heardTo: SoundToken[];
-  id: string;
-  turn: 'enemy' | 'player';
-  enemyID: 'e1' | 'e2';
-  sound: number;
+  readonly heardTo: SoundToken[];
+  readonly id: string;
+  readonly turn: 'enemy' | 'player';
+  readonly enemyID: 'e1' | 'e2';
+  readonly sound: number;
 }
 
 export interface OnChooseNewPath {
-  pathNames: string[];
+  readonly pathNames: string[];
 }
 
 export interface OnPossibleSteps {
-  possibleSteps: Position[];
-  stepsLeft?: number;
+  readonly possibleSteps: Position[];
+  readonly stepsLeft?: number;
 }
 
 export interface OnEnemyTakesStep {
-  position: Position;
+  readonly position: Position;
 }
 
 export interface OnPlayerTakesStep {
-  position: Position;
+  readonly position: Position;
 }
 
 export interface OnPlayerPlacedToken {
-  position: Position;
-  turn: 'player' | 'enemy';
-  enemyID: 'e1' | 'e2';
-  sound: number;
+  readonly position: Position;
+  readonly turn: 'player' | 'enemy';
+  readonly enemyID: 'e1' | 'e2';
+  readonly sound: number;
 }
 
 export interface OnUpdatePlayer {
-  id: string;
-  hasKey: boolean;
-  hasGoal: boolean;
-  visible: boolean;
+  readonly id: string;
+  readonly hasKey: boolean;
+  readonly hasGoal: boolean;
+  readonly visible: boolean;
 }
 
 export interface OnSelectEnemy {
-  enemyID: 'e1' | 'e2';
+  readonly enemyID: 'e1' | 'e2';
 }
 
 export interface OnPlayersTurn {
-  resetPosition?: Position;
-  caughtPlayers: string[];
+  readonly resetPosition?: Position;
+  readonly caughtPlayers: string[];
 }
 
 export interface OnPlayerSelectsPace {
-  pace: string;
-  firstTurn?: boolean;
+  readonly pace: string;
+  readonly firstTurn?: boolean;
 }
 
 export interface OnEnemySelectsPace {
-  pace: string;
+  readonly pace: string;
 }
 
 export interface OnSelectPath {
-  pathName: string;
+  readonly pathName: string;
 }
 
 export interface OnProgress {
-  msg: ProgressLogObject[];
+  readonly msg: ProgressLogObject[];
 }
 
 export interface OpenGame {
-  id: string;
-  name: string;
-  users: Users;
-  status: 'open' | 'full';
+  readonly id: string;
+  readonly name: string;
+  readonly users: Users;
+  readonly status: 'open' | 'full';
 }
 
 export interface OnStartScreen {
-  openGames: OpenGame[];
+  readonly openGames: OpenGame[];
 }
 
 export interface OnUpdateOpenGames {
-  openGames: OpenGame[];
+  readonly openGames: OpenGame[];
 }
 
 export interface OnInit {
-  enemyJoined: boolean;
-  allGoodPlayersJoined: boolean;
+  readonly enemyJoined: boolean;
+  readonly allGoodPlayersJoined: boolean;
 }
 
 export interface OnSetUpPlayer {
-  id: string;
-  home: Position;
-  key: Position;
-  goal: Position;
+  readonly id: string;
+  readonly home: Position;
+  readonly key: Position;
+  readonly goal: Position;
 }
 
 export interface OnSetUpEnemy {
-  startPositions: Position[];
+  readonly startPositions: Position[];
 }
 
 export interface OnJoinGame {
-  gameID: string;
-  user: ClientUser;
+  readonly gameID: string;
+  readonly user: ClientUser;
 }
 
 export interface OnPlayerJoined {
-  good: boolean;
-  user: ClientUser;
+  readonly good: boolean;
+  readonly user: ClientUser;
 }
 
 export interface OnInitNewGame {
-  user: ClientUser;
+  readonly user: ClientUser;
 }
 
 export interface OnGameOver {
-  winners: ClientUser[];
+  readonly winners: ClientUser[];
 }
 
 export interface OnSetEnemyWinGoal {
-  num: number;
+  readonly num: number;
 }
 
 export interface OnSendMessage {
-  msg: ChatMessage;
+  readonly msg: ChatMessage;
 }
 
 export interface OnCheckPulseDistance {
-  position: Position;
+  readonly position: Position;
 }
 
 export interface OnUpdatePulseFrequency {
-  newPulseFrequency: number;
+  readonly newPulseFrequency: number;
 }
 
 export interface OnInitialPlayerIDs {
-  playerIDs: string[];
+  readonly playerIDs: string[];
 }
 
 export interface OnPlayersFirstTurn {
-  resetPosition?: Position;
+  readonly resetPosition?: Position;
 }
 
 export interface OnSetInitialPath {
-  pathName: string;
+  readonly pathName: string;
 }
 
 export interface OnSelectInitialPaths {
-  pathNames: string[];
+  readonly pathNames: string[];
 }

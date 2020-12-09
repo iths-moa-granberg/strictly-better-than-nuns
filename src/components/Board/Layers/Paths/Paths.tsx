@@ -7,11 +7,11 @@ import { ActionStateParams } from '../../../../clientTypes';
 import styles from './Paths.module.scss';
 
 interface PathsProps {
-  actionState: { key: string; params?: ActionStateParams };
-  possiblePaths: string[];
-  viewAllPaths: boolean;
-  e1Path: string;
-  e2Path: string;
+  readonly actionState: { key: string; params?: ActionStateParams };
+  readonly possiblePaths: string[];
+  readonly viewAllPaths: boolean;
+  readonly e1Path: string;
+  readonly e2Path: string;
 }
 
 const Paths = ({ actionState, possiblePaths, viewAllPaths, e1Path, e2Path }: PathsProps) => {

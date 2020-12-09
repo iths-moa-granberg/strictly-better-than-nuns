@@ -6,8 +6,8 @@ import { ReactComponent as SightToken } from '../../../../assets/sight-token.svg
 import styles from './Token.module.scss';
 
 interface TokenProps {
-  type: 'sight' | 'sound';
-  clickable?: boolean;
+  readonly type: 'sight' | 'sound';
+  readonly clickable?: boolean;
 }
 
 const Token = ({ type, clickable }: TokenProps) => {

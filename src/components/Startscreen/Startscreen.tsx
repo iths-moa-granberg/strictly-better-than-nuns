@@ -29,9 +29,9 @@ import gameStyles from './Game.module.scss';
 import playerListStyles from './PlayerList.module.scss';
 
 interface StartscreenProps {
-  setMyPlayer: Function;
-  myPlayer: MyPlayer | null;
-  setCurrentPlayerId: Function;
+  readonly setMyPlayer: Function;
+  readonly myPlayer: MyPlayer | null;
+  readonly setCurrentPlayerId: Function;
 }
 
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenProps) => {

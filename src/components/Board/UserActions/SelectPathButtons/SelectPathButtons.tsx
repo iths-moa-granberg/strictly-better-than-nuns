@@ -7,9 +7,9 @@ import styles from './SelectPathButtons.module.scss';
 import buttonStyles from '../../../../scss/Buttons.module.scss';
 
 interface SelectPathButtonsProps {
-  pathNames: string[];
-  setActionState: Function;
-  selectInitial?: boolean;
+  readonly pathNames: string[];
+  readonly setActionState: Function;
+  readonly selectInitial?: boolean;
 }
 
 const SelectPathButtons = ({ pathNames, setActionState, selectInitial }: SelectPathButtonsProps) => {

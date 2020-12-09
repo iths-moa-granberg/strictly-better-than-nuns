@@ -13,18 +13,18 @@ import ClientPlayer from '../../../modules/clientPlayer';
 import styles from './UserActions.module.scss';
 
 interface UserActionProps {
-  actionState: { key: string; params?: ActionStateParams };
-  setActionState: Function;
-  myPlayer: MyPlayer;
-  currentPlayerID: 'e1' | 'e2' | null;
-  setMyPlayer: Function;
-  setCurrentPlayerId: Function;
+  readonly actionState: { key: string; params?: ActionStateParams };
+  readonly setActionState: Function;
+  readonly myPlayer: MyPlayer;
+  readonly currentPlayerID: 'e1' | 'e2' | null;
+  readonly setMyPlayer: Function;
+  readonly setCurrentPlayerId: Function;
 }
 
 interface PaceProps {
-  playersTurn: boolean;
-  caught: boolean;
-  firstTurn?: boolean;
+  readonly playersTurn: boolean;
+  readonly caught: boolean;
+  readonly firstTurn?: boolean;
 }
 
 const UserActions = ({
