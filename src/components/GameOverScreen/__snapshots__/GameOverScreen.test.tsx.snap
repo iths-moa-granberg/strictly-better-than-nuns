@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameOverScreen component renders with multiple winners 1`] = `
+<div>
+  <div
+    class="gameOverWrapper"
+  >
+    <h1
+      class="gameOverHeading"
+    >
+      Game over!
+    </h1>
+    <h2
+      class="gameOverWinner"
+    >
+      The 
+      winners are
+       
+      <span
+        class="player-a1"
+      >
+        winner
+      </span>
+      , 
+      <span
+        class="player-b2"
+      >
+        winner nr 2
+      </span>
+      , 
+      <span
+        class="player-c3"
+      >
+        winner nr 3
+      </span>
+       and 
+      <span
+        class="player-d4"
+      >
+        winner nr 4
+      </span>
+      !
+    </h2>
+    <button
+      class="button big"
+    >
+      New game
+    </button>
+  </div>
+</div>
+`;
+
+exports[`GameOverScreen component renders with one winner 1`] = `
+<div>
+  <div
+    class="gameOverWrapper"
+  >
+    <h1
+      class="gameOverHeading"
+    >
+      Game over!
+    </h1>
+    <h2
+      class="gameOverWinner"
+    >
+      The 
+      winner is
+       
+      <span
+        class="player-a1"
+      >
+        winner
+      </span>
+      !
+    </h2>
+    <button
+      class="button big"
+    >
+      New game
+    </button>
+  </div>
+</div>
+`;
+
+exports[`GameOverScreen component renders with two winners 1`] = `
+<div>
+  <div
+    class="gameOverWrapper"
+  >
+    <h1
+      class="gameOverHeading"
+    >
+      Game over!
+    </h1>
+    <h2
+      class="gameOverWinner"
+    >
+      The 
+      winners are
+       
+      <span
+        class="player-a1"
+      >
+        winner
+      </span>
+       and 
+      <span
+        class="player-b2"
+      >
+        winner nr 2
+      </span>
+      !
+    </h2>
+    <button
+      class="button big"
+    >
+      New game
+    </button>
+  </div>
+</div>
+`;
