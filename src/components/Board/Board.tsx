@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { socket } from '../../App';
 
 import { getClassName, stepIsValid } from './boardUtils';
@@ -13,7 +13,7 @@ import Layers from './Layers/Layers';
 import Players from './Players/Players';
 import PathEndings from './PathEndings/PathEndings';
 
-import { MyPlayer, ActionStateParams, ClientEnemies } from '../../clientTypes';
+import { MyPlayer, ClientEnemies, ActionState } from '../../clientTypes';
 import {
   Position,
   OnUpdateBoard,
@@ -34,9 +34,9 @@ import styles from './Board.module.scss';
 
 interface BoardProps {
   readonly myPlayer: MyPlayer;
-  readonly setMyPlayer: Function;
+  readonly setMyPlayer: Dispatch<SetStateAction<MyPlayer | null>>;
   readonly currentPlayerID: 'e1' | 'e2' | null;
-  readonly setCurrentPlayerId: Function;
+  readonly setCurrentPlayerId: (id: 'e1' | 'e2' | null) => void;
 }
 
 interface ClickStateParams {
@@ -47,9 +47,7 @@ interface ClickStateParams {
 }
 
 const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: BoardProps) => {
-  const [actionState, setActionState] = useState<{ key: string; params?: ActionStateParams }>({
-    key: 'pace',
-  });
+  const [actionState, setActionState] = useState<ActionState>({ key: 'pace' });
   const [clickState, setClickState] = useState<{ key: string; params?: ClickStateParams }>({ key: '' });
 
   const [visiblePlayers, setVisiblePlayers] = useState<VisiblePlayers>([]);
@@ -137,9 +135,10 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
         setActionState({ key: 'disabled enemy confirm' });
         const params: OnEnemyTakesStep = { position };
         socket.emit('enemy takes step', params);
-        setMyPlayer((mp: ClientEnemies) => {
-          const newMyPlayer = { ...mp };
-          newMyPlayer[currentPlayerID!] = { ...mp[currentPlayerID!], position };
+        setMyPlayer((prevState: MyPlayer | null) => {
+          const prevClientEnemies = prevState as ClientEnemies;
+          const newMyPlayer = { ...prevClientEnemies };
+          newMyPlayer[currentPlayerID!] = { ...prevClientEnemies[currentPlayerID!], position };
           return newMyPlayer;
         });
       } else {

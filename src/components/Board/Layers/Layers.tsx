@@ -4,14 +4,14 @@ import Paths from './Paths/Paths';
 import Keys from './Keys/Keys';
 import Goals from './Goals/Goals';
 
-import { ActionStateParams, MyPlayer } from '../../../clientTypes';
+import { ActionState, MyPlayer } from '../../../clientTypes';
 import ClientPlayer from '../../../modules/clientPlayer';
 
 import styles from './Layers.module.scss';
 
 interface ToggleProps {
   readonly myPlayer: MyPlayer;
-  readonly actionState: { key: string; params?: ActionStateParams };
+  readonly actionState: ActionState;
   readonly possiblePaths: string[];
   readonly e1Path: string;
   readonly e2Path: string;

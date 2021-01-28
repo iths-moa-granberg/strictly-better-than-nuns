@@ -9,7 +9,12 @@ export interface ClientEnemies {
 
 export type MyPlayer = ClientPlayer | ClientEnemies;
 
-export interface ActionStateParams {
+interface ActionStateParams {
   pathNames: string[];
   selectInitial?: boolean;
+}
+
+export interface ActionState {
+  key: string;
+  params?: ActionStateParams;
 }

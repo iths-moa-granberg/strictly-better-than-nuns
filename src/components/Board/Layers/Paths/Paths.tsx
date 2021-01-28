@@ -2,12 +2,12 @@ import React from 'react';
 
 import paths from './paths-svg/pathIndex';
 
-import { ActionStateParams } from '../../../../clientTypes';
+import { ActionState } from '../../../../clientTypes';
 
 import styles from './Paths.module.scss';
 
 interface PathsProps {
-  readonly actionState: { key: string; params?: ActionStateParams };
+  readonly actionState: ActionState;
   readonly possiblePaths: string[];
   readonly viewAllPaths: boolean;
   readonly e1Path: string;

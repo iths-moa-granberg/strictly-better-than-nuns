@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { socket } from '../../App';
 
 import ClientPlayer from '../../modules/clientPlayer';
@@ -29,9 +29,9 @@ import gameStyles from './Game.module.scss';
 import playerListStyles from './PlayerList.module.scss';
 
 interface StartscreenProps {
-  readonly setMyPlayer: Function;
+  readonly setMyPlayer: Dispatch<SetStateAction<MyPlayer | null>>;
   readonly myPlayer: MyPlayer | null;
-  readonly setCurrentPlayerId: Function;
+  readonly setCurrentPlayerId: (id: 'e1' | 'e2' | null) => void;
 }
 
 const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenProps) => {

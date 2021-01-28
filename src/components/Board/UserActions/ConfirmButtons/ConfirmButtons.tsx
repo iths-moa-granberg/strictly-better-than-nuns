@@ -1,13 +1,13 @@
 import React from 'react';
 import { socket } from '../../../../App';
 
-import { MyPlayer } from '../../../../clientTypes';
+import { ActionState, MyPlayer } from '../../../../clientTypes';
 
 import styles from '../../../../scss/Buttons.module.scss';
 
 interface ConfirmButtonsProps {
   readonly myPlayer: MyPlayer;
-  readonly setActionState: Function;
+  readonly setActionState: (actionState: ActionState) => void;
   readonly disabled: boolean;
 }
 

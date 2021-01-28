@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Dispatch, SetStateAction } from 'react';
 import { socket } from '../../../App';
 
 import PaceButtons from './PaceButtons/PaceButtons';
@@ -7,18 +7,18 @@ import SelectEnemyButtons from './SelectEnemyButtons/SelectEnemyButtons';
 import SelectPathButtons from './SelectPathButtons/SelectPathButtons';
 
 import { OnSelectEnemy, OnPlayersTurn, OnPlayersFirstTurn } from '../../../shared/sharedTypes';
-import { ActionStateParams, MyPlayer } from '../../../clientTypes';
+import { ActionState, MyPlayer } from '../../../clientTypes';
 import ClientPlayer from '../../../modules/clientPlayer';
 
 import styles from './UserActions.module.scss';
 
 interface UserActionProps {
-  readonly actionState: { key: string; params?: ActionStateParams };
-  readonly setActionState: Function;
+  readonly actionState: ActionState;
+  readonly setActionState: (actionState: ActionState) => void;
   readonly myPlayer: MyPlayer;
   readonly currentPlayerID: 'e1' | 'e2' | null;
-  readonly setMyPlayer: Function;
-  readonly setCurrentPlayerId: Function;
+  readonly setMyPlayer: Dispatch<SetStateAction<MyPlayer | null>>;
+  readonly setCurrentPlayerId: (id: 'e1' | 'e2' | null) => void;
 }
 
 interface PaceProps {

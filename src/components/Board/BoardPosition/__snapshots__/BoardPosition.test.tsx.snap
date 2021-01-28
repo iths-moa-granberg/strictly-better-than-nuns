@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BoardPosition renders correctly with multiple children, reachable & clickable 1`] = `
+<div>
+  <div
+    class="
+        position 
+        reachable-1 
+        clickable 
+        multipleChildren
+      "
+    style="top: 28.533333333333335vh; left: 19.022222222222222vh;"
+  >
+    <div>
+      Child
+    </div>
+    <div>
+      Another child
+    </div>
+  </div>
+</div>
+`;
+
+exports[`BoardPosition renders correctly with one child and no classnames 1`] = `
+<div>
+  <div
+    class="
+        position 
+         
+         
+        
+      "
+    style="top: 28.533333333333335vh; left: 19.022222222222222vh;"
+  >
+    <div>
+      Child
+    </div>
+  </div>
+</div>
+`;
+
+exports[`BoardPosition renders correctly with one child, reachable & clickable 1`] = `
+<div>
+  <div
+    class="
+        position 
+        reachable-1 
+        clickable 
+        
+      "
+    style="top: 28.533333333333335vh; left: 19.022222222222222vh;"
+  >
+    <div>
+      Child
+    </div>
+  </div>
+</div>
+`;

@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { socket } from '../../../../App';
 
 import { OnSetInitialPath, OnSelectPath } from '../../../../shared/sharedTypes';
+import { ActionState } from '../../../../clientTypes';
 
 import styles from './SelectPathButtons.module.scss';
 import buttonStyles from '../../../../scss/Buttons.module.scss';
 
 interface SelectPathButtonsProps {
   readonly pathNames: string[];
-  readonly setActionState: Function;
+  readonly setActionState: (actionState: ActionState) => void;
   readonly selectInitial?: boolean;
 }
 

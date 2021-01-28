@@ -9,7 +9,7 @@ interface BoardPositionProps {
     clickable: string;
   };
   readonly children: JSX.Element[];
-  readonly clickHandler: Function;
+  readonly clickHandler: (position: Position) => void;
 }
 
 const BoardPosition = ({ position, className, children, clickHandler }: BoardPositionProps) => {

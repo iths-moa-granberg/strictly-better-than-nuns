@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../../../../scss/Buttons.module.scss';
 
 interface SelectEnemyButtonsProps {
-  readonly selectEnemyHandler: Function;
+  readonly selectEnemyHandler: (enemyID: 'e1' | 'e2') => void;
 }
 
 const SelectEnemyButtons = ({ selectEnemyHandler }: SelectEnemyButtonsProps) => {
