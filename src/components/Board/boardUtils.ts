@@ -27,13 +27,13 @@ export const stepIsValid = (
   possibleSteps: Position[]
 ) => {
   if (myPlayer.isEvil) {
-    return (
+    return Boolean(
       (myPlayer as ClientEnemies)[currentPlayerID!].position.neighbours.includes(position.id) &&
-      possibleSteps.find((pos) => pos.id === position.id)
+        possibleSteps.find((pos) => pos.id === position.id)
     );
   }
-  return (
+  return Boolean(
     (myPlayer as ClientPlayer).position.neighbours.includes(position.id) &&
-    possibleSteps.find((pos) => pos.id === position.id)
+      possibleSteps.find((pos) => pos.id === position.id)
   );
 };
