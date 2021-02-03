@@ -1,7 +1,59 @@
 import * as boardUtils from './boardUtils';
+import positions from '../../src/shared/positions';
+
 import { Position } from '../../src/shared/sharedTypes';
 
 describe('server-board', () => {
+  describe('getReachable', () => {
+    const start = positions[1];
+
+    it('should return reachable positions', () => {
+      const totalSteps = 3;
+      const hasKey = true;
+      const isEvil = true;
+      const enemiesPositionsIDn = [10, 11];
+
+      const result = boardUtils.getReachable(start, totalSteps, hasKey, isEvil, enemiesPositionsIDn);
+
+      const expectedResult = [positions[21], positions[20], positions[22], positions[19], positions[2], positions[23]];
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should remove enemy positions for good players', () => {
+      const totalSteps = 3;
+      const hasKey = true;
+      const isEvil = false;
+      const enemiesPositionsIDn = [20, 11];
+
+      const result = boardUtils.getReachable(start, totalSteps, hasKey, isEvil, enemiesPositionsIDn);
+
+      const expectedResult = [positions[21], positions[22], positions[23]];
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should require keys for locked doors', () => {
+      const totalSteps = 4;
+      const hasKey = false;
+      const isEvil = false;
+      const enemiesPositionsIDn = [10, 11];
+
+      const result = boardUtils.getReachable(start, totalSteps, hasKey, isEvil, enemiesPositionsIDn);
+
+      const expectedResult = [
+        positions[21],
+        positions[20],
+        positions[22],
+        positions[19],
+        positions[2],
+        positions[23],
+        positions[18],
+        positions[3],
+        positions[43],
+      ];
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
   describe('getRandomSound', () => {
     it('stays between limit of 1 to 6', () => {
       for (let i = 0; i < 1000; i++) {

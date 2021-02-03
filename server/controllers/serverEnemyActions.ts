@@ -53,7 +53,8 @@ io.on('connection', (socket: ExtendedSocket) => {
       socket.game.heardSomeone(currentEnemy.id) ||
       currentEnemy.playersVisible.length
     ) {
-      possibleSteps = getReachable(currentEnemy.position, currentEnemy.stepsLeft, true, true, socket.game.enemies);
+      const enemiesPositionsIDn = [socket.game.enemies.e1.position.id, socket.game.enemies.e2.position.id]
+      possibleSteps = getReachable(currentEnemy.position, currentEnemy.stepsLeft, true, true, enemiesPositionsIDn);
     } else if (currentEnemy.isOnPath()) {
       possibleSteps = getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
     } else {

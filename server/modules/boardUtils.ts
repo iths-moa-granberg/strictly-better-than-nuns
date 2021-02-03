@@ -7,14 +7,13 @@ export const getReachable = (
   totalSteps: number,
   hasKey: boolean,
   isEvil: boolean,
-  enemies: Enemies
+  enemiesPositionsIDn: number[],
 ) => {
   let possiblePos = [startPosition];
   for (let steps = 0; steps < totalSteps; steps++) {
     for (let pos of possiblePos) {
       possiblePos = possiblePos.concat(_getNeighbours(pos).filter((neighbour) => !possiblePos.includes(neighbour)));
       if (!isEvil) {
-        const enemiesPositionsIDn: number[] = [enemies.e1.position.id, enemies.e2.position.id];
         possiblePos = possiblePos.filter((pos) => !enemiesPositionsIDn.includes(pos.id));
       }
       if (!hasKey) {
@@ -132,7 +131,8 @@ const _getPlaceInQueue = (position: Position, queue: Position[][]) => {
 
 export const isHeard = (playerPos: Position, enemies: Enemies, sound: number, enemyID: 'e1' | 'e2') => {
   const enemyPos = enemies[enemyID].position;
-  const reaches: Position[] = getReachable(playerPos, sound, true, true, enemies);
+  const enemiesPositionsIDn = [enemies.e1.position.id, enemies.e2.position.id]
+  const reaches: Position[] = getReachable(playerPos, sound, true, true, enemiesPositionsIDn);
 
   if (reaches.find((pos) => pos.id === enemyPos.id)) {
     const soundPaths: Position[][] = getClosestPaths(playerPos, enemyPos, true);

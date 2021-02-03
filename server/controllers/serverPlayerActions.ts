@@ -47,12 +47,13 @@ io.on('connection', (socket: PlayerSocket) => {
         socket.player.stepsLeft
       );
     } else {
+      const enemiesPositionsIDn = [socket.game.enemies.e1.position.id, socket.game.enemies.e2.position.id];
       possibleSteps = getReachable(
         socket.player.position,
         socket.player.stepsLeft,
         socket.player.hasKey,
         socket.player.isEvil,
-        socket.game.enemies
+        enemiesPositionsIDn,
       );
     }
     const params: OnPossibleSteps = { possibleSteps };
