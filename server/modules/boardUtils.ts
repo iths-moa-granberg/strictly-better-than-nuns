@@ -52,7 +52,7 @@ export const getClosestPaths = (start: Position, end: Position, hasKey: boolean)
     for (let pos of path) {
       if (pos.id === path[path.length - 1].id) {
         let i = _getPlaceInQueue(pos, queue) - 1;
-        let neighbours = _getNeighbours(pos).filter((neighbour) => queue[i].includes(neighbour));
+        let neighbours = _getNeighbours(pos).filter((neighbour) => queue[i].find((p) => p.id === neighbour.id));
         if (!hasKey) {
           neighbours = neighbours.filter((pos) => !pos.requireKey);
         }
