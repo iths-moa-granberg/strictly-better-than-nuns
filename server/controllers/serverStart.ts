@@ -1,12 +1,10 @@
 import { io } from '../index';
 
+import * as startModule from '../modules/serverStartModule';
 import { updateBoard, sleep, selectInitialPaths } from './sharedFunctions';
 
-import Game from '../modules/serverGame';
-import Player from '../modules/serverPlayer';
 import { ExtendedSocket } from '../serverTypes';
 import {
-  Users,
   OnStartScreen,
   OnUpdateOpenGames,
   OnInit,
@@ -15,52 +13,21 @@ import {
   OnJoinGame,
   OnPlayerJoined,
   OnInitNewGame,
-  OpenGame,
   OnSetEnemyWinGoal,
   OnInitialPlayerIDs,
 } from '../../src/shared/sharedTypes';
 
-interface Games {
-  [key: string]: StartGame;
-}
-
-interface StartGame {
-  game: Game;
-  name: string;
-  status: string;
-  users: Users;
-}
-
-let games: Games = {};
-
-const getOpenGames = () => {
-  return Object.keys(games)
-    .map((id) => {
-      if (games[id].status !== 'closed') {
-        return { id, name: games[id].name, users: games[id].users, status: games[id].status };
-      }
-    })
-    .filter((game) => game != null) as OpenGame[];
-};
-
 io.on('connection', (socket: ExtendedSocket) => {
-  const params: OnStartScreen = { openGames: getOpenGames() };
+  const params: OnStartScreen = { openGames: startModule.getOpenGames() };
   socket.emit('start screen', params);
 
   const updateOpenGames = () => {
-    const params: OnUpdateOpenGames = { openGames: getOpenGames() };
+    const params: OnUpdateOpenGames = { openGames: startModule.getOpenGames() };
     io.emit('update open games', params);
   };
 
   socket.on('init new game', ({ user }: OnInitNewGame) => {
-    socket.game = new Game();
-
-    games[socket.game.id] = {
-      game: socket.game,
-      name: `${user.username}'s game`,
-      status: 'open',
-      users: { [user.userID]: { username: user.username, role: '', playerId: '' } },
-    };
+    socket.game = startModule.initNewGame(user);
 
     updateOpenGames();
 
@@ -74,12 +41,7 @@ io.on('connection', (socket: ExtendedSocket) => {
   });
 
   socket.on('join game', ({ gameID, user }: OnJoinGame) => {
-    games[gameID].users[user.userID] = { username: user.username, role: '', playerId: '' };
-    socket.game = games[gameID].game;
-
-    if (Object.values(games[gameID].users).length === 7) {
-      games[socket.game.id].status = 'full';
-    }
+    socket.game = startModule.joinGame(user, gameID);
 
     updateOpenGames();
 
@@ -96,12 +58,7 @@ io.on('connection', (socket: ExtendedSocket) => {
 
   socket.on('player joined', ({ good, user }: OnPlayerJoined) => {
     if (good) {
-      games[socket.game.id].users[user.userID].role = 'good';
-
-      socket.player = new Player(socket.game.generatePlayerInfo(user.username));
-
-      socket.game.addPlayer(socket.player as Player);
-      games[socket.game.id].users[user.userID].playerId = socket.player.id;
+      socket.player = startModule.setUpGoodPlayer(user, socket.game.id);
 
       const params: OnSetUpPlayer = {
         id: socket.player.id,
@@ -114,44 +71,32 @@ io.on('connection', (socket: ExtendedSocket) => {
       if (socket.game.players.length === 6) {
         io.in(socket.game.id).emit('disable join as good');
       }
-      updateOpenGames();
     } else {
-      games[socket.game.id].users[user.userID].role = 'evil';
-      games[socket.game.id].users[user.userID].playerId = 'e1';
-      socket.player = socket.game.enemies;
-      socket.player.username = user.username;
-      socket.game.enemyJoined = true;
+      socket.player = startModule.setUpEvilPlayer(user, socket.game.id);
+
       const params: OnSetUpEnemy = {
         startPositions: [socket.player.e1.position, socket.player.e2.position],
       };
       socket.emit('set up enemy', params);
+
       io.in(socket.game.id).emit('disable join as evil');
-      updateOpenGames();
     }
 
+    updateOpenGames();
+
     updateBoard(socket.game);
-    if (playersReady()) {
+
+    if (startModule.arePlayersReady(socket.game.id)) {
       io.in(socket.game.id).emit('players ready');
     } else {
       io.in(socket.game.id).emit('waiting for players');
     }
   });
 
-  const playersReady = () => {
-    let users = games[socket.game.id].users;
-    if (Object.values(users).length < 2) {
-      return false;
-    }
-    if (Object.values(users).find((user) => user.role === '')) {
-      return false;
-    }
-    return Boolean(Object.values(users).filter((user) => user.role === 'evil').length);
-  };
-
   socket.on('start', async () => {
     io.in(socket.game.id).emit('game started');
 
-    games[socket.game.id].status = 'closed';
+    startModule.closeGame(socket.game.id);
 
     updateOpenGames();
 
