@@ -51,14 +51,14 @@ export const initNewGame = (user: ClientUser) => {
 };
 
 export const joinGame = (user: ClientUser, gameID: string) => {
-  const currentGame = games[gameID];
-  currentGame.users[user.userID] = { username: user.username, role: '', playerId: '' };
+  const joinedGame = games[gameID];
+  joinedGame.users[user.userID] = { username: user.username, role: '', playerId: '' };
 
-  if (Object.values(currentGame.users).length === 7) {
-    currentGame.status = 'full';
+  if (Object.values(joinedGame.users).length === 7) {
+    joinedGame.status = 'full';
   }
 
-  return currentGame.game;
+  return joinedGame.game;
 };
 
 export const setUpGoodPlayer = (user: ClientUser, gameID: string) => {
