@@ -39,7 +39,7 @@ io.on('connection', (socket: PlayerSocket) => {
 
   const playerStepOptions = () => {
     let possibleSteps: Position[] = [];
-    if (socket.game.isCaught(socket.player)) {
+    if (socket.game.isCaught(socket.player.id)) {
       possibleSteps = getClosestWayHome(
         socket.player.position,
         socket.player.home,
@@ -67,12 +67,12 @@ io.on('connection', (socket: PlayerSocket) => {
 
     const seenBy = getSeenBy(socket.player, socket.game);
     socket.player.visible = Boolean(seenBy.length);
-    if (seenBy.length && !socket.game.isCaught(socket.player)) {
+    if (seenBy.length && !socket.game.isCaught(socket.player.id)) {
       const msg = [{ text: 'You are seen! Click back if you want to take a different route' }];
       logProgress(msg, { socket });
     }
 
-    if (socket.game.isCaught(socket.player) && !socket.player.visible) {
+    if (socket.game.isCaught(socket.player.id) && !socket.player.visible) {
       socket.game.removeCaughtPlayer(socket.player);
 
       const msg = [{ text: 'You are out of sight and can move freely again' }];

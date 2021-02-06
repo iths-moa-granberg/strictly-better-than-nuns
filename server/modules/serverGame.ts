@@ -125,8 +125,8 @@ class Game {
     this.enemies.e2.playersVisible = this.enemies.e2.playersVisible.filter((playerID) => playerID !== id);
   };
 
-  isCaught = (player: Player) => {
-    return this.caughtPlayers.includes(player.id);
+  isCaught = (playerID: string) => {
+    return this.caughtPlayers.includes(playerID);
   };
 
   generatePlayerInfo = (username: string) => {

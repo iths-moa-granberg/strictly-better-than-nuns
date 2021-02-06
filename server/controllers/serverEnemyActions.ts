@@ -168,7 +168,7 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     const sound = getRandomSound();
     for (let player of socket.game.players) {
-      if (!socket.game.isCaught(player) && !player.visible) {
+      if (!socket.game.isCaught(player.id) && !player.visible) {
         const playerSound = getSoundReach(player.pace, sound);
         const heardTo = isHeard(player.position, socket.game.enemies, playerSound, enemy.id);
         if (heardTo) {
