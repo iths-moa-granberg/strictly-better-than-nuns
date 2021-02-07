@@ -1,9 +1,15 @@
 import * as boardUtils from './boardUtils';
 import positions from '../../src/shared/positions';
+import enemyPaths from './enemyPaths';
 
 import { Position } from '../../src/shared/sharedTypes';
+import Enemy from './serverEnemy';
 
-describe('server-board', () => {
+describe('board-utils', () => {
+  const filterDuplicates = (arr: Position[]) => {
+    return arr.filter((position: Position, index: number) => arr.indexOf(position) === index);
+  };
+
   describe('getReachable', () => {
     const start = positions[1];
 
@@ -51,6 +57,139 @@ describe('server-board', () => {
         positions[43],
       ];
       expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('getEnemyStandardReachable', () => {
+    it('should return positions enemy can reach along their path', () => {
+      const path = enemyPaths.lightPurpleA;
+      const result = boardUtils.getEnemyStandardReachable(positions[101], path, 3);
+
+      expect(result).toEqual([positions[100], positions[93], positions[94]]);
+    });
+  });
+
+  describe('getClosestWayHome', () => {
+    it('should return postions leading the closest way home', () => {
+      const result = boardUtils.getClosestWayHome(positions[17], positions[1], true, 5);
+
+      const expectedResult = [positions[1], positions[21], positions[20], positions[19], positions[18]];
+
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should return positions correctly with multiple possible paths', () => {
+      const result = boardUtils.getClosestWayHome(positions[44], positions[24], true, 5);
+
+      const filteredResult = filterDuplicates(result);
+      const expectedResult = [positions[24], positions[42], positions[43], positions[45]];
+
+      expect(filteredResult).toEqual(expectedResult);
+    });
+  });
+
+  describe('getClosestPaths', () => {
+    it('should return closest paths with one path', () => {
+      const result = boardUtils.getClosestPaths(positions[1], positions[19], true);
+
+      const filteredResult = result.map((path) => filterDuplicates(path));
+      const expectedResult = [[positions[19], positions[20], positions[21], positions[1]]];
+
+      expect(filteredResult).toEqual(expectedResult);
+    });
+
+    it('should return closest paths with multiple paths', () => {
+      const result = boardUtils.getClosestPaths(positions[105], positions[79], true);
+
+      const filteredResult = result.map((path) => filterDuplicates(path));
+      const expectedResult = [
+        [positions[79], positions[78], positions[88], positions[105]],
+        [positions[79], positions[87], positions[88], positions[105]],
+        [positions[79], positions[87], positions[106], positions[105]],
+      ];
+
+      expect(filteredResult).toEqual(expectedResult);
+    });
+
+    it('should filter positions behind locked doors if player has no key', () => {
+      const result = boardUtils.getClosestPaths(positions[19], positions[40], false);
+
+      const filteredResult = result.map((path) => filterDuplicates(path));
+      const expectedResult = [[positions[40], positions[39], positions[27], positions[18], positions[19]]];
+
+      expect(filteredResult).toEqual(expectedResult);
+    });
+  });
+
+  describe('getClosestWayToPath', () => {
+    it('should get closest way to enemy path', () => {
+      const result = boardUtils.getClosestWayToPath(positions[20], enemyPaths.lightPurpleA, 4);
+
+      const filteredResult = filterDuplicates(result);
+      const expectedResult = [positions[26], positions[19]];
+
+      expect(filteredResult).toEqual(expectedResult);
+    });
+
+    it('should limit path-lengths based on steps left', () => {
+      const result = boardUtils.getClosestWayToPath(positions[16], enemyPaths.lightPurpleA, 2);
+
+      const filteredResult = filterDuplicates(result);
+      const expectedResult = [positions[18], positions[17]];
+
+      expect(filteredResult).toEqual(expectedResult);
+    });
+  });
+
+  describe('isHeard', () => {
+    it('should return heard player from one direction correctly', () => {
+      const playerPosition = positions[3];
+      const enemies = {
+        e1: new Enemy('e1'),
+        e2: new Enemy('e2'),
+        username: 'username',
+      };
+      const sound = 3;
+      const enemyID = 'e1';
+
+      const result = boardUtils.isHeard(playerPosition, enemies, sound, enemyID);
+
+      const expectedResult = [{ id: 19, enemyID: 'e1' }];
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should return heard player from multiple directions correctly', () => {
+      const playerPosition = positions[27];
+      const enemies = {
+        e1: new Enemy('e1'),
+        e2: new Enemy('e2'),
+        username: 'username',
+      };
+      const sound = 4;
+      const enemyID = 'e1';
+
+      const result = boardUtils.isHeard(playerPosition, enemies, sound, enemyID);
+
+      const expectedResult = [
+        { id: 19, enemyID: 'e1' },
+        { id: 40, enemyID: 'e1' },
+      ];
+      expect(result).toEqual(expectedResult);
+    });
+
+    it('should return silent player correctly', () => {
+      const playerPosition = positions[3];
+      const enemies = {
+        e1: new Enemy('e1'),
+        e2: new Enemy('e2'),
+        username: 'username',
+      };
+      const sound = 1;
+      const enemyID = 'e1';
+
+      const result = boardUtils.isHeard(playerPosition, enemies, sound, enemyID);
+
+      expect(result).toBe(undefined);
     });
   });
 
