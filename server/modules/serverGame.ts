@@ -5,7 +5,7 @@ import Enemy from './serverEnemy';
 
 import Player from './serverPlayer';
 import { Enemies } from '../serverTypes';
-import { SoundToken, SightToken, VisiblePlayers, ClientUser } from '../../src/shared/sharedTypes';
+import { SoundToken, SightToken, VisiblePlayers, ClientUser, Position } from '../../src/shared/sharedTypes';
 
 interface Game {
   id: string;
@@ -82,12 +82,6 @@ class Game {
     return Boolean(this.soundTokens.find((token) => token.enemyID === enemyID));
   };
 
-  getVisiblePlayers = () => {
-    return this.players
-      .filter((player) => player.visible)
-      .map((player) => ({ id: player.id, position: player.position })) as VisiblePlayers;
-  };
-
   checkEnemyTarget = (enemy: Enemy) => {
     for (let player of this.players) {
       if (enemy.checkTarget(player) && !this.caughtPlayers.includes(player.id)) {
@@ -155,6 +149,78 @@ class Game {
 
   getServerPosition = (id: number) => {
     return positions[id];
+  };
+
+  logSound = () => {
+    if (this.newSoundLog.find((id) => id === 'e1') && this.newSoundLog.find((id) => id === 'e2')) {
+      const msg = [{ text: 'Both enemies heard someone!' }];
+      logProgress(msg, { room: this.id });
+    } else {
+      if (this.newSoundLog.find((id) => id === 'e1')) {
+        const msg = [
+          {
+            text: 'Enemy 1',
+            id: 'e1',
+          },
+          { text: ' heard someone!' },
+        ];
+        logProgress(msg, { room: this.id });
+      }
+      if (this.newSoundLog.find((id) => id === 'e2')) {
+        const msg = [
+          {
+            text: 'Enemy 2',
+            id: 'e2',
+          },
+          { text: ' heard someone!' },
+        ];
+        logProgress(msg, { room: this.id });
+      }
+    }
+    this.newSoundLog = [];
+  };
+
+  _getVisiblePlayers = () => {
+    return this.players
+      .filter((player) => player.visible)
+      .map((player) => ({ id: player.id, position: player.position })) as VisiblePlayers;
+  };
+
+  _getDirection = (position: Position, lastPosition: Position) => {
+    if (position.x !== lastPosition.x && position.y !== lastPosition.y) {
+      if (Math.abs(position.x - lastPosition.x) > Math.abs(position.y - lastPosition.y)) {
+        return position.x > lastPosition.x ? 'right' : 'left';
+      }
+      return position.y > lastPosition.y ? 'down' : 'up';
+    } else if (position.x === lastPosition.x) {
+      return position.y > lastPosition.y ? 'down' : 'up';
+    } else {
+      return position.x > lastPosition.x ? 'right' : 'left';
+    }
+  };
+
+  getUpdatedBoardData = () => {
+    const visiblePlayers = this._getVisiblePlayers();
+    visiblePlayers.push({
+      id: 'e1',
+      position: this.enemies.e1.position,
+      direction: this._getDirection(this.enemies.e1.position, this.enemies.e1.lastPosition),
+    });
+    visiblePlayers.push({
+      id: 'e2',
+      position: this.enemies.e2.position,
+      direction: this._getDirection(this.enemies.e2.position, this.enemies.e2.lastPosition),
+    });
+
+    const reachablePositions: Position[] = [];
+
+    return {
+      visiblePlayers,
+      soundTokens: this.soundTokens,
+      sightTokens: this.sightTokens,
+      enemyPaths: [this.enemies.e1.pathName, this.enemies.e2.pathName],
+      reachablePositions,
+    };
   };
 }
 

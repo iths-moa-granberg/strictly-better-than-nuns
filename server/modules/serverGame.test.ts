@@ -148,25 +148,6 @@ describe('serverGame', () => {
     });
   });
 
-  describe('getVisiblePlayers', () => {
-    it('should return visible players', () => {
-      const visiblePlayer = new Player({
-        id: '2',
-        home: positions[4],
-        key: positions[5],
-        goal: positions[6],
-        username: 'visible',
-      });
-      visiblePlayer.visible = true;
-      game.players = [visiblePlayer, player];
-
-      const result = game.getVisiblePlayers();
-
-      const expectedResult = [{ id: '2', position: positions[4] }];
-      expect(result).toEqual(expectedResult);
-    });
-  });
-
   describe('checkEnemyTarget', () => {
     beforeEach(() => {
       player.position = positions[26];
@@ -324,6 +305,153 @@ describe('serverGame', () => {
       const result = game.getServerPosition(1);
 
       expect(result).toBe(positions[1]);
+    });
+  });
+
+  describe('logSound', () => {
+    it('should log when both enemies heard someone correctly', () => {
+      game.newSoundLog = ['e1', 'e2'];
+
+      game.logSound();
+
+      const expectedResult = [{ text: 'Both enemies heard someone!' }];
+      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+    });
+
+    it('should log when enemy1 heard someone correctly', () => {
+      game.newSoundLog = ['e1'];
+
+      game.logSound();
+
+      const expectedResult = [{ text: 'Enemy 1', id: 'e1' }, { text: ' heard someone!' }];
+      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+    });
+
+    it('should log when enemy2 heard someone correctly', () => {
+      game.newSoundLog = ['e2'];
+
+      game.logSound();
+
+      const expectedResult = [{ text: 'Enemy 2', id: 'e2' }, { text: ' heard someone!' }];
+      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+    });
+
+    it('should not log if no enemy heard anything', () => {
+      game.newSoundLog = [];
+
+      game.logSound();
+
+      expect(logProgress).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  describe('_getVisiblePlayers', () => {
+    it('should return visible players', () => {
+      const visiblePlayer = new Player({
+        id: '2',
+        home: positions[4],
+        key: positions[5],
+        goal: positions[6],
+        username: 'visible',
+      });
+      visiblePlayer.visible = true;
+      game.players = [visiblePlayer, player];
+
+      const result = game._getVisiblePlayers();
+
+      const expectedResult = [{ id: '2', position: positions[4] }];
+      expect(result).toEqual(expectedResult);
+    });
+  });
+
+  describe('_getDirection', () => {
+    it('should return diagonally right correctly', () => {
+      const result = game._getDirection(positions[46], positions[47]);
+      expect(result).toBe('right');
+    });
+
+    it('should return diagonally left correctly', () => {
+      const result = game._getDirection(positions[47], positions[46]);
+      expect(result).toBe('left');
+    });
+
+    it('should return diagonally down correctly', () => {
+      const result = game._getDirection(positions[48], positions[63]);
+      expect(result).toBe('down');
+    });
+
+    it('should return diagonally up correctly', () => {
+      const result = game._getDirection(positions[63], positions[48]);
+      expect(result).toBe('up');
+    });
+
+    it('should return down correctly', () => {
+      const result = game._getDirection(positions[18], positions[27]);
+      expect(result).toBe('down');
+    });
+
+    it('should return up correctly', () => {
+      const result = game._getDirection(positions[18], positions[4]);
+      expect(result).toBe('up');
+    });
+
+    it('should return right correctly', () => {
+      const result = game._getDirection(positions[18], positions[17]);
+      expect(result).toBe('right');
+    });
+
+    it('should return left correctly', () => {
+      const result = game._getDirection(positions[18], positions[19]);
+      expect(result).toBe('left');
+    });
+  });
+
+  describe('getUpdatedBoardData', () => {
+    it('should return correct data', () => {
+      const result = game.getUpdatedBoardData();
+
+      const expectedVisiblePlayers = [
+        {
+          id: 'e1',
+          position: positions[26],
+          direction: 'up',
+        },
+        {
+          id: 'e2',
+          position: positions[26],
+          direction: 'up',
+        },
+      ];
+
+      expect(result.visiblePlayers).toEqual(expectedVisiblePlayers);
+      expect(result.soundTokens).toBe(game.soundTokens);
+      expect(result.sightTokens).toBe(game.sightTokens);
+      expect(result.enemyPaths[0]).toBe(game.enemies.e1.pathName);
+      expect(result.enemyPaths[1]).toBe(game.enemies.e2.pathName);
+      expect(result.reachablePositions).toEqual([]);
+    });
+
+    it('should return visiblePlayers correctly when players are visible', () => {
+      player.visible = true;
+      game.players = [player];
+
+      const result = game.getUpdatedBoardData();
+
+      const expectedVisiblePlayers = [
+        { id: '1', position: positions[1] },
+        {
+          id: 'e1',
+          position: positions[26],
+          direction: 'up',
+        },
+        {
+          id: 'e2',
+          position: positions[26],
+          direction: 'up',
+        },
+      ];
+
+      expect(result.visiblePlayers).toEqual(expectedVisiblePlayers);
     });
   });
 });

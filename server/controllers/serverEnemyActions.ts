@@ -1,14 +1,6 @@
 import { io } from '../index';
 
-import {
-  updateBoard,
-  startNextTurn,
-  logProgress,
-  logSound,
-  getSeenBy,
-  updateBoardSocket,
-  selectInitialPaths,
-} from './sharedFunctions';
+import { updateBoard, startNextTurn, logProgress, updateBoardSocket, selectInitialPaths } from './sharedFunctions';
 import {
   getReachable,
   getEnemyStandardReachable,
@@ -16,6 +8,7 @@ import {
   getRandomSound,
   isHeard,
   getSoundReach,
+  getSeenBy,
 } from '../modules/boardUtils';
 
 import { ExtendedSocket } from '../serverTypes';
@@ -53,7 +46,7 @@ io.on('connection', (socket: ExtendedSocket) => {
       socket.game.heardSomeone(currentEnemy.id) ||
       currentEnemy.playersVisible.length
     ) {
-      const enemiesPositionsIDn = [socket.game.enemies.e1.position.id, socket.game.enemies.e2.position.id]
+      const enemiesPositionsIDn = [socket.game.enemies.e1.position.id, socket.game.enemies.e2.position.id];
       possibleSteps = getReachable(currentEnemy.position, currentEnemy.stepsLeft, true, true, enemiesPositionsIDn);
     } else if (currentEnemy.isOnPath()) {
       possibleSteps = getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
@@ -81,7 +74,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     socket.game.checkEnemyTarget(currentEnemy);
 
     for (let player of socket.game.players) {
-      const seenBy = getSeenBy(player, socket.game);
+      const seenBy = getSeenBy(player, socket.game.enemies);
       if (seenBy.length) {
         player.visible = true;
         player.updatePathVisibility(player.position, seenBy);
@@ -216,7 +209,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     if (socket.game.enemyListened == 1) {
       enemyListen(socket.game.enemies.e2);
     } else if (socket.game.enemyListened == 2) {
-      logSound(socket.game);
+      socket.game.logSound();
 
       socket.game.enemyListened = 0;
       updateBoard(socket.game);

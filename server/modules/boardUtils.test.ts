@@ -1,11 +1,19 @@
 import * as boardUtils from './boardUtils';
 import positions from '../../src/shared/positions';
 import enemyPaths from './enemyPaths';
+import Enemy from './serverEnemy';
+import Player from './serverPlayer';
 
 import { Position } from '../../src/shared/sharedTypes';
-import Enemy from './serverEnemy';
+import { Enemies } from '../serverTypes';
+
+jest.mock('../controllers/sharedFunctions', () => ({}));
 
 describe('board-utils', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+  });
+
   const filterDuplicates = (arr: Position[]) => {
     return arr.filter((position: Position, index: number) => arr.indexOf(position) === index);
   };
@@ -214,159 +222,94 @@ describe('board-utils', () => {
     });
   });
 
-  describe('isSeen', () => {
-    it('is invisible behinds wall', () => {
-      const hiddenPosition = { x: 3, y: 2, id: 2 } as Position;
-      const enemyPos = { x: 2, y: 2, inSight: [1] } as Position;
-      const enemyLastPos = { x: 1, y: 2 } as Position;
+  describe('getSeenBy', () => {
+    let player: Player;
+    let enemies: Enemies;
 
-      expect(boardUtils.isSeen(hiddenPosition, enemyPos, enemyLastPos)).toEqual(false);
+    beforeEach(() => {
+      player = new Player({
+        id: '1',
+        home: positions[1],
+        key: positions[2],
+        goal: positions[3],
+        username: 'username',
+      });
+
+      enemies = {
+        e1: new Enemy('e1'),
+        e2: new Enemy('e2'),
+        username: 'enemyUsername',
+      };
     });
 
-    describe('should work when walking straight', () => {
-      const enemyPos = { x: 2, y: 2, inSight: [1] } as Position;
-      const enemyLastPos = { x: 1, y: 2 } as Position;
+    it('should return player visible by both enemies correctly', () => {
+      player.position = positions[21];
 
-      const positions = [
-        { direction: 'same position', pos: { x: 2, y: 2, id: 1 } },
-        { direction: 'straight', pos: { x: 3, y: 2, id: 1 } },
-        { direction: 'right', pos: { x: 2, y: 3, id: 1 } },
-        { direction: 'left', pos: { x: 2, y: 1, id: 1 } },
-        { direction: 'diagonally right', pos: { x: 3, y: 3, id: 1 } },
-        { direction: 'diagonally left', pos: { x: 3, y: 1, id: 1 } },
-      ] as { direction: string; pos: Position }[];
+      enemies.e1.lastPosition = positions[4];
+      enemies.e1.position = positions[18];
+      enemies.e2.lastPosition = positions[27];
+      enemies.e2.position = positions[18];
 
-      const hiddenPositions = [
-        { direction: 'right behind', pos: { x: 1, y: 2, id: 1 } },
-        { direction: 'behind diagonally right', pos: { x: 1, y: 3, id: 1 } },
-        { direction: 'behind diagonally left', pos: { x: 1, y: 1, id: 1 } },
-      ] as { direction: string; pos: Position }[];
+      const result = boardUtils.getSeenBy(player, enemies);
 
-      positions.forEach(({ direction, pos }) => {
-        it(`is seen ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPos)).toEqual(true);
-        });
-      });
-
-      hiddenPositions.forEach(({ direction, pos }) => {
-        it(`is not seen when ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPos)).toEqual(false);
-        });
-      });
+      expect(result).toEqual(['e1', 'e2']);
     });
 
-    const enemyPos = { x: 3, y: 3, inSight: [1] } as Position;
+    it('should return player visible by one enemy correctly', () => {
+      player.position = positions[21];
+      enemies.e1.lastPosition = positions[17];
+      enemies.e1.position = positions[18];
 
-    describe('should work when walking diagonally up', () => {
-      const enemyLastPosUp = { x: 2, y: 5 } as Position;
+      const result = boardUtils.getSeenBy(player, enemies);
 
-      const positionsUp = [
-        { direction: 'up', pos: { x: 3, y: 2, id: 1 } },
-        { direction: 'right', pos: { x: 4, y: 3, id: 1 } },
-        { direction: 'left', pos: { x: 2, y: 1, id: 1 } },
-      ] as { direction: string; pos: Position }[];
-
-      const hiddenPositionsUp = [
-        { direction: 'down', pos: { x: 3, y: 4, id: 1 } },
-        { direction: 'behind right', pos: { x: 4, y: 4, id: 1 } },
-        { direction: 'behind left', pos: { x: 2, y: 4, id: 1 } },
-      ] as { direction: string; pos: Position }[];
-
-      positionsUp.forEach(({ direction, pos }) => {
-        it(`when walkin up, is seen ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosUp)).toEqual(true);
-        });
-      });
-
-      hiddenPositionsUp.forEach(({ direction, pos }) => {
-        it(`when walking up, is not seen when ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosUp)).toEqual(false);
-        });
-      });
+      expect(result).toEqual(['e1']);
     });
 
-    describe('should work when walking diagonally down', () => {
-      const enemyLastPosDown = { x: 2, y: 1 } as Position;
+    it('should return invisible player correctly', () => {
+      const result = boardUtils.getSeenBy(player, enemies);
 
-      const positionsDown = [
-        { direction: 'down', pos: { x: 3, y: 4, id: 1 } },
-        { direction: 'right', pos: { x: 4, y: 3, id: 1 } },
-        { direction: 'left', pos: { x: 2, y: 3, id: 1 } },
-      ] as { direction: string; pos: Position }[];
-
-      const hiddenPositionsDown = [
-        { direction: 'up', pos: { x: 3, y: 2, id: 1 } },
-        { direction: 'behind right', pos: { x: 4, y: 2, id: 1 } },
-        { direction: 'behind left', pos: { x: 2, y: 2, id: 1 } },
-      ] as { direction: string; pos: Position }[];
-
-      positionsDown.forEach(({ direction, pos }) => {
-        it(`when walkin Down, is seen ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosDown)).toEqual(true);
-        });
-      });
-
-      hiddenPositionsDown.forEach(({ direction, pos }) => {
-        it(`when walking Down, is not seen when ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosDown)).toEqual(false);
-        });
-      });
+      expect(result).toEqual([]);
     });
 
-    describe('should work when walking diagonally left', () => {
-      const enemyLastPosLeft = { x: 6, y: 2 } as Position;
+    it('should return already visible player correctly', () => {
+      player.position = positions[21];
 
-      const positionsLeft = [
-        { direction: 'up', pos: { x: 3, y: 2, id: 1 } },
-        { direction: 'down', pos: { x: 3, y: 4, id: 1 } },
-        { direction: 'left', pos: { x: 2, y: 3, id: 1 } },
-      ] as { direction: string; pos: Position }[];
+      enemies.e1.lastPosition = positions[4];
+      enemies.e1.position = positions[18];
+      enemies.e1.playersVisible = [player.id];
+      enemies.e2.lastPosition = positions[27];
+      enemies.e2.position = positions[18];
+      enemies.e2.playersVisible = [player.id];
 
-      const hiddenPositionsLeft = [
-        { direction: 'right', pos: { x: 4, y: 3, id: 1 } },
-        { direction: 'behind up', pos: { x: 4, y: 2, id: 1 } },
-        { direction: 'behind down', pos: { x: 4, y: 4, id: 1 } },
-      ] as { direction: string; pos: Position }[];
+      const result = boardUtils.getSeenBy(player, enemies);
 
-      positionsLeft.forEach(({ direction, pos }) => {
-        it(`when walkin Left, is seen ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosLeft)).toEqual(true);
-        });
-      });
-
-      hiddenPositionsLeft.forEach(({ direction, pos }) => {
-        it(`when walking Left, is not seen when ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosLeft)).toEqual(false);
-        });
-      });
+      expect(result).toEqual(['e1', 'e2']);
     });
 
-    describe('should work when walking diagonally right', () => {
-      const enemyLastPosRight = { x: 1, y: 2 } as Position;
+    it('should return player visible diagonally up/down correctly', () => {
+      player.position = positions[64];
 
-      const positionsRight = [
-        { direction: 'down', pos: { x: 3, y: 4, id: 1 } },
-        { direction: 'up', pos: { x: 3, y: 2, id: 1 } },
-        { direction: 'right', pos: { x: 5, y: 3, id: 1 } },
-      ] as { direction: string; pos: Position }[];
+      enemies.e1.lastPosition = positions[91];
+      enemies.e1.position = positions[75];
+      enemies.e2.lastPosition = positions[48];
+      enemies.e2.position = positions[63];
 
-      const hiddenPositionsRight = [
-        { direction: 'left', pos: { x: 2, y: 3, id: 1 } },
-        { direction: 'behind up', pos: { x: 2, y: 1, id: 1 } },
-        { direction: 'behind down', pos: { x: 2, y: 5, id: 1 } },
-      ] as { direction: string; pos: Position }[];
+      const result = boardUtils.getSeenBy(player, enemies);
 
-      positionsRight.forEach(({ direction, pos }) => {
-        it(`when walkin Right, is seen ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosRight)).toEqual(true);
-        });
-      });
+      expect(result).toEqual(['e1', 'e2']);
+    });
 
-      hiddenPositionsRight.forEach(({ direction, pos }) => {
-        it(`when walking Right, is not seen when ${direction}`, () => {
-          expect(boardUtils.isSeen(pos, enemyPos, enemyLastPosRight)).toEqual(false);
-        });
-      });
+    it('should return player visible diagonally right/left correctly', () => {
+      player.position = positions[63];
+
+      enemies.e1.lastPosition = positions[46];
+      enemies.e1.position = positions[47];
+      enemies.e2.lastPosition = positions[75];
+      enemies.e2.position = positions[64];
+
+      const result = boardUtils.getSeenBy(player, enemies);
+
+      expect(result).toEqual(['e1', 'e2']);
     });
   });
 });

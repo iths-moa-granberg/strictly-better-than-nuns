@@ -1,15 +1,14 @@
 import { io } from '../index';
 
+import { updateBoard, logProgress, updatePlayer, updateBoardSocket, gameOver } from './sharedFunctions';
 import {
-  updateBoard,
-  logProgress,
-  logSound,
+  getClosestWayHome,
+  getReachable,
   getSeenBy,
-  updatePlayer,
-  updateBoardSocket,
-  gameOver,
-} from './sharedFunctions';
-import { getClosestWayHome, getReachable, getSoundReach, getRandomSound, isHeard } from '../modules/boardUtils';
+  getSoundReach,
+  getRandomSound,
+  isHeard,
+} from '../modules/boardUtils';
 
 import { PlayerSocket, Enemies } from '../serverTypes';
 import {
@@ -53,7 +52,7 @@ io.on('connection', (socket: PlayerSocket) => {
         socket.player.stepsLeft,
         socket.player.hasKey,
         socket.player.isEvil,
-        enemiesPositionsIDn,
+        enemiesPositionsIDn
       );
     }
     const params: OnPossibleSteps = { possibleSteps };
@@ -65,7 +64,7 @@ io.on('connection', (socket: PlayerSocket) => {
     socket.player.position = serverPosition;
     socket.player.stepsLeft--;
 
-    const seenBy = getSeenBy(socket.player, socket.game);
+    const seenBy = getSeenBy(socket.player, socket.game.enemies);
     socket.player.visible = Boolean(seenBy.length);
     if (seenBy.length && !socket.game.isCaught(socket.player.id)) {
       const msg = [{ text: 'You are seen! Click back if you want to take a different route' }];
@@ -191,7 +190,7 @@ io.on('connection', (socket: PlayerSocket) => {
         updatePlayer(player, socket.game.id);
       }
 
-      logSound(socket.game);
+      socket.game.logSound();
 
       if (socket.game.winners.length) {
         gameOver(socket.game.winners, socket.game.id);

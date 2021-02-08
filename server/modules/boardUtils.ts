@@ -1,6 +1,7 @@
 import positions from '../../src/shared/positions';
 import { Position } from '../../src/shared/sharedTypes';
 import { Enemies } from '../serverTypes';
+import Player from './serverPlayer';
 
 export const getReachable = (
   startPosition: Position,
@@ -131,7 +132,7 @@ const _getPlaceInQueue = (position: Position, queue: Position[][]) => {
 
 export const isHeard = (playerPos: Position, enemies: Enemies, sound: number, enemyID: 'e1' | 'e2') => {
   const enemyPos = enemies[enemyID].position;
-  const enemiesPositionsIDn = [enemies.e1.position.id, enemies.e2.position.id]
+  const enemiesPositionsIDn = [enemies.e1.position.id, enemies.e2.position.id];
   const reaches: Position[] = getReachable(playerPos, sound, true, true, enemiesPositionsIDn);
 
   if (reaches.find((pos) => pos.id === enemyPos.id)) {
@@ -157,7 +158,7 @@ export const getSoundReach = (pace: string, sound: number) => {
   return pace === 'stand' ? sound - 3 : pace === 'sneak' ? sound - 2 : pace === 'walk' ? sound - 1 : sound;
 };
 
-export const isSeen = (position: Position, enemyPos: Position, enemyLastPos: Position) => {
+const isSeen = (position: Position, enemyPos: Position, enemyLastPos: Position) => {
   if (!enemyPos.inSight.includes(position.id)) {
     return false;
   }
@@ -177,4 +178,27 @@ export const isSeen = (position: Position, enemyPos: Position, enemyLastPos: Pos
   }
 
   return isVisibleFromDirection(enemyPos.x === enemyLastPos.x ? 'y' : 'x');
+};
+
+export const getSeenBy = (player: Player, enemies: Enemies) => {
+  let seenBy: ('e1' | 'e2')[] = [];
+  if (
+    isSeen(player.position, enemies.e1.position, enemies.e1.lastPosition) ||
+    enemies.e1.position.id === player.position.id
+  ) {
+    seenBy.push('e1');
+    if (!enemies.e1.playersVisible.includes(player.id)) {
+      enemies.e1.playersVisible.push(player.id);
+    }
+  }
+  if (
+    isSeen(player.position, enemies.e2.position, enemies.e2.lastPosition) ||
+    enemies.e2.position.id === player.position.id
+  ) {
+    seenBy.push('e2');
+    if (!enemies.e2.playersVisible.includes(player.id)) {
+      enemies.e2.playersVisible.push(player.id);
+    }
+  }
+  return seenBy;
 };
