@@ -2,6 +2,7 @@ import { logProgress } from '../controllers/sharedFunctions';
 
 import { Position } from '../../src/shared/sharedTypes';
 import { PlayerSocket } from '../serverTypes';
+import positions from '../../src/shared/positions';
 
 interface Player {
   id: string;
@@ -87,6 +88,12 @@ class Player {
     this.path = [{ position: this.position, visible: this.visible, enemyID }];
   };
 
+  resetMove = () => {
+    this.position = this.path[0].position;
+    this.visible = this.path[0].visible;
+    this.resetPath(this.path[0].enemyID);
+  };
+
   updatePathVisibility = (position: Position, enemyID: ('e1' | 'e2')[]) => {
     if (enemyID.length) {
       this.path.forEach((obj) => {
@@ -98,6 +105,28 @@ class Player {
     } else {
       console.log('Error: player.updatePathVisibility called with empty enemyID');
     }
+  };
+
+  selectPace = (pace: string, firstTurn?: boolean) => {
+    this.pace = pace;
+    this.stepsLeft = pace === 'stand' ? 0 : pace === 'sneak' ? 2 : pace === 'walk' ? 3 : 5;
+
+    if (firstTurn) {
+      this.stepsLeft = pace === 'run' ? 8 : this.stepsLeft * 2;
+    }
+  };
+
+  takeStep = (positionID: number) => {
+    this.position = positions[positionID];
+    this.stepsLeft--;
+  };
+
+  addToPath = (enemyID: ('e1' | 'e2')[]) => {
+    this.path.push({
+      position: this.position,
+      visible: this.visible,
+      enemyID,
+    });
   };
 }
 

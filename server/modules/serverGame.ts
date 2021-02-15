@@ -222,6 +222,25 @@ class Game {
       reachablePositions,
     };
   };
+
+  playerPlacedToken = (positionID: number,  enemyID: 'e1' | 'e2') => {
+    this.addToken(positionID, 'sound', enemyID);
+    this.newSoundLog.push(enemyID);
+  };
+
+  playerLeavesSight = (player: Player) => {
+    let path = player.path.reverse();
+
+    for (let obj of path) {
+      if (obj.visible && obj != path[0]) {
+        this.addToken(obj.position.id, 'sight', obj.enemyID);
+
+        const msg = [{ text: player.username, id: player.id }, { text: ' has disappeared' }];
+        logProgress(msg, { room: this.id });
+        break;
+      }
+    }
+  };
 }
 
 export default Game;

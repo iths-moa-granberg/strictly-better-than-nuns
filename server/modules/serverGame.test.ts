@@ -18,6 +18,7 @@ describe('serverGame', () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+
     game = new Game();
     player = new Player({
       id: '1',
@@ -223,7 +224,6 @@ describe('serverGame', () => {
       game.removeCaughtPlayer(player);
 
       expect(spy).toHaveBeenCalledWith('1');
-      spy.mockRestore();
     });
   });
 
@@ -452,6 +452,65 @@ describe('serverGame', () => {
       ];
 
       expect(result.visiblePlayers).toEqual(expectedVisiblePlayers);
+    });
+  });
+
+  describe('playerPlacedToken', () => {
+    it('should update soundTokens', () => {
+      expect(game.soundTokens).toEqual([]);
+
+      game.playerPlacedToken(1, 'e1');
+
+      expect(game.soundTokens).toEqual([{ id: 1, enemyID: 'e1' }]);
+    });
+
+    it('should update newSoundLog', () => {
+      expect(game.newSoundLog).toEqual([]);
+
+      game.playerPlacedToken(1, 'e1');
+
+      expect(game.newSoundLog).toEqual(['e1']);
+    });
+  });
+
+  describe('playerLeavesSight', () => {
+    it('should update sighttokens correctly', () => {
+      player.path = [
+        { position: positions[1], visible: false, enemyID: [] },
+        { position: positions[2], visible: true, enemyID: ['e1'] },
+        { position: positions[3], visible: false, enemyID: [] },
+      ];
+
+      game.playerLeavesSight(player);
+
+      const expectedResult = [{ id: 2, enemyID: ['e1'] }];
+      expect(game.sightTokens).toEqual(expectedResult);
+    });
+
+    it('should emit progress if player left sight', () => {
+      player.path = [
+        { position: positions[1], visible: false, enemyID: [] },
+        { position: positions[2], visible: true, enemyID: ['e1'] },
+        { position: positions[3], visible: false, enemyID: [] },
+      ];
+
+      game.playerLeavesSight(player);
+
+      const expectedResult = [{ text: 'username', id: '1' }, { text: ' has disappeared' }];
+      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+    });
+
+    it('should not do anything if player was invisible whole path', () => {
+      player.path = [
+        { position: positions[1], visible: false, enemyID: [] },
+        { position: positions[2], visible: false, enemyID: [] },
+        { position: positions[3], visible: false, enemyID: [] },
+      ];
+
+      game.playerLeavesSight(player);
+
+      expect(logProgress).toHaveBeenCalledTimes(0);
+      expect(game.sightTokens).toEqual([]);
     });
   });
 });

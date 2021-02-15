@@ -133,6 +133,24 @@ describe('serverPlayer', () => {
     });
   });
 
+  describe('resetMove', () => {
+    it('should update correctly', () => {
+      player.path = [
+        { position: positions[10], visible: true, enemyID: ['e1'] },
+        { position: positions[11], visible: false, enemyID: [] },
+        { position: positions[12], visible: false, enemyID: [] },
+      ];
+
+      player.resetMove();
+
+      const expectedPath = [{ position: positions[10], visible: true, enemyID: ['e1'] }];
+
+      expect(player.position).toBe(positions[10]);
+      expect(player.visible).toBe(true);
+      expect(player.path).toEqual(expectedPath);
+    });
+  });
+
   describe('updatePathVisibility', () => {
     beforeEach(() => {
       player.path.push({ position: positions[2], visible: false, enemyID: [] });
@@ -152,6 +170,73 @@ describe('serverPlayer', () => {
       player.updatePathVisibility(positions[2], []);
 
       expect(player.path).toEqual(expectedOutput);
+    });
+  });
+
+  describe('selectPace', () => {
+    describe('sets pace correctly', () => {
+      it.each`
+        pace       | expectedStepsLeft
+        ${'stand'} | ${0}
+        ${'sneak'} | ${2}
+        ${'walk'}  | ${3}
+        ${'run'}   | ${5}
+      `('pace $pace sets steps left to $expectedStepsLeft', ({ pace, expectedStepsLeft }) => {
+        player.selectPace(pace);
+
+        expect(player.pace).toEqual(pace);
+        expect(player.stepsLeft).toEqual(expectedStepsLeft);
+      });
+    });
+
+    describe('handles first turn correctly', () => {
+      it.each`
+        pace       | expectedStepsLeft
+        ${'stand'} | ${0}
+        ${'sneak'} | ${4}
+        ${'walk'}  | ${6}
+        ${'run'}   | ${8}
+      `('pace $pace sets steps left to $expectedStepsLeft', ({ pace, expectedStepsLeft }) => {
+        player.selectPace(pace, true);
+
+        expect(player.pace).toEqual(pace);
+        expect(player.stepsLeft).toEqual(expectedStepsLeft);
+      });
+    });
+  });
+
+  describe('takeStep', () => {
+    it('should update correctly', () => {
+      player.stepsLeft = 1;
+
+      player.takeStep(2);
+
+      expect(player.position).toEqual(positions[2]);
+      expect(player.stepsLeft).toEqual(0);
+    });
+  });
+
+  describe('addToPath', () => {
+    it('should update correctly', () => {
+      player.position = positions[2];
+      player.visible = true;
+
+      player.addToPath(['e1']);
+
+      const expectedResult = [
+        {
+          position: positions[1],
+          visible: false,
+          enemyID: [],
+        },
+        {
+          position: positions[2],
+          visible: true,
+          enemyID: ['e1'],
+        },
+      ];
+
+      expect(player.path).toEqual(expectedResult);
     });
   });
 });
