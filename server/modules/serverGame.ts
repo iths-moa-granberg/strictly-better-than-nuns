@@ -147,10 +147,6 @@ class Game {
     };
   };
 
-  getServerPosition = (id: number) => {
-    return positions[id];
-  };
-
   logSound = () => {
     if (this.newSoundLog.find((id) => id === 'e1') && this.newSoundLog.find((id) => id === 'e2')) {
       const msg = [{ text: 'Both enemies heard someone!' }];
@@ -223,7 +219,7 @@ class Game {
     };
   };
 
-  playerPlacedToken = (positionID: number,  enemyID: 'e1' | 'e2') => {
+  playerPlacedToken = (positionID: number, enemyID: 'e1' | 'e2') => {
     this.addToken(positionID, 'sound', enemyID);
     this.newSoundLog.push(enemyID);
   };

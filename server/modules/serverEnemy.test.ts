@@ -30,7 +30,7 @@ describe('serverEnemy', () => {
       const currentPositionID = enemy.position.id;
       enemy.stepsLeft = 2;
 
-      enemy.move(positions[1]);
+      enemy.move(1);
 
       expect(enemy.stepsLeft).toEqual(1);
       expect(enemy.lastPosition.id).toEqual(currentPositionID);
@@ -111,6 +111,42 @@ describe('serverEnemy', () => {
 
       expect(enemy.pathName).toEqual('pinkA');
       expect(enemy.path).toEqual(enemyPaths.pinkA);
+    });
+  });
+
+  describe('selectPace', () => {
+    it('should update pace correctly', () => {
+      enemy.selectPace('walk');
+
+      expect(enemy.pace).toBe('walk');
+    });
+
+    it.each`
+      pace      | expectedStepsLeft
+      ${'walk'} | ${4}
+      ${'run'}  | ${6}
+    `('pace $pace sets steps left to $expectedStepsLeft', ({ pace, expectedStepsLeft }) => {
+      enemy.selectPace(pace);
+
+      expect(enemy.pace).toEqual(pace);
+      expect(enemy.stepsLeft).toEqual(expectedStepsLeft);
+    });
+  });
+
+  describe('isFirstStep', () => {
+    it.each`
+      pace      | stepsLeft | expectedResult
+      ${'walk'} | ${4}      | ${true}
+      ${'run'}  | ${6}      | ${true}
+      ${'walk'} | ${3}      | ${false}
+      ${'run'}  | ${5}      | ${false}
+    `('pace $pace sets steps left to $expectedStepsLeft', ({ pace, stepsLeft, expectedResult }) => {
+      enemy.pace = pace;
+      enemy.stepsLeft = stepsLeft;
+
+      const result = enemy.isFirstStep();
+
+      expect(result).toBe(expectedResult);
     });
   });
 });

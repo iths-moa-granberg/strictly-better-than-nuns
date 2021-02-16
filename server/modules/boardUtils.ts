@@ -1,5 +1,5 @@
 import positions from '../../src/shared/positions';
-import { Position } from '../../src/shared/sharedTypes';
+import { Position, SoundToken } from '../../src/shared/sharedTypes';
 import { Enemies } from '../serverTypes';
 import Player from './serverPlayer';
 
@@ -144,7 +144,7 @@ export const isHeard = (playerPos: Position, enemies: Enemies, sound: number, en
         tokenPositions.push(path[1]);
       }
     }
-    return tokenPositions.map((pos) => ({ id: pos.id, enemyID }));
+    return tokenPositions.map<SoundToken>((pos) => ({ id: pos.id, enemyID }));
   } else {
     return;
   }

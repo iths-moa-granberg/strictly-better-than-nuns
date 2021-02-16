@@ -300,14 +300,6 @@ describe('serverGame', () => {
     });
   });
 
-  describe('getServerPosition', () => {
-    it('should return server-position correctly', () => {
-      const result = game.getServerPosition(1);
-
-      expect(result).toBe(positions[1]);
-    });
-  });
-
   describe('logSound', () => {
     it('should log when both enemies heard someone correctly', () => {
       game.newSoundLog = ['e1', 'e2'];

@@ -31,10 +31,10 @@ class Enemy {
     this.playersVisible = [];
   }
 
-  move = (position: Position) => {
+  move = (positionID: number) => {
     this.stepsLeft--;
     this.lastPosition = this.position;
-    this.position = position;
+    this.position = positions[positionID];
   };
 
   checkTarget = (player: Player) => {
@@ -56,6 +56,15 @@ class Enemy {
   setNewPath = (pathName: string) => {
     this.pathName = pathName;
     this.path = enemyPaths[pathName];
+  };
+
+  selectPace = (pace: string) => {
+    this.pace = pace;
+    this.stepsLeft = pace === 'walk' ? 4 : 6;
+  };
+
+  isFirstStep = () => {
+    return (this.pace === 'walk' && this.stepsLeft === 4) || (this.pace === 'run' && this.stepsLeft === 6);
   };
 }
 

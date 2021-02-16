@@ -1,19 +1,11 @@
 import { io } from '../index';
 
 import { updateBoard, startNextTurn, logProgress, updateBoardSocket, selectInitialPaths } from './sharedFunctions';
-import {
-  getReachable,
-  getEnemyStandardReachable,
-  getClosestWayToPath,
-  getRandomSound,
-  isHeard,
-  getSoundReach,
-  getSeenBy,
-} from '../modules/boardUtils';
+import { getEnemySeenMessages, getEnemyPossibleSteps } from '../modules/serverEnemyActionsUtils';
+import { getRandomSound, isHeard, getSoundReach } from '../modules/boardUtils';
 
 import { ExtendedSocket } from '../serverTypes';
 import {
-  Position,
   OnPlayerSelectToken,
   OnChooseNewPath,
   OnPossibleSteps,
@@ -23,6 +15,7 @@ import {
   OnSelectPath,
   OnPlayerPlacedToken,
   OnSetInitialPath,
+  SoundToken,
 } from '../../src/shared/sharedTypes';
 import Enemy from '../modules/serverEnemy';
 
@@ -34,34 +27,19 @@ io.on('connection', (socket: ExtendedSocket) => {
   });
 
   socket.on('enemy selects pace', ({ pace }: OnEnemySelectsPace) => {
-    currentEnemy.pace = pace;
-    currentEnemy.stepsLeft = pace === 'walk' ? 4 : 6;
-    enemyStepOptions();
+    currentEnemy.selectPace(pace);
+    emitPossibleSteps();
   });
 
-  const enemyStepOptions = () => {
-    let possibleSteps: Position[] = [];
-    if (
-      socket.game.seenSomeone(currentEnemy.id) ||
-      socket.game.heardSomeone(currentEnemy.id) ||
-      currentEnemy.playersVisible.length
-    ) {
-      const enemiesPositionsIDn = [socket.game.enemies.e1.position.id, socket.game.enemies.e2.position.id];
-      possibleSteps = getReachable(currentEnemy.position, currentEnemy.stepsLeft, true, true, enemiesPositionsIDn);
-    } else if (currentEnemy.isOnPath()) {
-      possibleSteps = getEnemyStandardReachable(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
-    } else {
-      possibleSteps = getClosestWayToPath(currentEnemy.position, currentEnemy.path, currentEnemy.stepsLeft);
-    }
+  const emitPossibleSteps = () => {
+    const possibleSteps = getEnemyPossibleSteps(socket.game, currentEnemy);
+
     const params: OnPossibleSteps = { possibleSteps, stepsLeft: currentEnemy.stepsLeft };
     socket.emit('possible steps', params);
   };
 
   socket.on('enemy takes step', ({ position }: OnEnemyTakesStep) => {
-    if (
-      (currentEnemy.pace === 'walk' && currentEnemy.stepsLeft === 4) ||
-      (currentEnemy.pace === 'run' && currentEnemy.stepsLeft === 6)
-    ) {
+    if (currentEnemy.isFirstStep()) {
       const msg = [
         { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
         { text: ` is ${currentEnemy.pace === 'run' ? 'running' : 'walking'}` },
@@ -69,49 +47,24 @@ io.on('connection', (socket: ExtendedSocket) => {
       logProgress(msg, { room: socket.game.id });
     }
 
-    const serverPosition = socket.game.getServerPosition(position.id);
-    currentEnemy.move(serverPosition);
+    currentEnemy.move(position.id);
     socket.game.checkEnemyTarget(currentEnemy);
 
-    for (let player of socket.game.players) {
-      const seenBy = getSeenBy(player, socket.game.enemies);
-      if (seenBy.length) {
-        player.visible = true;
-        player.updatePathVisibility(player.position, seenBy);
+    const messages = getEnemySeenMessages(socket.game.players, socket.game.enemies, currentEnemy.id);
+    messages.forEach((msg) => {
+      logProgress(msg, { room: socket.game.id });
+    });
 
-        if (seenBy.length === 2) {
-          const msg = [{ text: player.username, id: player.id }, { text: ' is seen by both enemies' }];
-          logProgress(msg, { room: socket.game.id });
-        } else if (seenBy[0] === currentEnemy.id) {
-          const msg = [
-            {
-              text: player.username,
-              id: player.id,
-            },
-            { text: ' is seen by' },
-            {
-              text: seenBy[0] === 'e1' ? ' Enemy 1' : ' Enemy 2',
-              id: seenBy[0],
-            },
-          ];
-          logProgress(msg, { room: socket.game.id });
-        }
-      }
-    }
+    updateBoard(socket.game);
+
     if (currentEnemy.endOfPath()) {
-      updateBoard(socket.game);
-      chooseNewPath(currentEnemy.getNewPossiblePaths());
+      emitChooseNewPath(currentEnemy.getNewPossiblePaths());
     } else {
-      actOnEnemyStep();
+      emitPossibleSteps();
     }
   });
 
-  const actOnEnemyStep = () => {
-    updateBoard(socket.game);
-    enemyStepOptions();
-  };
-
-  const chooseNewPath = (pathNames: string[]) => {
+  const emitChooseNewPath = (pathNames: string[]) => {
     const params: OnChooseNewPath = { pathNames };
     socket.emit('choose new path', params);
   };
@@ -130,21 +83,24 @@ io.on('connection', (socket: ExtendedSocket) => {
 
   socket.on('select path', ({ pathName }: OnSelectPath) => {
     currentEnemy.setNewPath(pathName);
-    actOnEnemyStep();
+
+    updateBoard(socket.game);
+    emitPossibleSteps();
   });
 
   socket.on('enemy move completed', () => {
     socket.game.enemyMovesCompleted++;
-    if (socket.game.enemyMovesCompleted === 2) {
-      socket.game.enemyMovesCompleted = 0;
-      enemyMoveComplete();
-    } else {
+
+    if (socket.game.enemyMovesCompleted < 2) {
       updateBoardSocket(socket);
       socket.emit('next enemy turn');
+    } else {
+      socket.game.enemyMovesCompleted = 0;
+      enemiesMovesCompleted();
     }
   });
 
-  const enemyMoveComplete = () => {
+  const enemiesMovesCompleted = () => {
     socket.game.soundTokens = [];
     socket.game.sightTokens = [];
     socket.game.enemies.e1.playersVisible = [];
@@ -160,27 +116,19 @@ io.on('connection', (socket: ExtendedSocket) => {
     }
 
     const sound = getRandomSound();
+
     for (let player of socket.game.players) {
       if (!socket.game.isCaught(player.id) && !player.visible) {
         const playerSound = getSoundReach(player.pace, sound);
         const heardTo = isHeard(player.position, socket.game.enemies, playerSound, enemy.id);
-        if (heardTo) {
-          if (heardTo.length > 1) {
-            const params: OnPlayerSelectToken = {
-              heardTo,
-              id: player.id,
-              turn: 'enemy',
-              enemyID: enemy.id,
-              sound,
-            };
-            io.in(socket.game.id).emit('player select token', params);
-          } else {
-            socket.game.addToken(heardTo[0].id, 'sound', enemy.id);
-            socket.game.newSoundLog.push(enemy.id);
-            waitForTokenPlacement();
-          }
-        } else {
+
+        if (!heardTo) {
           waitForTokenPlacement();
+        } else if (heardTo.length === 1) {
+          socket.game.playerPlacedToken(heardTo[0].id, enemy.id);
+          waitForTokenPlacement();
+        } else {
+          emitPlayerSelectToken(heardTo, player.id, enemy.id, sound);
         }
       } else {
         waitForTokenPlacement();
@@ -188,16 +136,27 @@ io.on('connection', (socket: ExtendedSocket) => {
     }
   };
 
+  const emitPlayerSelectToken = (heardTo: SoundToken[], playerID: string, enemyID: 'e1' | 'e2', sound: number) => {
+    const params: OnPlayerSelectToken = {
+      heardTo,
+      id: playerID,
+      turn: 'enemy',
+      enemyID,
+      sound,
+    };
+    io.in(socket.game.id).emit('player select token', params);
+  };
+
   socket.on('player placed token', ({ position, turn, enemyID }: OnPlayerPlacedToken) => {
     if (turn === 'enemy') {
-      socket.game.addToken(position.id, 'sound', enemyID);
-      socket.game.newSoundLog.push(enemyID);
+      socket.game.playerPlacedToken(position.id, enemyID);
       waitForTokenPlacement();
     }
   });
 
   const waitForTokenPlacement = (run?: boolean) => {
     socket.game.placedSoundCounter++;
+
     if (socket.game.placedSoundCounter === socket.game.players.length || run) {
       socket.game.placedSoundCounter = 0;
       endEnemyTurn();
@@ -206,6 +165,7 @@ io.on('connection', (socket: ExtendedSocket) => {
 
   const endEnemyTurn = () => {
     socket.game.enemyListened++;
+
     if (socket.game.enemyListened == 1) {
       enemyListen(socket.game.enemies.e2);
     } else if (socket.game.enemyListened == 2) {
