@@ -101,6 +101,10 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
     };
 
     const onPlayerSelectToken = ({ heardTo, id, turn, enemyID, sound }: OnPlayerSelectToken) => {
+      if (myPlayer.isEvil) {
+        setActionState({ key: 'waiting' });
+      }
+
       if (id === (myPlayer as ClientPlayer).id) {
         setSoundTokens(heardTo);
         setClickState({ key: 'select token', params: { turn, heardTo, enemyID, sound } });

@@ -119,6 +119,7 @@ const UserActions = ({
       {actionState.key === 'select initial paths' && (
         <SelectPathButtons setActionState={setActionState} {...actionState.params!} />
       )}
+      {actionState.key === 'waiting' && <h1>Waiting for your turn</h1>}
     </section>
   );
 };
