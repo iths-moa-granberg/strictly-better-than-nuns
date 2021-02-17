@@ -67,6 +67,8 @@ export const setUpGoodPlayer = (user: ClientUser, gameID: string) => {
   const currentGame = games[gameID].game;
   const newPlayer = new Player(currentGame.generatePlayerInfo(user.username));
 
+  games[gameID].users[user.userID].playerId = newPlayer.id;
+
   currentGame.addPlayer(newPlayer);
 
   return newPlayer;

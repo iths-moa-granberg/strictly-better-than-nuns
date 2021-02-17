@@ -189,12 +189,14 @@ describe('serverStartModule', () => {
       gameID = newGame.id;
     });
 
-    it('should change user role correctly', () => {
-      serverStartModule.setUpGoodPlayer(user, gameID);
+    it('should change user correctly', () => {
+      const result = serverStartModule.setUpGoodPlayer(user, gameID);
 
       const userRole = serverStartModule.games[gameID].users['userID'].role;
+      const userID = serverStartModule.games[gameID].users['userID'].playerId;
 
       expect(userRole).toBe('good');
+      expect(userID).toBe(result.id);
     });
 
     it('should add new player to joined game', () => {
