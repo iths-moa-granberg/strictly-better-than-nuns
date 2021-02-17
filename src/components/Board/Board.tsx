@@ -36,7 +36,7 @@ interface BoardProps {
   readonly myPlayer: MyPlayer;
   readonly setMyPlayer: Dispatch<SetStateAction<MyPlayer | null>>;
   readonly currentPlayerID: 'e1' | 'e2' | null;
-  readonly setCurrentPlayerId: (id: 'e1' | 'e2' | null) => void;
+  readonly setCurrentPlayerID: (id: 'e1' | 'e2' | null) => void;
 }
 
 interface ClickStateParams {
@@ -46,7 +46,7 @@ interface ClickStateParams {
   heardTo: SoundToken[];
 }
 
-const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: BoardProps) => {
+const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerID }: BoardProps) => {
   const [actionState, setActionState] = useState<ActionState>({ key: 'pace' });
   const [clickState, setClickState] = useState<{ key: string; params?: ClickStateParams }>({ key: '' });
 
@@ -207,7 +207,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
         currentPlayerID={currentPlayerID}
         myPlayer={myPlayer}
         setMyPlayer={setMyPlayer}
-        setCurrentPlayerId={setCurrentPlayerId}
+        setCurrentPlayerID={setCurrentPlayerID}
       />
     </>
   );

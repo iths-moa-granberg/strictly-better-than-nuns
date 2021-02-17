@@ -13,9 +13,9 @@ describe('startscreenUtils', () => {
   describe('getUsernames', () => {
     it('should return string with users listed correctly', () => {
       const users = {
-        Ann_123abc: { username: 'Ann', role: 'evil', playerId: 'e1' },
-        Ben_123abc: { username: 'Ben', role: 'good', playerId: '1' },
-        Cece_123abc: { username: 'Cece', role: 'good', playerId: '2' },
+        Ann_123abc: { username: 'Ann', role: 'evil', playerID: 'e1' },
+        Ben_123abc: { username: 'Ben', role: 'good', playerID: '1' },
+        Cece_123abc: { username: 'Cece', role: 'good', playerID: '2' },
       };
       const expectedOutput = 'Ann, Ben, Cece';
 

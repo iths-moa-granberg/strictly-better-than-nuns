@@ -14,7 +14,7 @@ export interface Users {
 interface User {
   username: string;
   role: string;
-  playerId: string;
+  playerID: string;
 }
 
 export interface ClientUser {

@@ -18,7 +18,7 @@ interface UserActionProps {
   readonly myPlayer: MyPlayer;
   readonly currentPlayerID: 'e1' | 'e2' | null;
   readonly setMyPlayer: Dispatch<SetStateAction<MyPlayer | null>>;
-  readonly setCurrentPlayerId: (id: 'e1' | 'e2' | null) => void;
+  readonly setCurrentPlayerID: (id: 'e1' | 'e2' | null) => void;
 }
 
 interface PaceProps {
@@ -33,18 +33,18 @@ const UserActions = ({
   myPlayer,
   currentPlayerID,
   setMyPlayer,
-  setCurrentPlayerId,
+  setCurrentPlayerID,
 }: UserActionProps) => {
   const [paceProps, setPaceProps] = useState<PaceProps>({ playersTurn: false, caught: false });
 
   const selectEnemyHandler = useCallback(
     (enemyID: 'e1' | 'e2') => {
-      setCurrentPlayerId(enemyID);
+      setCurrentPlayerID(enemyID);
       const params: OnSelectEnemy = { enemyID };
       socket.emit('select enemy', params);
       setActionState({ key: 'pace' });
     },
-    [setActionState, setCurrentPlayerId]
+    [setActionState, setCurrentPlayerID]
   );
 
   useEffect(() => {

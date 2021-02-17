@@ -18,7 +18,7 @@ const socket = io('http://localhost:3002');
 const App = () => {
   const [gameState, setGameState] = useState<string>('startscreen');
   const [myPlayer, setMyPlayer] = useState<MyPlayer | null>(null);
-  const [currentPlayerID, setCurrentPlayerId] = useState<'e1' | 'e2' | null>(null);
+  const [currentPlayerID, setCurrentPlayerID] = useState<'e1' | 'e2' | null>(null);
   const [winners, setWinners] = useState<ClientUser[]>([]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const App = () => {
     <div className={`main-wrapper ${gameState === 'startscreen' ? 'start-view' : ''}`}>
       {gameState === 'game over' && <GameOverScreen winners={winners} />}
       {gameState === 'startscreen' && (
-        <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerId={setCurrentPlayerId} />
+        <Startscreen myPlayer={myPlayer} setMyPlayer={setMyPlayer} setCurrentPlayerID={setCurrentPlayerID} />
       )}
       {gameState === 'started' && (
         <>
@@ -68,7 +68,7 @@ const App = () => {
             myPlayer={myPlayer!}
             setMyPlayer={setMyPlayer}
             currentPlayerID={currentPlayerID}
-            setCurrentPlayerId={setCurrentPlayerId}
+            setCurrentPlayerID={setCurrentPlayerID}
           />
           <ProgressBars />
           <ProgressLogger id={myPlayer!.isEvil ? 'e1' : (myPlayer as ClientPlayer).id} />

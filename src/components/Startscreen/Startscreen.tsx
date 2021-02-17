@@ -31,10 +31,10 @@ import playerListStyles from './PlayerList.module.scss';
 interface StartscreenProps {
   readonly setMyPlayer: Dispatch<SetStateAction<MyPlayer | null>>;
   readonly myPlayer: MyPlayer | null;
-  readonly setCurrentPlayerId: (id: 'e1' | 'e2' | null) => void;
+  readonly setCurrentPlayerID: (id: 'e1' | 'e2' | null) => void;
 }
 
-const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenProps) => {
+const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerID }: StartscreenProps) => {
   const [openGames, setOpenGames] = useState<OpenGame[]>([]);
   const [enemyJoined, setEnemyJoined] = useState<boolean>(false);
   const [allGoodPlayersJoined, setAllGoodPlayersJoined] = useState<boolean>(false);
@@ -104,7 +104,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
         isEvil: true,
       };
       setMyPlayer(enemy);
-      setCurrentPlayerId('e1');
+      setCurrentPlayerID('e1');
     };
 
     socket.on('set up player', onSetUpPlayer);
@@ -114,7 +114,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
       socket.off('set up player', onSetUpPlayer);
       socket.off('set up enemy', onSetUpEnemy);
     };
-  }, [setCurrentPlayerId, setMyPlayer]);
+  }, [setCurrentPlayerID, setMyPlayer]);
 
   const Game = ({ game }: { game: OpenGame }) => {
     return (
@@ -196,7 +196,7 @@ const Startscreen = ({ setMyPlayer, myPlayer, setCurrentPlayerId }: StartscreenP
           <h1>Players:</h1>
           <div className={playerListStyles.playersWrapper}>
             {Object.values(myGame.users).map((user, index) => (
-              <p key={user.username + index} className={playerListStyles[`player-${user.playerId}`]}>
+              <p key={user.username + index} className={playerListStyles[`player-${user.playerID}`]}>
                 {user.username} ({user.role ? user.role : '?'})
               </p>
             ))}

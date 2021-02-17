@@ -17,7 +17,7 @@ describe('serverStartModule', () => {
 
   describe('getOpenGames', () => {
     it('should return open games', () => {
-      const user = { username: 'username', role: '', playerId: '' };
+      const user = { username: 'username', role: '', playerID: '' };
       const startGame = {
         game: {} as Game,
         name: 'gameName',
@@ -34,7 +34,7 @@ describe('serverStartModule', () => {
     });
 
     it('should filter closed games', () => {
-      const user = { username: 'username', role: '', playerId: '' };
+      const user = { username: 'username', role: '', playerID: '' };
       const startGame = {
         game: {} as Game,
         name: 'gameName',
@@ -78,8 +78,8 @@ describe('serverStartModule', () => {
 
     it('should return true if all players are ready', () => {
       serverStartModule.games['gameID'].users = {
-        user1: { username: 'user1', role: 'good', playerId: '1' },
-        user3: { username: 'user2', role: 'evil', playerId: '2' },
+        user1: { username: 'user1', role: 'good', playerID: '1' },
+        user3: { username: 'user2', role: 'evil', playerID: '2' },
       };
       const result = serverStartModule.arePlayersReady('gameID');
 
@@ -88,8 +88,8 @@ describe('serverStartModule', () => {
 
     it('should return false if no enemy has joined', () => {
       serverStartModule.games['gameID'].users = {
-        user1: { username: 'user1', role: 'good', playerId: '1' },
-        user2: { username: 'user2', role: 'good', playerId: '2' },
+        user1: { username: 'user1', role: 'good', playerID: '1' },
+        user2: { username: 'user2', role: 'good', playerID: '2' },
       };
       const result = serverStartModule.arePlayersReady('gameID');
 
@@ -98,7 +98,7 @@ describe('serverStartModule', () => {
 
     it('should return false if too few players has joined', () => {
       serverStartModule.games['gameID'].users = {
-        user1: { username: 'user1', role: 'good', playerId: '1' },
+        user1: { username: 'user1', role: 'good', playerID: '1' },
       };
       const result = serverStartModule.arePlayersReady('gameID');
 
@@ -107,9 +107,9 @@ describe('serverStartModule', () => {
 
     it('should return false if a player has not choosen role', () => {
       serverStartModule.games['gameID'].users = {
-        user1: { username: 'user1', role: 'good', playerId: '1' },
-        user2: { username: 'user2', role: 'evil', playerId: '2' },
-        user3: { username: 'user3', role: '', playerId: '3' },
+        user1: { username: 'user1', role: 'good', playerID: '1' },
+        user2: { username: 'user2', role: 'evil', playerID: '2' },
+        user3: { username: 'user3', role: '', playerID: '3' },
       };
       const result = serverStartModule.arePlayersReady('gameID');
 
@@ -134,7 +134,7 @@ describe('serverStartModule', () => {
       expect(result.game).toBe(newGame);
       expect(result.status).toBe('open');
       expect(result.name).toBe("username's game");
-      expect(result.users).toEqual({ userID: { username: 'username', role: '', playerId: '' } });
+      expect(result.users).toEqual({ userID: { username: 'username', role: '', playerID: '' } });
     });
   });
 
@@ -156,7 +156,7 @@ describe('serverStartModule', () => {
       serverStartModule.joinGame(user, 'gameID');
       const result = serverStartModule.games['gameID'];
 
-      expect(result.users).toEqual({ userID: { username: 'username', role: '', playerId: '' } });
+      expect(result.users).toEqual({ userID: { username: 'username', role: '', playerID: '' } });
     });
 
     it('should change game status to full correctly', () => {
@@ -193,7 +193,7 @@ describe('serverStartModule', () => {
       const result = serverStartModule.setUpGoodPlayer(user, gameID);
 
       const userRole = serverStartModule.games[gameID].users['userID'].role;
-      const userID = serverStartModule.games[gameID].users['userID'].playerId;
+      const userID = serverStartModule.games[gameID].users['userID'].playerID;
 
       expect(userRole).toBe('good');
       expect(userID).toBe(result.id);
@@ -231,10 +231,10 @@ describe('serverStartModule', () => {
       serverStartModule.setUpEvilPlayer(user, gameID);
 
       const userRole = serverStartModule.games[gameID].users['userID'].role;
-      const playerId = serverStartModule.games[gameID].users['userID'].playerId;
+      const playerID = serverStartModule.games[gameID].users['userID'].playerID;
 
       expect(userRole).toBe('evil');
-      expect(playerId).toBe('e1');
+      expect(playerID).toBe('e1');
     });
 
     it('should update enemyJoined', () => {

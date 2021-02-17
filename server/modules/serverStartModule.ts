@@ -44,7 +44,7 @@ export const initNewGame = (user: ClientUser) => {
     game: newGame,
     name: `${user.username}'s game`,
     status: 'open',
-    users: { [user.userID]: { username: user.username, role: '', playerId: '' } },
+    users: { [user.userID]: { username: user.username, role: '', playerID: '' } },
   };
 
   return newGame;
@@ -52,7 +52,7 @@ export const initNewGame = (user: ClientUser) => {
 
 export const joinGame = (user: ClientUser, gameID: string) => {
   const joinedGame = games[gameID];
-  joinedGame.users[user.userID] = { username: user.username, role: '', playerId: '' };
+  joinedGame.users[user.userID] = { username: user.username, role: '', playerID: '' };
 
   if (Object.values(joinedGame.users).length === 7) {
     joinedGame.status = 'full';
@@ -67,7 +67,7 @@ export const setUpGoodPlayer = (user: ClientUser, gameID: string) => {
   const currentGame = games[gameID].game;
   const newPlayer = new Player(currentGame.generatePlayerInfo(user.username));
 
-  games[gameID].users[user.userID].playerId = newPlayer.id;
+  games[gameID].users[user.userID].playerID = newPlayer.id;
 
   currentGame.addPlayer(newPlayer);
 
@@ -76,7 +76,7 @@ export const setUpGoodPlayer = (user: ClientUser, gameID: string) => {
 
 export const setUpEvilPlayer = (user: ClientUser, gameID: string) => {
   games[gameID].users[user.userID].role = 'evil';
-  games[gameID].users[user.userID].playerId = 'e1';
+  games[gameID].users[user.userID].playerID = 'e1';
 
   const currentGame = games[gameID].game;
   const newPlayer = currentGame.enemies;
