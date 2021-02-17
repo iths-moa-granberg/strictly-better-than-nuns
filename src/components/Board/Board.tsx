@@ -158,6 +158,7 @@ const Board = ({ myPlayer, setMyPlayer, currentPlayerID, setCurrentPlayerId }: B
       if (heardTo!.find((pos) => pos.id === position.id)) {
         const params: OnPlayerPlacedToken = { position, turn, enemyID, sound };
         socket.emit('player placed token', params);
+        setClickState({ key: '' });
       }
     }
   };
