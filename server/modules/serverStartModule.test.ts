@@ -4,7 +4,7 @@ import Game from './serverGame';
 import Player from './serverPlayer';
 import Enemy from './serverEnemy';
 
-jest.mock('../controllers/sharedFunctions', () => ({}));
+jest.mock('../controllers/sharedEmitFunctions', () => ({}));
 
 describe('serverStartModule', () => {
   beforeEach(() => {

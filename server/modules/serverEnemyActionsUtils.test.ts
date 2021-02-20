@@ -5,9 +5,8 @@ import Player from './serverPlayer';
 import positions from '../../src/shared/positions';
 import Game from './serverGame';
 import enemyPaths from './enemyPaths';
-import { ProgressLogObject } from '../../src/shared/sharedTypes';
 
-jest.mock('../controllers/sharedFunctions', () => {});
+jest.mock('../controllers/sharedEmitFunctions', () => {});
 
 describe('serverEnemyActionsUtils', () => {
   let game: Game;

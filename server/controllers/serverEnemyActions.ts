@@ -1,6 +1,12 @@
 import { io } from '../index';
 
-import { updateBoard, startNextTurn, logProgress, updateBoardSocket, selectInitialPaths } from './sharedFunctions';
+import {
+  emitUpdateBoard,
+  emitStartNextTurn,
+  emitLogProgress,
+  emitUpdateBoardSocket,
+  emitSelectInitialPaths,
+} from './sharedEmitFunctions';
 import { getEnemySeenMessages, getEnemyPossibleSteps } from '../modules/serverEnemyActionsUtils';
 import { getRandomSound, isHeard, getSoundReach } from '../modules/boardUtils';
 
@@ -44,7 +50,7 @@ io.on('connection', (socket: ExtendedSocket) => {
         { text: currentEnemy.id === 'e1' ? 'Enemy 1' : 'Enemy 2', id: currentEnemy.id },
         { text: ` is ${currentEnemy.pace === 'run' ? 'running' : 'walking'}` },
       ];
-      logProgress(msg, { room: socket.game.id });
+      emitLogProgress(msg, { room: socket.game.id });
     }
 
     currentEnemy.move(position.id);
@@ -52,10 +58,10 @@ io.on('connection', (socket: ExtendedSocket) => {
 
     const messages = getEnemySeenMessages(socket.game.players, socket.game.enemies, currentEnemy.id);
     messages.forEach((msg) => {
-      logProgress(msg, { room: socket.game.id });
+      emitLogProgress(msg, { room: socket.game.id });
     });
 
-    updateBoard(socket.game);
+    emitUpdateBoard(socket.game);
 
     if (currentEnemy.endOfPath()) {
       emitChooseNewPath(currentEnemy.getNewPossiblePaths());
@@ -72,19 +78,21 @@ io.on('connection', (socket: ExtendedSocket) => {
   socket.on('set initial path', ({ pathName }: OnSetInitialPath) => {
     if (!socket.game.enemies.e1.pathName) {
       socket.game.enemies.e1.setNewPath(pathName);
-      updateBoard(socket.game);
-      selectInitialPaths(socket.game);
+      emitUpdateBoard(socket.game);
+      emitSelectInitialPaths(socket.game);
     } else {
       socket.game.enemies.e2.setNewPath(pathName);
-      updateBoard(socket.game);
-      startNextTurn(socket.game);
+      emitUpdateBoard(socket.game);
+
+      socket.game.startNextTurn();
+      emitStartNextTurn(socket.game);
     }
   });
 
   socket.on('select path', ({ pathName }: OnSelectPath) => {
     currentEnemy.setNewPath(pathName);
 
-    updateBoard(socket.game);
+    emitUpdateBoard(socket.game);
     emitPossibleSteps();
   });
 
@@ -92,7 +100,7 @@ io.on('connection', (socket: ExtendedSocket) => {
     socket.game.enemyMovesCompleted++;
 
     if (socket.game.enemyMovesCompleted < 2) {
-      updateBoardSocket(socket);
+      emitUpdateBoardSocket(socket);
       socket.emit('next enemy turn');
     } else {
       socket.game.enemyMovesCompleted = 0;
@@ -172,8 +180,10 @@ io.on('connection', (socket: ExtendedSocket) => {
       socket.game.logSound();
 
       socket.game.enemyListened = 0;
-      updateBoard(socket.game);
-      startNextTurn(socket.game);
+      emitUpdateBoard(socket.game);
+
+      socket.game.startNextTurn();
+      emitStartNextTurn(socket.game);
     }
   };
 });

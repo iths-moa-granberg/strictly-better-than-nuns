@@ -7,7 +7,7 @@ import Player from './serverPlayer';
 import { Position } from '../../src/shared/sharedTypes';
 import { Enemies } from '../serverTypes';
 
-jest.mock('../controllers/sharedFunctions', () => ({}));
+jest.mock('../controllers/sharedEmitFunctions', () => ({}));
 
 describe('board-utils', () => {
   beforeEach(() => {

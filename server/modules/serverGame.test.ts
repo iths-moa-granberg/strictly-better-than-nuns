@@ -1,15 +1,20 @@
 import Game from './serverGame';
-import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
+import {
+  emitGameOver,
+  emitLogProgress,
+  emitUpdateEnemyWinCounterClient,
+  emitUpdatePlayer,
+} from '../controllers/sharedEmitFunctions';
 import Enemy from './serverEnemy';
 import Player from './serverPlayer';
 import positions from '../../src/shared/positions';
 import keys from '../../src/shared/keys';
 
-jest.mock('../controllers/sharedFunctions', () => ({
-  logProgress: jest.fn(),
-  gameOver: jest.fn(),
-  updatePlayer: jest.fn(),
-  updateEnemyWinCounterClient: jest.fn(),
+jest.mock('../controllers/sharedEmitFunctions', () => ({
+  emitLogProgress: jest.fn(),
+  emitGameOver: jest.fn(),
+  emitUpdatePlayer: jest.fn(),
+  emitUpdateEnemyWinCounterClient: jest.fn(),
 }));
 
 describe('serverGame', () => {
@@ -86,7 +91,7 @@ describe('serverGame', () => {
       game.startNextTurn();
 
       const expectedWinner = [{ username: '', userID: 'e1' }];
-      expect(gameOver).toHaveBeenCalledWith(expectedWinner, game.id);
+      expect(emitGameOver).toHaveBeenCalledWith(expectedWinner, game.id);
     });
   });
 
@@ -183,17 +188,17 @@ describe('serverGame', () => {
     it('should call socket.emits correctly', () => {
       game.checkEnemyTarget(new Enemy('e1'));
 
-      expect(updatePlayer).toHaveBeenCalledWith(player, game.id);
+      expect(emitUpdatePlayer).toHaveBeenCalledWith(player, game.id);
       const expectedMessage = [{ text: 'username', id: '1' }, { text: ' is caught! Enemy win counter is now 1' }];
-      expect(logProgress).toHaveBeenCalledWith(expectedMessage, { room: game.id });
-      expect(updateEnemyWinCounterClient).toHaveBeenCalledWith(game.id);
+      expect(emitLogProgress).toHaveBeenCalledWith(expectedMessage, { room: game.id });
+      expect(emitUpdateEnemyWinCounterClient).toHaveBeenCalledWith(game.id);
     });
 
     it('should call game over correctly', () => {
       game.enemyWinCounter = 1;
       game.checkEnemyTarget(new Enemy('e1'));
 
-      expect(gameOver).toHaveBeenCalledWith([{ username: '', userID: 'e1' }], game.id);
+      expect(emitGameOver).toHaveBeenCalledWith([{ username: '', userID: 'e1' }], game.id);
     });
   });
 
@@ -307,7 +312,7 @@ describe('serverGame', () => {
       game.logSound();
 
       const expectedResult = [{ text: 'Both enemies heard someone!' }];
-      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+      expect(emitLogProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
     });
 
     it('should log when enemy1 heard someone correctly', () => {
@@ -316,7 +321,7 @@ describe('serverGame', () => {
       game.logSound();
 
       const expectedResult = [{ text: 'Enemy 1', id: 'e1' }, { text: ' heard someone!' }];
-      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+      expect(emitLogProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
     });
 
     it('should log when enemy2 heard someone correctly', () => {
@@ -325,7 +330,7 @@ describe('serverGame', () => {
       game.logSound();
 
       const expectedResult = [{ text: 'Enemy 2', id: 'e2' }, { text: ' heard someone!' }];
-      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+      expect(emitLogProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
     });
 
     it('should not log if no enemy heard anything', () => {
@@ -333,7 +338,7 @@ describe('serverGame', () => {
 
       game.logSound();
 
-      expect(logProgress).toHaveBeenCalledTimes(0);
+      expect(emitLogProgress).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -489,7 +494,7 @@ describe('serverGame', () => {
       game.playerLeavesSight(player);
 
       const expectedResult = [{ text: 'username', id: '1' }, { text: ' has disappeared' }];
-      expect(logProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
+      expect(emitLogProgress).toHaveBeenCalledWith(expectedResult, { room: game.id });
     });
 
     it('should not do anything if player was invisible whole path', () => {
@@ -501,7 +506,7 @@ describe('serverGame', () => {
 
       game.playerLeavesSight(player);
 
-      expect(logProgress).toHaveBeenCalledTimes(0);
+      expect(emitLogProgress).toHaveBeenCalledTimes(0);
       expect(game.sightTokens).toEqual([]);
     });
   });

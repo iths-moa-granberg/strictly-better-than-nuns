@@ -1,9 +1,9 @@
-import { logProgress } from '../controllers/sharedFunctions';
+import { emitLogProgress } from '../controllers/sharedEmitFunctions';
 import Player from './serverPlayer';
 import positions from '../../src/shared/positions';
 
-jest.mock('../controllers/sharedFunctions', () => ({
-  logProgress: jest.fn(),
+jest.mock('../controllers/sharedEmitFunctions', () => ({
+  emitLogProgress: jest.fn(),
 }));
 
 describe('serverPlayer', () => {
@@ -69,7 +69,7 @@ describe('serverPlayer', () => {
 
       expect(player.hasKey).toEqual(true);
       expect(player.hasGoal).toEqual(false);
-      expect(logProgress).toHaveBeenCalledWith([{ text: `You have reached your key!` }], { socket });
+      expect(emitLogProgress).toHaveBeenCalledWith([{ text: `You have reached your key!` }], { socket });
     });
 
     it('receives goal correctly', () => {
@@ -80,7 +80,7 @@ describe('serverPlayer', () => {
 
       expect(player.hasKey).toEqual(true);
       expect(player.hasGoal).toEqual(true);
-      expect(logProgress).toHaveBeenCalledWith([{ text: `You have reached your goal!` }], { socket });
+      expect(emitLogProgress).toHaveBeenCalledWith([{ text: `You have reached your goal!` }], { socket });
     });
 
     it('is added to winners correctly', () => {
@@ -107,7 +107,7 @@ describe('serverPlayer', () => {
       player.checkTarget(socket);
 
       expect(socket.game.winners).toEqual([]);
-      expect(logProgress).not.toHaveBeenCalled();
+      expect(emitLogProgress).not.toHaveBeenCalled();
     });
   });
 

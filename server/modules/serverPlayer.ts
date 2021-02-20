@@ -1,4 +1,4 @@
-import { logProgress } from '../controllers/sharedFunctions';
+import { emitLogProgress } from '../controllers/sharedEmitFunctions';
 
 import { Position } from '../../src/shared/sharedTypes';
 import { PlayerSocket } from '../serverTypes';
@@ -74,13 +74,13 @@ class Player {
         this.hasGoal = true;
 
         const msg = [{ text: `You have reached your goal!` }];
-        logProgress(msg, { socket });
+        emitLogProgress(msg, { socket });
       }
     } else if (this.key.id === this.position.id) {
       this.hasKey = true;
 
       const msg = [{ text: `You have reached your key!` }];
-      logProgress(msg, { socket });
+      emitLogProgress(msg, { socket });
     }
   };
 

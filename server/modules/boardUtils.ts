@@ -8,7 +8,7 @@ export const getReachable = (
   totalSteps: number,
   hasKey: boolean,
   isEvil: boolean,
-  enemiesPositionsIDn: number[],
+  enemiesPositionsIDn: number[]
 ) => {
   let possiblePos = [startPosition];
   for (let steps = 0; steps < totalSteps; steps++) {

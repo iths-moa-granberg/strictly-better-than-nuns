@@ -4,7 +4,7 @@ import Game from './serverGame';
 import Player from './serverPlayer';
 import positions from '../../src/shared/positions';
 
-jest.mock('../controllers/sharedFunctions', () => {});
+jest.mock('../controllers/sharedEmitFunctions', () => {});
 
 describe('serverPlayerActionsUtils', () => {
   let game: Game;

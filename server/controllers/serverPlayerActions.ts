@@ -7,7 +7,13 @@ import {
   updatePlayerOnStep,
 } from '../modules/serverPlayerActionsUtils';
 
-import { updateBoard, logProgress, updatePlayer, updateBoardSocket, gameOver } from './sharedFunctions';
+import {
+  emitUpdateBoard,
+  emitLogProgress,
+  emitUpdatePlayer,
+  emitUpdateBoardSocket,
+  emitGameOver,
+} from './sharedEmitFunctions';
 import { getSoundReach, getRandomSound, isHeard } from '../modules/boardUtils';
 
 import { PlayerSocket, Enemies } from '../serverTypes';
@@ -43,12 +49,12 @@ io.on('connection', (socket: PlayerSocket) => {
 
     if (playerStatus.seen) {
       const msg = [{ text: 'You are seen! Click back if you want to take a different route' }];
-      logProgress(msg, { socket });
+      emitLogProgress(msg, { socket });
     }
 
     if (playerStatus.setFree) {
       const msg = [{ text: 'You are out of sight and can move freely again' }];
-      logProgress(msg, { socket });
+      emitLogProgress(msg, { socket });
     }
 
     emitPossibleSteps();
@@ -65,7 +71,7 @@ io.on('connection', (socket: PlayerSocket) => {
       socket.emit('players turn', params);
     }
 
-    updateBoardSocket(socket);
+    emitUpdateBoardSocket(socket);
   });
 
   socket.on('player move completed', () => {
@@ -132,7 +138,7 @@ io.on('connection', (socket: PlayerSocket) => {
       { text: socket.player.username, id: socket.player.id },
       { text: ` is ${socket.player.pace === 'run' ? 'runn' : socket.player.pace}ing` },
     ];
-    logProgress(msg, { room: socket.game.id });
+    emitLogProgress(msg, { room: socket.game.id });
 
     if (socket.game.playerTurnCompleted === socket.game.players.length) {
       socket.game.playerTurnCompleted = 0;
@@ -141,13 +147,13 @@ io.on('connection', (socket: PlayerSocket) => {
         socket.game.playerLeavesSight(player);
         socket.player.resetPath(socket.player.path[0].enemyID);
 
-        updatePlayer(player, socket.game.id);
+        emitUpdatePlayer(player, socket.game.id);
       }
 
       socket.game.logSound();
 
       if (socket.game.winners.length) {
-        gameOver(socket.game.winners, socket.game.id);
+        emitGameOver(socket.game.winners, socket.game.id);
       }
 
       emitStartEnemyTurn();
@@ -157,10 +163,10 @@ io.on('connection', (socket: PlayerSocket) => {
   };
 
   const emitStartEnemyTurn = () => {
-    updateBoard(socket.game);
+    emitUpdateBoard(socket.game);
     io.in(socket.game.id).emit('enemy turn');
 
     const msg = [{ text: 'Enemy turn' }];
-    logProgress(msg, { room: socket.game.id });
+    emitLogProgress(msg, { room: socket.game.id });
   };
 });

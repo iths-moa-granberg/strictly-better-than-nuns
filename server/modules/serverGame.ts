@@ -1,4 +1,9 @@
-import { gameOver, logProgress, updateEnemyWinCounterClient, updatePlayer } from '../controllers/sharedFunctions';
+import {
+  emitGameOver,
+  emitLogProgress,
+  emitUpdateEnemyWinCounterClient,
+  emitUpdatePlayer,
+} from '../controllers/sharedEmitFunctions';
 import positions from '../../src/shared/positions';
 import keys from '../../src/shared/keys';
 import Enemy from './serverEnemy';
@@ -62,7 +67,7 @@ class Game {
   startNextTurn = () => {
     this.roundCounter++;
     if (this.roundCounter > 15) {
-      gameOver([{ username: this.enemies.username, userID: 'e1' }], this.id);
+      emitGameOver([{ username: this.enemies.username, userID: 'e1' }], this.id);
     }
   };
 
@@ -89,19 +94,19 @@ class Game {
         player.isCaught();
         this.addCaughtPlayer(player);
 
-        updatePlayer(player, this.id);
+        emitUpdatePlayer(player, this.id);
 
         const msg = [
           { text: player.username, id: player.id },
           { text: ` is caught! Enemy win counter is now ${this.enemyWinCounter}` },
         ];
-        logProgress(msg, { room: this.id });
+        emitLogProgress(msg, { room: this.id });
 
-        updateEnemyWinCounterClient(this.id);
+        emitUpdateEnemyWinCounterClient(this.id);
       }
     }
     if (this.enemyWinCounter > this.players.length) {
-      gameOver([{ username: this.enemies.username, userID: 'e1' }], this.id);
+      emitGameOver([{ username: this.enemies.username, userID: 'e1' }], this.id);
     }
   };
 
@@ -150,7 +155,7 @@ class Game {
   logSound = () => {
     if (this.newSoundLog.find((id) => id === 'e1') && this.newSoundLog.find((id) => id === 'e2')) {
       const msg = [{ text: 'Both enemies heard someone!' }];
-      logProgress(msg, { room: this.id });
+      emitLogProgress(msg, { room: this.id });
     } else {
       if (this.newSoundLog.find((id) => id === 'e1')) {
         const msg = [
@@ -160,7 +165,7 @@ class Game {
           },
           { text: ' heard someone!' },
         ];
-        logProgress(msg, { room: this.id });
+        emitLogProgress(msg, { room: this.id });
       }
       if (this.newSoundLog.find((id) => id === 'e2')) {
         const msg = [
@@ -170,7 +175,7 @@ class Game {
           },
           { text: ' heard someone!' },
         ];
-        logProgress(msg, { room: this.id });
+        emitLogProgress(msg, { room: this.id });
       }
     }
     this.newSoundLog = [];
@@ -232,7 +237,7 @@ class Game {
         this.addToken(obj.position.id, 'sight', obj.enemyID);
 
         const msg = [{ text: player.username, id: player.id }, { text: ' has disappeared' }];
-        logProgress(msg, { room: this.id });
+        emitLogProgress(msg, { room: this.id });
         break;
       }
     }

@@ -3,8 +3,8 @@ import Player from './serverPlayer';
 
 import { Position } from '../../src/shared/sharedTypes';
 
-jest.mock('../controllers/sharedFunctions', () => ({
-  logProgress: jest.fn(),
+jest.mock('../controllers/sharedEmitFunctions', () => ({
+  emitLogProgress: jest.fn(),
 }));
 
 describe('chatModule', () => {
